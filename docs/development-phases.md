@@ -27,7 +27,7 @@
 - [x] 建立 Vue 3 + TypeScript + Vite 專案
 - [x] 設定 `vite-plugin-pwa`（Manifest、App Shell 預快取、`registerType: 'prompt'`）
 - [x] 設定 ESLint、Prettier、Vitest
-- [ ] 部署到 Cloudflare Pages（私有 repo），確認 HTTPS 與「加入主畫面」可用
+- [ ] 部署到 Cloudflare Pages，確認 HTTPS 與「加入主畫面」可用（專案擁有者連接 repo；`_redirects`、`_headers` 已備妥）
 - [x] 套用 `design-system.md` 的設計 token（CSS 變數）
 
 ### 除錯面板
@@ -51,7 +51,7 @@
 ### UI 函式庫試做
 - [x] Vant 4 做一頁（首頁）
 - [x] Konsta UI 做同一頁
-- [ ] 比較操作手感後選定
+- [ ] 比較操作手感後選定（iPhone 實測）
 
 ### P0 驗證清單（在 iPhone 主畫面 App 上實測）
 - [ ] 除錯面板可顯示 console 輸出與未捕捉的錯誤

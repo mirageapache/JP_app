@@ -2,7 +2,7 @@
 
 以 iPhone 為主要使用裝置的日語學習 PWA，核心特色是**螢幕手寫練習**，並逐步擴充為涵蓋 N5～N1 的學習工具。個人自用，不商業化。
 
-> **目前狀態**：規劃階段（規劃書 v0.4），尚未開始實作。下一步為 P0 驗證。
+> **目前狀態**：P0 驗證階段。程式部分已完成（專案骨架、除錯面板、手寫原型、Firebase 原型、UI 試做、裝置能力頁），等待 Firebase／Cloudflare Pages 設定與 iPhone 實機驗證。
 
 ## 文件
 
@@ -40,29 +40,39 @@
 
 架構細節見規劃書第 3、4 章。
 
-## 專案結構（規劃）
+## 專案結構
 
 ```
-├─ public/content/      # 內容包（靜態 JSON）
+├─ docs/                # 規劃書、設計系統、UI 範例、開發階段清單
+├─ public/
+│  ├─ content/strokes/  # KanjiVG 轉出的假名筆畫資料（CC BY-SA 3.0）
+│  ├─ icons/            # PWA 圖示
+│  └─ _redirects, _headers  # Cloudflare Pages：SPA 回退與快取標頭
 ├─ src/
-│  ├─ modules/          # kana、vocab、grammar、quiz、stats、settings、onboarding
-│  ├─ core/             # srs、handwriting、tts、db、sync
-│  ├─ components/
-│  └─ stores/
-├─ tools/               # Python 內容建置腳本
-├─ firebase/            # Firestore 安全規則與測試
+│  ├─ app/              # 路由
+│  ├─ components/       # AppTopbar、AppTabbar、AppIcon、WritingBox…
+│  ├─ core/
+│  │  ├─ handwriting/   # 筆畫幾何、逐筆比對、書寫流程、筆畫資料載入
+│  │  ├─ sync/          # Firebase 登入、chunk 上傳／下載
+│  │  ├─ db/            # Dexie schema
+│  │  ├─ debug/         # 錯誤收集、裝置資訊
+│  │  ├─ tts/           # 語音合成
+│  │  └─ ui/            # useToast 等共用 composable
+│  ├─ modules/          # home、settings、p0（驗證頁）；kana、vocab… 於後續階段加入
+│  └─ styles/app.css    # 設計 token 與共用樣式
+├─ tools/kanjivg/       # KanjiVG → 筆畫 JSON 建置腳本（Python）
+├─ firebase/            # Firestore 安全規則、規則測試、部署說明
+├─ scripts/             # 開發用工具（iPhone 尺寸截圖）
 └─ tests/
 ```
 
 ## 開發
 
-> 以下為預計的開發流程，專案建立後再依實際內容更新。
-
 ### 需求
 
-- Node.js（LTS）
-- Python 3（內容建置腳本）
-- Firebase CLI（安全規則測試與部署）
+- Node.js 22 以上
+- Python 3（內容建置腳本，只用標準函式庫）
+- Java 11 以上（只有執行 Firestore 安全規則測試時需要）
 
 ### 環境變數
 
@@ -77,18 +87,35 @@ VITE_FIREBASE_APP_ID=
 
 Firebase 的前端設定值本身可以公開，資料安全由 Firestore 安全規則把關；`.env.local` 不納入版本控制只是為了方便切換開發與正式專案。
 
-### 常用指令（預計）
+### 常用指令
 
 ```bash
 npm install          # 安裝相依套件
-npm run dev          # 開發伺服器
-npm run build        # 建置正式版
+npm run dev          # 開發伺服器（--host，區網裝置可連）
+npm run build        # 型別檢查 + 建置正式版（含 Service Worker）
+npm run preview      # 預覽建置結果
+npm run check        # 型別檢查 + ESLint + 單元測試
 npm run test         # 單元測試
+python tools/kanjivg/build_strokes.py --all-kana   # 重建筆畫資料
+node scripts/screenshot.mjs <url> <out.png> [--dark]  # iPhone 尺寸截圖（需本機 Chrome）
 ```
+
+Firestore 安全規則的部署與測試見 [firebase/README.md](firebase/README.md)。
+
+### 部署到 Cloudflare Pages
+
+1. Cloudflare 儀表板 → Workers & Pages → Create → Pages → 連接 GitHub 的 `JP_app` repo
+2. 建置設定：Framework preset 選 **Vite**（或手動填）
+   - Build command：`npm run build`
+   - Build output directory：`dist`
+   - 環境變數：加入 `.env.example` 列出的四個 `VITE_FIREBASE_*`（Production 與 Preview 都要）
+3. 部署完成後，把網域（`<project>.pages.dev`）加進 Firebase Auth 的授權網域
+
+`public/_redirects` 讓所有路徑回退到 `index.html`（SPA）；`public/_headers` 設定資產快取。
 
 ### iPhone 實機測試
 
-PWA 的 Service Worker 需要 HTTPS。實機測試時，透過 Cloudflare Pages 的預覽部署，或使用 HTTPS 通道工具連到開發機，再於 Safari 選「加入主畫面」。
+PWA 的 Service Worker 需要 HTTPS，請用 Cloudflare Pages 的網址測試：Safari 開啟 → 分享 → 加入主畫面 → 從主畫面開啟。P0 的驗證項目都在 App 內「設定 → P0 驗證清單」；在「裝置能力與驗證清單」頁勾選結果後按「複製驗證結果」回報。
 
 ## 資料來源與授權
 
