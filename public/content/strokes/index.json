@@ -1,0 +1,721 @@
+{
+ "source": "KanjiVG",
+ "license": "CC BY-SA 3.0",
+ "attribution": "KanjiVG (c) Ulrich Apel, http://kanjivg.tagaini.net",
+ "viewBox": 109,
+ "pointsPerStroke": 32,
+ "chars": {
+  "ぁ": {
+   "code": "03041",
+   "strokeCount": 3
+  },
+  "あ": {
+   "code": "03042",
+   "strokeCount": 3
+  },
+  "ぃ": {
+   "code": "03043",
+   "strokeCount": 2
+  },
+  "い": {
+   "code": "03044",
+   "strokeCount": 2
+  },
+  "ぅ": {
+   "code": "03045",
+   "strokeCount": 2
+  },
+  "う": {
+   "code": "03046",
+   "strokeCount": 2
+  },
+  "ぇ": {
+   "code": "03047",
+   "strokeCount": 2
+  },
+  "え": {
+   "code": "03048",
+   "strokeCount": 2
+  },
+  "ぉ": {
+   "code": "03049",
+   "strokeCount": 3
+  },
+  "お": {
+   "code": "0304a",
+   "strokeCount": 3
+  },
+  "か": {
+   "code": "0304b",
+   "strokeCount": 3
+  },
+  "が": {
+   "code": "0304c",
+   "strokeCount": 5
+  },
+  "き": {
+   "code": "0304d",
+   "strokeCount": 4
+  },
+  "ぎ": {
+   "code": "0304e",
+   "strokeCount": 6
+  },
+  "く": {
+   "code": "0304f",
+   "strokeCount": 1
+  },
+  "ぐ": {
+   "code": "03050",
+   "strokeCount": 3
+  },
+  "け": {
+   "code": "03051",
+   "strokeCount": 3
+  },
+  "げ": {
+   "code": "03052",
+   "strokeCount": 5
+  },
+  "こ": {
+   "code": "03053",
+   "strokeCount": 2
+  },
+  "ご": {
+   "code": "03054",
+   "strokeCount": 4
+  },
+  "さ": {
+   "code": "03055",
+   "strokeCount": 3
+  },
+  "ざ": {
+   "code": "03056",
+   "strokeCount": 5
+  },
+  "し": {
+   "code": "03057",
+   "strokeCount": 1
+  },
+  "じ": {
+   "code": "03058",
+   "strokeCount": 3
+  },
+  "す": {
+   "code": "03059",
+   "strokeCount": 2
+  },
+  "ず": {
+   "code": "0305a",
+   "strokeCount": 4
+  },
+  "せ": {
+   "code": "0305b",
+   "strokeCount": 3
+  },
+  "ぜ": {
+   "code": "0305c",
+   "strokeCount": 5
+  },
+  "そ": {
+   "code": "0305d",
+   "strokeCount": 1
+  },
+  "ぞ": {
+   "code": "0305e",
+   "strokeCount": 3
+  },
+  "た": {
+   "code": "0305f",
+   "strokeCount": 4
+  },
+  "だ": {
+   "code": "03060",
+   "strokeCount": 6
+  },
+  "ち": {
+   "code": "03061",
+   "strokeCount": 2
+  },
+  "ぢ": {
+   "code": "03062",
+   "strokeCount": 4
+  },
+  "っ": {
+   "code": "03063",
+   "strokeCount": 1
+  },
+  "つ": {
+   "code": "03064",
+   "strokeCount": 1
+  },
+  "づ": {
+   "code": "03065",
+   "strokeCount": 3
+  },
+  "て": {
+   "code": "03066",
+   "strokeCount": 1
+  },
+  "で": {
+   "code": "03067",
+   "strokeCount": 3
+  },
+  "と": {
+   "code": "03068",
+   "strokeCount": 2
+  },
+  "ど": {
+   "code": "03069",
+   "strokeCount": 4
+  },
+  "な": {
+   "code": "0306a",
+   "strokeCount": 4
+  },
+  "に": {
+   "code": "0306b",
+   "strokeCount": 3
+  },
+  "ぬ": {
+   "code": "0306c",
+   "strokeCount": 2
+  },
+  "ね": {
+   "code": "0306d",
+   "strokeCount": 2
+  },
+  "の": {
+   "code": "0306e",
+   "strokeCount": 1
+  },
+  "は": {
+   "code": "0306f",
+   "strokeCount": 3
+  },
+  "ば": {
+   "code": "03070",
+   "strokeCount": 5
+  },
+  "ぱ": {
+   "code": "03071",
+   "strokeCount": 4
+  },
+  "ひ": {
+   "code": "03072",
+   "strokeCount": 1
+  },
+  "び": {
+   "code": "03073",
+   "strokeCount": 3
+  },
+  "ぴ": {
+   "code": "03074",
+   "strokeCount": 2
+  },
+  "ふ": {
+   "code": "03075",
+   "strokeCount": 4
+  },
+  "ぶ": {
+   "code": "03076",
+   "strokeCount": 6
+  },
+  "ぷ": {
+   "code": "03077",
+   "strokeCount": 5
+  },
+  "へ": {
+   "code": "03078",
+   "strokeCount": 1
+  },
+  "べ": {
+   "code": "03079",
+   "strokeCount": 3
+  },
+  "ぺ": {
+   "code": "0307a",
+   "strokeCount": 2
+  },
+  "ほ": {
+   "code": "0307b",
+   "strokeCount": 4
+  },
+  "ぼ": {
+   "code": "0307c",
+   "strokeCount": 6
+  },
+  "ぽ": {
+   "code": "0307d",
+   "strokeCount": 5
+  },
+  "ま": {
+   "code": "0307e",
+   "strokeCount": 3
+  },
+  "み": {
+   "code": "0307f",
+   "strokeCount": 2
+  },
+  "む": {
+   "code": "03080",
+   "strokeCount": 3
+  },
+  "め": {
+   "code": "03081",
+   "strokeCount": 2
+  },
+  "も": {
+   "code": "03082",
+   "strokeCount": 3
+  },
+  "ゃ": {
+   "code": "03083",
+   "strokeCount": 3
+  },
+  "や": {
+   "code": "03084",
+   "strokeCount": 3
+  },
+  "ゅ": {
+   "code": "03085",
+   "strokeCount": 2
+  },
+  "ゆ": {
+   "code": "03086",
+   "strokeCount": 2
+  },
+  "ょ": {
+   "code": "03087",
+   "strokeCount": 2
+  },
+  "よ": {
+   "code": "03088",
+   "strokeCount": 2
+  },
+  "ら": {
+   "code": "03089",
+   "strokeCount": 2
+  },
+  "り": {
+   "code": "0308a",
+   "strokeCount": 2
+  },
+  "る": {
+   "code": "0308b",
+   "strokeCount": 1
+  },
+  "れ": {
+   "code": "0308c",
+   "strokeCount": 2
+  },
+  "ろ": {
+   "code": "0308d",
+   "strokeCount": 1
+  },
+  "ゎ": {
+   "code": "0308e",
+   "strokeCount": 2
+  },
+  "わ": {
+   "code": "0308f",
+   "strokeCount": 2
+  },
+  "ゐ": {
+   "code": "03090",
+   "strokeCount": 1
+  },
+  "ゑ": {
+   "code": "03091",
+   "strokeCount": 1
+  },
+  "を": {
+   "code": "03092",
+   "strokeCount": 3
+  },
+  "ん": {
+   "code": "03093",
+   "strokeCount": 1
+  },
+  "ゔ": {
+   "code": "03094",
+   "strokeCount": 4
+  },
+  "ゕ": {
+   "code": "03095",
+   "strokeCount": 3
+  },
+  "ゖ": {
+   "code": "03096",
+   "strokeCount": 3
+  },
+  "ァ": {
+   "code": "030a1",
+   "strokeCount": 2
+  },
+  "ア": {
+   "code": "030a2",
+   "strokeCount": 2
+  },
+  "ィ": {
+   "code": "030a3",
+   "strokeCount": 2
+  },
+  "イ": {
+   "code": "030a4",
+   "strokeCount": 2
+  },
+  "ゥ": {
+   "code": "030a5",
+   "strokeCount": 3
+  },
+  "ウ": {
+   "code": "030a6",
+   "strokeCount": 3
+  },
+  "ェ": {
+   "code": "030a7",
+   "strokeCount": 3
+  },
+  "エ": {
+   "code": "030a8",
+   "strokeCount": 3
+  },
+  "ォ": {
+   "code": "030a9",
+   "strokeCount": 3
+  },
+  "オ": {
+   "code": "030aa",
+   "strokeCount": 3
+  },
+  "カ": {
+   "code": "030ab",
+   "strokeCount": 2
+  },
+  "ガ": {
+   "code": "030ac",
+   "strokeCount": 4
+  },
+  "キ": {
+   "code": "030ad",
+   "strokeCount": 3
+  },
+  "ギ": {
+   "code": "030ae",
+   "strokeCount": 5
+  },
+  "ク": {
+   "code": "030af",
+   "strokeCount": 2
+  },
+  "グ": {
+   "code": "030b0",
+   "strokeCount": 4
+  },
+  "ケ": {
+   "code": "030b1",
+   "strokeCount": 3
+  },
+  "ゲ": {
+   "code": "030b2",
+   "strokeCount": 5
+  },
+  "コ": {
+   "code": "030b3",
+   "strokeCount": 2
+  },
+  "ゴ": {
+   "code": "030b4",
+   "strokeCount": 4
+  },
+  "サ": {
+   "code": "030b5",
+   "strokeCount": 3
+  },
+  "ザ": {
+   "code": "030b6",
+   "strokeCount": 5
+  },
+  "シ": {
+   "code": "030b7",
+   "strokeCount": 3
+  },
+  "ジ": {
+   "code": "030b8",
+   "strokeCount": 5
+  },
+  "ス": {
+   "code": "030b9",
+   "strokeCount": 2
+  },
+  "ズ": {
+   "code": "030ba",
+   "strokeCount": 4
+  },
+  "セ": {
+   "code": "030bb",
+   "strokeCount": 2
+  },
+  "ゼ": {
+   "code": "030bc",
+   "strokeCount": 4
+  },
+  "ソ": {
+   "code": "030bd",
+   "strokeCount": 2
+  },
+  "ゾ": {
+   "code": "030be",
+   "strokeCount": 4
+  },
+  "タ": {
+   "code": "030bf",
+   "strokeCount": 3
+  },
+  "ダ": {
+   "code": "030c0",
+   "strokeCount": 5
+  },
+  "チ": {
+   "code": "030c1",
+   "strokeCount": 3
+  },
+  "ヂ": {
+   "code": "030c2",
+   "strokeCount": 5
+  },
+  "ッ": {
+   "code": "030c3",
+   "strokeCount": 3
+  },
+  "ツ": {
+   "code": "030c4",
+   "strokeCount": 3
+  },
+  "ヅ": {
+   "code": "030c5",
+   "strokeCount": 5
+  },
+  "テ": {
+   "code": "030c6",
+   "strokeCount": 3
+  },
+  "デ": {
+   "code": "030c7",
+   "strokeCount": 5
+  },
+  "ト": {
+   "code": "030c8",
+   "strokeCount": 2
+  },
+  "ド": {
+   "code": "030c9",
+   "strokeCount": 4
+  },
+  "ナ": {
+   "code": "030ca",
+   "strokeCount": 2
+  },
+  "ニ": {
+   "code": "030cb",
+   "strokeCount": 2
+  },
+  "ヌ": {
+   "code": "030cc",
+   "strokeCount": 2
+  },
+  "ネ": {
+   "code": "030cd",
+   "strokeCount": 4
+  },
+  "ノ": {
+   "code": "030ce",
+   "strokeCount": 1
+  },
+  "ハ": {
+   "code": "030cf",
+   "strokeCount": 2
+  },
+  "バ": {
+   "code": "030d0",
+   "strokeCount": 4
+  },
+  "パ": {
+   "code": "030d1",
+   "strokeCount": 3
+  },
+  "ヒ": {
+   "code": "030d2",
+   "strokeCount": 2
+  },
+  "ビ": {
+   "code": "030d3",
+   "strokeCount": 4
+  },
+  "ピ": {
+   "code": "030d4",
+   "strokeCount": 3
+  },
+  "フ": {
+   "code": "030d5",
+   "strokeCount": 1
+  },
+  "ブ": {
+   "code": "030d6",
+   "strokeCount": 3
+  },
+  "プ": {
+   "code": "030d7",
+   "strokeCount": 2
+  },
+  "ヘ": {
+   "code": "030d8",
+   "strokeCount": 1
+  },
+  "ベ": {
+   "code": "030d9",
+   "strokeCount": 3
+  },
+  "ペ": {
+   "code": "030da",
+   "strokeCount": 2
+  },
+  "ホ": {
+   "code": "030db",
+   "strokeCount": 4
+  },
+  "ボ": {
+   "code": "030dc",
+   "strokeCount": 6
+  },
+  "ポ": {
+   "code": "030dd",
+   "strokeCount": 5
+  },
+  "マ": {
+   "code": "030de",
+   "strokeCount": 2
+  },
+  "ミ": {
+   "code": "030df",
+   "strokeCount": 3
+  },
+  "ム": {
+   "code": "030e0",
+   "strokeCount": 2
+  },
+  "メ": {
+   "code": "030e1",
+   "strokeCount": 2
+  },
+  "モ": {
+   "code": "030e2",
+   "strokeCount": 3
+  },
+  "ャ": {
+   "code": "030e3",
+   "strokeCount": 2
+  },
+  "ヤ": {
+   "code": "030e4",
+   "strokeCount": 2
+  },
+  "ュ": {
+   "code": "030e5",
+   "strokeCount": 2
+  },
+  "ユ": {
+   "code": "030e6",
+   "strokeCount": 2
+  },
+  "ョ": {
+   "code": "030e7",
+   "strokeCount": 3
+  },
+  "ヨ": {
+   "code": "030e8",
+   "strokeCount": 3
+  },
+  "ラ": {
+   "code": "030e9",
+   "strokeCount": 2
+  },
+  "リ": {
+   "code": "030ea",
+   "strokeCount": 2
+  },
+  "ル": {
+   "code": "030eb",
+   "strokeCount": 2
+  },
+  "レ": {
+   "code": "030ec",
+   "strokeCount": 1
+  },
+  "ロ": {
+   "code": "030ed",
+   "strokeCount": 3
+  },
+  "ヮ": {
+   "code": "030ee",
+   "strokeCount": 2
+  },
+  "ワ": {
+   "code": "030ef",
+   "strokeCount": 2
+  },
+  "ヰ": {
+   "code": "030f0",
+   "strokeCount": 4
+  },
+  "ヱ": {
+   "code": "030f1",
+   "strokeCount": 3
+  },
+  "ヲ": {
+   "code": "030f2",
+   "strokeCount": 3
+  },
+  "ン": {
+   "code": "030f3",
+   "strokeCount": 2
+  },
+  "ヴ": {
+   "code": "030f4",
+   "strokeCount": 5
+  },
+  "ヵ": {
+   "code": "030f5",
+   "strokeCount": 2
+  },
+  "ヶ": {
+   "code": "030f6",
+   "strokeCount": 3
+  },
+  "ヷ": {
+   "code": "030f7",
+   "strokeCount": 4
+  },
+  "ヸ": {
+   "code": "030f8",
+   "strokeCount": 6
+  },
+  "ヹ": {
+   "code": "030f9",
+   "strokeCount": 5
+  },
+  "ヺ": {
+   "code": "030fa",
+   "strokeCount": 5
+  },
+  "゛": {
+   "code": "0309b",
+   "strokeCount": 2
+  },
+  "゜": {
+   "code": "0309c",
+   "strokeCount": 1
+  }
+ }
+}

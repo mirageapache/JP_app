@@ -24,20 +24,20 @@
 **目標**：在正式開發前，確認 iPhone 上最不確定的事情做得到。原型做完可以丟掉。
 
 ### 專案骨架
-- [ ] 建立 Vue 3 + TypeScript + Vite 專案
-- [ ] 設定 `vite-plugin-pwa`（Manifest、App Shell 預快取、`registerType: 'prompt'`）
-- [ ] 設定 ESLint、Prettier、Vitest
+- [x] 建立 Vue 3 + TypeScript + Vite 專案
+- [x] 設定 `vite-plugin-pwa`（Manifest、App Shell 預快取、`registerType: 'prompt'`）
+- [x] 設定 ESLint、Prettier、Vitest
 - [ ] 部署到 Cloudflare Pages（私有 repo），確認 HTTPS 與「加入主畫面」可用
-- [ ] 套用 `design-system.md` 的設計 token（CSS 變數）
+- [x] 套用 `design-system.md` 的設計 token（CSS 變數）
 
 ### 除錯面板
-- [ ] 收集 `console` 輸出與 `window.onerror`、`unhandledrejection`，寫入 Dexie `errorLogs`
-- [ ] 設定頁隱藏入口（例如連點版本號 5 次）開啟面板
+- [x] 收集 `console` 輸出與 `window.onerror`、`unhandledrejection`，寫入 Dexie `errorLogs`
+- [x] 設定頁隱藏入口（連點版本號 5 次）開啟面板
 
 ### 手寫原型
-- [ ] Python 腳本：從 KanjiVG 取出 5～10 個假名（含 ぱ、ぬ、そ、り），重取樣輸出 JSON
-- [ ] 確認 KanjiVG 有無濁音、半濁音、小寫假名的獨立檔案
-- [ ] 確認 §12 候選變體（き、さ、そ、り、ふ）KanjiVG 收錄的是哪種寫法
+- [x] Python 腳本：從 KanjiVG 取出假名，重取樣輸出 JSON（已直接處理全部 178 個假名）
+- [x] 確認 KanjiVG 有無濁音、半濁音、小寫假名的獨立檔案（都有，見 tools/README.md）
+- [x] 確認 §12 候選變體（き、さ、そ、り、ふ）KanjiVG 收錄的是哪種寫法（き4 さ3 そ1 り2 ふ4）
 - [ ] 田字格畫布：Pointer Events 收集筆畫、`devicePixelRatio`、`touch-action: none`
 - [ ] 逐筆比對（平均距離、Fréchet、起訖點、長度、順序錯誤）
 - [ ] 判定結果的視覺回饋（通過、位置偏差、方向錯誤、順序錯誤）
