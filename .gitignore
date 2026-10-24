@@ -1,0 +1,54 @@
+# ---- Node / Vite ----
+node_modules/
+dist/
+dev-dist/
+*.tsbuildinfo
+.vite/
+coverage/
+
+# ---- 環境變數（保留 .env.example） ----
+.env
+.env.*
+!.env.example
+
+# ---- 記錄檔 ----
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ---- Firebase ----
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+emulator-data/
+
+# ---- Cloudflare ----
+.wrangler/
+
+# ---- Python（tools/ 內容建置腳本） ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# ---- 內容建置的原始資料與中間產物（體積大，可由腳本重新下載與產生） ----
+tools/data/raw/
+tools/data/cache/
+
+# ---- 調校模式匯出、尚未整理的筆跡樣本（整理後放入 tests/fixtures/strokes/ 才納入版本控制） ----
+stroke-samples-export*/
+
+# ---- 編輯器與作業系統 ----
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ---- Claude Code 個人設定 ----
+.claude/settings.local.json
