@@ -49,8 +49,8 @@
 - [x] Firestore 安全規則與規則測試（測試需 Java 執行 Emulator）
 
 ### UI 函式庫試做
-- [ ] Vant 4 做一頁（首頁）
-- [ ] Konsta UI 做同一頁
+- [x] Vant 4 做一頁（首頁）
+- [x] Konsta UI 做同一頁
 - [ ] 比較操作手感後選定
 
 ### P0 驗證清單（在 iPhone 主畫面 App 上實測）

@@ -2,12 +2,15 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
+import tailwindcss from '@tailwindcss/vite'
 import pkg from './package.json' with { type: 'json' }
 
 export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   plugins: [
     vue(),
+    // 只有 Konsta UI 試做頁的 konsta.css 使用 Tailwind；App 本身不用
+    tailwindcss(),
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['icons/apple-touch-icon.png', 'icons/favicon.svg'],
