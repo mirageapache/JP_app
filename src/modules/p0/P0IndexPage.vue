@@ -5,7 +5,7 @@ import type { IconName } from '@/components/icons'
 
 /** P0 驗證項目（docs/development-phases.md「P0 驗證清單」） */
 const items: { to?: string; title: string; sub: string; icon: IconName; phase: string }[] = [
-  { title: '除錯面板', sub: 'console 輸出與未捕捉錯誤', icon: 'bug', phase: '製作中' },
+  { to: '/settings/debug', title: '除錯面板', sub: 'console 輸出與未捕捉錯誤', icon: 'bug', phase: '可測' },
   { title: '手寫原型', sub: '田字格、逐筆判定、手指與 Apple Pencil', icon: 'pencil', phase: '製作中' },
   { title: 'Firebase', sub: '登入、隔天仍登入、離線後上傳', icon: 'cloud', phase: '製作中' },
   { title: '裝置能力', sub: 'TTS、持久儲存、安裝狀態', icon: 'wifi', phase: '製作中' },

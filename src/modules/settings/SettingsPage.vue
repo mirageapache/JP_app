@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import AppIcon from '@/components/AppIcon.vue'
 import AppTabbar from '@/components/AppTabbar.vue'
+import { useRouter } from 'vue-router'
 import AppTopbar from '@/components/AppTopbar.vue'
+import { useTapToReveal } from '@/core/debug/useTapToReveal'
 
 const version = __APP_VERSION__
+const router = useRouter()
+/** 連點版本號 5 次開啟除錯面板（規劃書 F16） */
+const { tap } = useTapToReveal(5, () => router.push('/settings/debug'))
 </script>
 
 <template>
@@ -23,7 +28,7 @@ const version = __APP_VERSION__
         </ul>
       </section>
 
-      <p class="caption faint" style="text-align: center">
+      <p class="caption faint" style="text-align: center; user-select: none" @click="tap">
         日語練習帳 {{ version }}
       </p>
     </main>
