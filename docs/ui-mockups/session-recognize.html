@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>學習：辨識題 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="app session">
+  <header class="session-top">
+    <a class="icon-btn" href="home.html" aria-label="結束學習"><svg class="i"><use href="#i-x"/></svg></a>
+    <div class="progress" role="progressbar" aria-valuenow="12" aria-valuemax="32"><span style="width:37%"></span></div>
+    <span class="count num">12 / 32</span>
+  </header>
+
+  <main class="session-body">
+    <span class="badge badge--primary">假名 · 讀音</span>
+    <p class="prompt-label">這個假名怎麼念？</p>
+    <div class="prompt-kana ja-display" lang="ja">ぬ</div>
+  </main>
+
+  <footer class="session-foot">
+    <div class="choices" data-answer="nu">
+      <button class="choice" data-value="me" type="button">me</button>
+      <button class="choice" data-value="nu" type="button">nu</button>
+      <button class="choice" data-value="ne" type="button">ne</button>
+      <button class="choice" data-value="mu" type="button">mu</button>
+    </div>
+
+    <div class="stack" data-after-answer hidden>
+      <p class="rating-note">點選一個評分繼續（已依作答結果建議）</p>
+      <div class="rating">
+        <button class="again" type="button">重來<small>1 分</small></button>
+        <button class="hard" type="button">困難<small>1 天</small></button>
+        <button class="good is-suggested" type="button">良好<small>3 天</small></button>
+        <button class="easy" type="button">簡單<small>8 天</small></button>
+      </div>
+    </div>
+  </footer>
+  <p class="mock-note">範例互動：點選任一選項，會顯示正確／錯誤狀態與評分列。答錯時建議評分會改為「重來」。</p>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

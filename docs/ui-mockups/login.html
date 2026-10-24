@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>登入 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .or { display: flex; align-items: center; gap: var(--sp-3); color: var(--c-ink-3); font-size: var(--fs-small); }
+  .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--c-line); }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="icon-btn" href="onboarding.html" aria-label="返回"><svg class="i"><use href="#i-chev-l"/></svg></a>
+    <h1 class="topbar__title">登入</h1>
+    <a class="btn btn--ghost btn--sm" href="home.html">稍後</a>
+  </header>
+
+  <main class="page" style="gap:var(--sp-6)">
+    <section class="stack" style="gap:var(--sp-2)">
+      <h2 style="font-size:var(--fs-title-lg)">同步你的學習紀錄</h2>
+      <p class="muted">登入後紀錄會自動備份到雲端，換手機或資料被清除時都能還原。</p>
+    </section>
+
+    <form class="stack" style="gap:var(--sp-4)" onsubmit="event.preventDefault()">
+      <div class="field">
+        <label for="email">電子郵件</label>
+        <div class="input"><svg class="i sm"><use href="#i-mail"/></svg><input id="email" type="email" autocomplete="email" inputmode="email" placeholder="name@example.com"></div>
+      </div>
+      <div class="field">
+        <label for="pw">密碼</label>
+        <div class="input"><svg class="i sm"><use href="#i-lock"/></svg><input id="pw" type="password" autocomplete="current-password" placeholder="至少 8 個字元"><button class="icon-btn" type="button" aria-label="顯示密碼" style="width:36px;height:36px"><svg class="i sm"><use href="#i-eye"/></svg></button></div>
+      </div>
+      <button class="btn btn--primary btn--lg btn--block" type="submit">登入</button>
+      <div class="row row--between">
+        <a class="btn btn--ghost btn--sm" href="#" style="padding:0">建立帳號</a>
+        <a class="btn btn--ghost btn--sm" href="#" style="padding:0">忘記密碼</a>
+      </div>
+    </form>
+
+    <div class="or">或</div>
+
+    <button class="btn btn--secondary btn--lg btn--block" type="button">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#4285F4" d="M22 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.6a4.8 4.8 0 0 1-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-7.5z"/><path fill="#34A853" d="M12 22c2.8 0 5.2-.9 6.9-2.5l-3.4-2.6c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.7v2.7A10 10 0 0 0 12 22z"/><path fill="#FBBC05" d="M6.2 13.6a6 6 0 0 1 0-3.8V7.1H2.7a10 10 0 0 0 0 9.2z"/><path fill="#EA4335" d="M12 6c1.5 0 2.9.5 4 1.5l3-3A10 10 0 0 0 2.7 7.1l3.5 2.7C7 7.8 9.3 6 12 6z"/></svg>
+      使用 Google 登入
+    </button>
+    <p class="small faint" style="text-align:center;margin-top:calc(var(--sp-4) * -1)">Google 登入視 P0 驗證結果決定是否提供</p>
+
+    <div class="banner">
+      <svg class="i sm"><use href="#i-info"/></svg>
+      <div>不登入也能使用，紀錄只會存在這台裝置。可以隨時在設定中登入。</div>
+    </div>
+  </main>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

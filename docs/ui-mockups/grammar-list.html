@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>文法 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .lesson-head { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--sp-1); }
+  .lesson-head h2 { font-size: var(--fs-body); font-weight: 600; }
+  .g { font-size: var(--fs-callout); }
+  .is-current-lesson .list { border: 2px solid var(--c-primary); }
+</style>
+</head>
+<body>
+<div class="app has-tabbar">
+  <header class="topbar">
+    <h1 class="topbar__title topbar__title--left">文法</h1>
+    <button class="icon-btn" type="button" aria-label="搜尋"><svg class="i"><use href="#i-search"/></svg></button>
+  </header>
+
+  <main class="page" style="gap:var(--sp-5)">
+    <div class="segmented">
+      <button type="button" aria-pressed="true">初級 I（N5）</button>
+      <button type="button" aria-pressed="false">初級 II（N4）</button>
+    </div>
+
+    <section class="card stack" style="gap:var(--sp-2)">
+      <div class="row row--between"><strong>學到第 14 課</strong><span class="small muted num">14 / 25 課</span></div>
+      <div class="progress"><span style="width:56%"></span></div>
+      <p class="small faint">依《大家的日本語》課次排序</p>
+    </section>
+
+    <section class="stack">
+      <div class="lesson-head"><h2>第 13 課</h2><span class="badge badge--ok">完成</span></div>
+      <ul class="list">
+        <li><a class="list-row" href="grammar-detail.html"><div class="list-row__main"><div class="g" lang="ja">〜が<ruby>欲<rt>ほ</rt></ruby>しいです</div><div class="list-row__sub">想要～</div></div><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+        <li><a class="list-row" href="grammar-detail.html"><div class="list-row__main"><div class="g" lang="ja">V ます形 + たいです</div><div class="list-row__sub">想做～</div></div><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+        <li><a class="list-row" href="grammar-detail.html"><div class="list-row__main"><div class="g" lang="ja">V ます形 + に<ruby>行<rt>い</rt></ruby>きます</div><div class="list-row__sub">去做～（目的）</div></div><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+      </ul>
+    </section>
+
+    <section class="stack is-current-lesson">
+      <div class="lesson-head"><h2>第 14 課</h2><span class="badge badge--primary">學習中</span></div>
+      <ul class="list">
+        <li><a class="list-row" href="grammar-detail.html"><div class="list-row__main"><div class="g" lang="ja">V て形</div><div class="list-row__sub">動詞的て形變化</div></div><span class="badge badge--primary">學習中</span></a></li>
+        <li><a class="list-row" href="grammar-detail.html"><div class="list-row__main"><div class="g" lang="ja">V て形 + ください</div><div class="list-row__sub">請做～</div></div><span class="badge badge--primary">今天的新卡</span></a></li>
+        <li><a class="list-row" href="grammar-detail.html"><div class="list-row__main"><div class="g" lang="ja">V て形 + います</div><div class="list-row__sub">正在做～</div></div><span class="badge">未學</span></a></li>
+        <li><a class="list-row" href="grammar-detail.html"><div class="list-row__main"><div class="g" lang="ja">V ます形 + ましょうか</div><div class="list-row__sub">我來幫你～吧？</div></div><span class="badge">未學</span></a></li>
+      </ul>
+    </section>
+
+    <section class="stack">
+      <div class="lesson-head"><h2 class="faint">第 15 課</h2><span class="badge">未開始</span></div>
+      <ul class="list">
+        <li><a class="list-row" href="grammar-detail.html"><div class="list-row__main"><div class="g" lang="ja">V て形 + もいいです</div><div class="list-row__sub">可以做～</div></div><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+        <li><a class="list-row" href="grammar-detail.html"><div class="list-row__main"><div class="g" lang="ja">V て形 + はいけません</div><div class="list-row__sub">不可以做～</div></div><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="主要分頁">
+    <a href="home.html"><svg class="i"><use href="#i-home"/></svg>今日</a>
+    <a href="kana-chart.html"><span class="glyph" lang="ja">あ</span>假名</a>
+    <a href="vocab-list.html"><svg class="i"><use href="#i-layers"/></svg>單字</a>
+    <a href="grammar-list.html" aria-current="page"><svg class="i"><use href="#i-book"/></svg>文法</a>
+    <a href="stats.html"><svg class="i"><use href="#i-chart"/></svg>統計</a>
+  </nav>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

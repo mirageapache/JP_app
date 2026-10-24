@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>設定 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="icon-btn" href="home.html" aria-label="返回"><svg class="i"><use href="#i-chev-l"/></svg></a>
+    <h1 class="topbar__title">設定</h1>
+    <span class="spacer"></span>
+  </header>
+
+  <main class="page" style="gap:var(--sp-5)">
+    <!-- 帳號與同步 -->
+    <section class="stack" style="gap:var(--sp-2)">
+      <h2 class="section-title">帳號與同步</h2>
+      <ul class="list">
+        <li class="list-row">
+          <svg class="i" style="color:var(--c-ink-2)"><use href="#i-user"/></svg>
+          <div class="list-row__main"><div class="list-row__title">me@example.com</div><div class="list-row__sub">電子郵件登入</div></div>
+        </li>
+        <li class="list-row">
+          <svg class="i" style="color:var(--c-ok)"><use href="#i-cloud-check"/></svg>
+          <div class="list-row__main"><div class="list-row__title">已同步</div><div class="list-row__sub">5 分鐘前 · 待上傳 0 筆</div></div>
+          <button class="btn btn--secondary btn--sm" type="button"><svg class="i sm"><use href="#i-refresh"/></svg>立即同步</button>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 每日學習 -->
+    <section class="stack" style="gap:var(--sp-2)">
+      <h2 class="section-title">每日學習</h2>
+      <ul class="list">
+        <li class="list-row"><div class="list-row__main">每日新假名</div><div class="stepper"><button type="button" aria-label="減少">−</button><span>5</span><button type="button" aria-label="增加">＋</button></div></li>
+        <li class="list-row"><div class="list-row__main">每日新單字</div><div class="stepper"><button type="button" aria-label="減少">−</button><span>3</span><button type="button" aria-label="增加">＋</button></div></li>
+        <li class="list-row"><div class="list-row__main">每日新文法</div><div class="stepper"><button type="button" aria-label="減少">−</button><span>1</span><button type="button" aria-label="增加">＋</button></div></li>
+        <li><a class="list-row" href="#"><div class="list-row__main">每日目標</div><span class="list-row__value">20 分鐘</span><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+      </ul>
+      <p class="list-note">新卡以「項目」計算，一個單字會有多種技能卡，會在不同天出現。</p>
+    </section>
+
+    <!-- 顯示與發音 -->
+    <section class="stack" style="gap:var(--sp-2)">
+      <h2 class="section-title">顯示與發音</h2>
+      <ul class="list">
+        <li><label class="list-row"><div class="list-row__main"><div class="list-row__title">顯示讀音標注</div><div class="list-row__sub" lang="ja"><ruby>食<rt>た</rt></ruby>べる</div></div><span class="switch"><input type="checkbox" checked aria-label="顯示讀音標注"><span></span></span></label></li>
+        <li><label class="list-row"><div class="list-row__main"><div class="list-row__title">聽力題</div><div class="list-row__sub">單字的「聽得懂」技能</div></div><span class="switch"><input type="checkbox" checked aria-label="聽力題"><span></span></span></label></li>
+        <li><a class="list-row" href="kana-detail.html"><div class="list-row__main">假名筆畫版本</div><span class="list-row__value">そ、り 等 2 個自訂</span><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+      </ul>
+    </section>
+
+    <!-- 資料 -->
+    <section class="stack" style="gap:var(--sp-2)">
+      <h2 class="section-title">資料</h2>
+      <ul class="list">
+        <li><button class="list-row" type="button"><svg class="i" style="color:var(--c-ink-2)"><use href="#i-download"/></svg><div class="list-row__main">匯出學習紀錄</div><span class="list-row__value small">存到「檔案」</span></button></li>
+        <li><button class="list-row" type="button"><svg class="i" style="color:var(--c-ink-2)"><use href="#i-upload"/></svg><div class="list-row__main">匯入學習紀錄</div><span class="list-row__value small">與現有紀錄合併</span></button></li>
+        <li><a class="list-row" href="#"><svg class="i" style="color:var(--c-ink-2)"><use href="#i-flag"/></svg><div class="list-row__main">內容錯誤回報</div><span class="list-row__value">3 筆</span><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+      </ul>
+    </section>
+
+    <!-- 進階 -->
+    <section class="stack" style="gap:var(--sp-2)">
+      <h2 class="section-title">進階</h2>
+      <ul class="list">
+        <li><a class="list-row" href="calibration.html"><svg class="i" style="color:var(--c-ink-2)"><use href="#i-pencil"/></svg><div class="list-row__main"><div class="list-row__title">手寫調校模式</div><div class="list-row__sub">保存筆跡以調整判定門檻</div></div><span class="list-row__value">關閉</span><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+        <li><a class="list-row" href="#"><svg class="i" style="color:var(--c-ink-2)"><use href="#i-info"/></svg><div class="list-row__main">關於與資料來源</div><svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+      </ul>
+    </section>
+
+    <section class="stack" style="gap:var(--sp-2)">
+      <ul class="list">
+        <li><button class="list-row" type="button"><svg class="i" style="color:var(--c-ink-2)"><use href="#i-logout"/></svg><div class="list-row__main">登出</div></button></li>
+        <li><button class="list-row" type="button" style="color:var(--c-shu)"><svg class="i"><use href="#i-trash"/></svg><div class="list-row__main">刪除帳號與雲端資料</div></button></li>
+      </ul>
+      <p class="list-note">刪除主畫面上的 App 圖示會一併刪除這台裝置上的資料。登入後學習紀錄會自動同步到雲端。</p>
+    </section>
+
+    <p class="caption faint" style="text-align:center">日語練習帳 0.1.0（連點 5 次開啟除錯面板）</p>
+  </main>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

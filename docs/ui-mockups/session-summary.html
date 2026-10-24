@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>學習完成 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="app session">
+  <header class="session-top">
+    <a class="icon-btn" href="home.html" aria-label="關閉"><svg class="i"><use href="#i-x"/></svg></a>
+    <div class="progress progress--ok"><span style="width:100%"></span></div>
+    <span class="count num">32 / 32</span>
+  </header>
+
+  <main class="page" style="padding-top:var(--sp-6)">
+    <section class="stack" style="align-items:center;text-align:center;gap:var(--sp-2)">
+      <div style="width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:var(--c-ok-soft);color:var(--c-ok)">
+        <svg class="i" style="width:36px;height:36px;stroke-width:2.4"><use href="#i-check"/></svg>
+      </div>
+      <h1 style="font-size:var(--fs-title-lg)">今天的目標完成了</h1>
+      <p class="muted">連續 <span class="num">13</span> 天，明天見</p>
+    </section>
+
+    <section class="stat-grid">
+      <div class="stat"><div class="stat__value">32</div><div class="stat__label">題數</div></div>
+      <div class="stat"><div class="stat__value">88<span class="small">%</span></div><div class="stat__label">一次答對</div></div>
+      <div class="stat"><div class="stat__value">17<span class="small"> 分</span></div><div class="stat__label">用時</div></div>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">本次內容</h2>
+      <ul class="list">
+        <li class="list-row"><div class="list-row__main">假名</div><span class="list-row__value num">複習 14 · 新 5</span></li>
+        <li class="list-row"><div class="list-row__main">單字</div><span class="list-row__value num">複習 9 · 新 3</span></li>
+        <li class="list-row"><div class="list-row__main">文法</div><span class="list-row__value num">新 1</span></li>
+      </ul>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">這次答錯的</h2>
+      <div class="chips" style="flex-wrap:wrap">
+        <span class="chip ja-display" lang="ja" style="font-size:1.125rem">ぬ</span>
+        <span class="chip ja-display" lang="ja" style="font-size:1.125rem">ね</span>
+        <span class="chip ja-display" lang="ja" style="font-size:1.125rem">ほ</span>
+        <span class="chip" lang="ja">飲む</span>
+      </div>
+      <p class="small faint">它們會在幾分鐘到一天內再出現一次。</p>
+    </section>
+
+    <div class="stack">
+      <a class="btn btn--primary btn--lg btn--block" href="home.html">回到今日</a>
+      <button class="btn btn--secondary btn--block" type="button"><svg class="i sm"><use href="#i-plus"/></svg>再學 5 個新的</button>
+    </div>
+  </main>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>單字 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .word { font-size: var(--fs-callout); }
+  .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+  .topic { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); border: 1px solid var(--c-line); border-radius: var(--r-lg); background: var(--c-surface); color: var(--c-ink); }
+  .topic.is-current { border: 2px solid var(--c-primary); background: var(--c-primary-soft); }
+  .topic__name { font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="app has-tabbar">
+  <header class="topbar">
+    <h1 class="topbar__title topbar__title--left">單字</h1>
+    <button class="icon-btn" type="button" aria-label="搜尋"><svg class="i"><use href="#i-search"/></svg></button>
+  </header>
+
+  <main class="page" style="gap:var(--sp-4)">
+    <div class="segmented">
+      <button type="button" aria-pressed="true" data-show="main">主線</button>
+      <button type="button" aria-pressed="false" data-show="topic">主題</button>
+    </div>
+
+    <!-- 主線 -->
+    <div class="stack" data-panel="main" style="gap:var(--sp-4)">
+      <section class="card stack" style="gap:var(--sp-2)">
+        <div class="row row--between"><strong>N5</strong><span class="small muted num">已學 126 / 684</span></div>
+        <div class="progress"><span style="width:18%"></span></div>
+        <p class="small faint">依常用度排序，新單字從上往下出現</p>
+      </section>
+
+      <div class="chips" data-single>
+        <button class="chip" type="button" aria-pressed="true">全部</button>
+        <button class="chip" type="button" aria-pressed="false">學習中</button>
+        <button class="chip" type="button" aria-pressed="false">已熟</button>
+        <button class="chip" type="button" aria-pressed="false">未學</button>
+        <button class="chip" type="button" aria-pressed="false">弱點</button>
+      </div>
+
+      <ul class="list">
+        <li><a class="list-row" href="vocab-detail.html">
+          <div class="list-row__main"><div class="word" lang="ja"><ruby>食<rt>た</rt></ruby>べる</div><div class="list-row__sub">吃</div></div>
+          <span class="badge badge--ok">已熟</span></a></li>
+        <li><a class="list-row" href="vocab-detail.html">
+          <div class="list-row__main"><div class="word" lang="ja"><ruby>飲<rt>の</rt></ruby>む</div><div class="list-row__sub">喝</div></div>
+          <span class="badge badge--shu">弱點</span></a></li>
+        <li><a class="list-row" href="vocab-detail.html">
+          <div class="list-row__main"><div class="word" lang="ja"><ruby>行<rt>い</rt></ruby>く</div><div class="list-row__sub">去</div></div>
+          <span class="badge badge--primary">學習中</span></a></li>
+        <li><a class="list-row" href="vocab-detail.html">
+          <div class="list-row__main"><div class="word" lang="ja"><ruby>水<rt>みず</rt></ruby></div><div class="list-row__sub">水</div></div>
+          <span class="badge badge--ok">已熟</span></a></li>
+        <li><a class="list-row" href="vocab-detail.html">
+          <div class="list-row__main"><div class="word" lang="ja"><ruby>学校<rt>がっこう</rt></ruby></div><div class="list-row__sub">學校</div></div>
+          <span class="badge badge--primary">學習中</span></a></li>
+        <li><a class="list-row" href="vocab-detail.html">
+          <div class="list-row__main"><div class="word" lang="ja">これ</div><div class="list-row__sub">這個</div></div>
+          <span class="badge badge--ok">已熟</span></a></li>
+        <li><a class="list-row" href="vocab-detail.html">
+          <div class="list-row__main"><div class="word" lang="ja"><ruby>電車<rt>でんしゃ</rt></ruby></div><div class="list-row__sub">電車</div></div>
+          <span class="badge">未學</span></a></li>
+        <li><a class="list-row" href="vocab-detail.html">
+          <div class="list-row__main"><div class="word" lang="ja"><ruby>朝<rt>あさ</rt></ruby></div><div class="list-row__sub">早上</div></div>
+          <span class="badge">未學</span></a></li>
+      </ul>
+    </div>
+
+    <!-- 主題 -->
+    <div class="stack" data-panel="topic" hidden style="gap:var(--sp-4)">
+      <div class="banner">
+        <svg class="i sm"><use href="#i-bookmark"/></svg>
+        <div>目前從 <strong style="display:inline">飲食</strong> 主題挑選新單字。學習卡和主線相同，只是換一種分類。</div>
+      </div>
+      <div class="topic-grid">
+        <a class="topic is-current" href="#"><span class="topic__name">飲食</span><div class="progress"><span style="width:66%"></span></div><span class="small faint num">32 / 48</span></a>
+        <a class="topic" href="#"><span class="topic__name">交通</span><div class="progress"><span style="width:25%"></span></div><span class="small faint num">9 / 36</span></a>
+        <a class="topic" href="#"><span class="topic__name">時間・日期</span><div class="progress"><span style="width:40%"></span></div><span class="small faint num">22 / 55</span></a>
+        <a class="topic" href="#"><span class="topic__name">家庭・人物</span><div class="progress"><span style="width:18%"></span></div><span class="small faint num">8 / 44</span></a>
+        <a class="topic" href="#"><span class="topic__name">學校・工作</span><div class="progress"><span style="width:12%"></span></div><span class="small faint num">5 / 40</span></a>
+        <a class="topic" href="#"><span class="topic__name">購物</span><div class="progress"><span style="width:0%"></span></div><span class="small faint num">0 / 31</span></a>
+        <a class="topic" href="#"><span class="topic__name">天氣・自然</span><div class="progress"><span style="width:0%"></span></div><span class="small faint num">0 / 27</span></a>
+        <a class="topic" href="#"><span class="topic__name">動作</span><div class="progress"><span style="width:30%"></span></div><span class="small faint num">19 / 63</span></a>
+      </div>
+      <button class="btn btn--secondary btn--block" type="button">改回主線順序</button>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="主要分頁">
+    <a href="home.html"><svg class="i"><use href="#i-home"/></svg>今日</a>
+    <a href="kana-chart.html"><span class="glyph" lang="ja">あ</span>假名</a>
+    <a href="vocab-list.html" aria-current="page"><svg class="i"><use href="#i-layers"/></svg>單字</a>
+    <a href="grammar-list.html"><svg class="i"><use href="#i-book"/></svg>文法</a>
+    <a href="stats.html"><svg class="i"><use href="#i-chart"/></svg>統計</a>
+  </nav>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

@@ -99,7 +99,7 @@
 | 發音 | Web Speech API（`ja-JP`） | iOS 內建，零成本；單字送假名讀音避免誤讀 |
 | 測試 | Vitest | 與 Vite 整合；手寫比對以真實筆跡樣本做回歸測試 |
 | 除錯 | App 內除錯面板（eruda 或自製） | 開發機為 Windows，無法用 Safari 遠端除錯 iPhone；錯誤需能在手機上直接查看 |
-| 託管 | Cloudflare Pages | 免費、自動 HTTPS、支援私有 repo |
+| 託管 | Cloudflare Pages | 免費、自動 HTTPS |
 | 內容建置 | Python（`tools/`） | KanjiVG、JMdict 處理；SudachiPy 或 fugashi 產生讀音；OpenCC 轉繁體 |
 
 > **關於資料庫**：PWA 無法直接使用 SQLite，只能使用瀏覽器內建的 IndexedDB（透過 Dexie 操作）。資料量（數千張卡片 + 複習紀錄）遠在其能力範圍內。代價是資料受瀏覽器的清除規則管理，保存比原生 App 脆弱，因此需要雲端同步（見第 7 章）。若日後改包 Capacitor，可再遷移至 SQLite。
@@ -597,14 +597,15 @@ match /users/{uid}/settings/{doc} {
   - JmdictFurigana，授權條款待確認（見第 12 章）
   - 附各授權條款連結，並註明「已經過篩選與格式轉換」
 - 由上述資料轉出的內容包視為 CC BY-SA；App 程式碼不受影響
-- 託管於 Cloudflare Pages，repo 維持私有
+- 託管於 Cloudflare Pages；GitHub repo 維持公開（內容包依 CC BY-SA 公開，程式碼一併公開無妨）
 
 ---
 
 ## 9. 專案結構（建議）
 
 ```
-japanese-app/
+JP_app/
+├─ docs/                    # 規劃書、設計系統、UI 範例
 ├─ public/
 │  ├─ content/              # 內容包（靜態 JSON）
 │  └─ icons/                # PWA 圖示

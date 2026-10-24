@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>標記已會 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .row-pick { display: grid; grid-template-columns: 56px 1fr; gap: var(--sp-2); align-items: center; }
+  .row-pick + .row-pick { margin-top: var(--sp-2); }
+  .row-pick .kana-table { gap: 6px; }
+  .row-pick .kana-cell .k { font-size: 1.25rem; }
+  .sticky-foot {
+    position: sticky; bottom: 0; padding: var(--sp-3) var(--sp-4) calc(var(--safe-bottom) + var(--sp-4));
+    background: linear-gradient(transparent, var(--c-paper) 30%);
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="icon-btn" href="kana-chart.html" aria-label="返回"><svg class="i"><use href="#i-chev-l"/></svg></a>
+    <h1 class="topbar__title">標記已會</h1>
+    <span class="spacer"></span>
+  </header>
+
+  <main class="page" style="gap:var(--sp-5)">
+    <div class="banner">
+      <svg class="i sm"><use href="#i-info"/></svg>
+      <div>已經會的假名可以跳過。讀和寫分開標記，例如<strong style="display:inline">會念但還不會寫</strong>，就只標記「讀」。</div>
+    </div>
+
+    <section class="stack">
+      <h2 class="section-title">要標記的技能</h2>
+      <div class="segmented">
+        <button type="button" aria-pressed="true">讀（看字讀音）</button>
+        <button type="button" aria-pressed="false">寫（手寫）</button>
+      </div>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">選擇假名<button class="btn btn--ghost btn--sm" type="button" style="min-height:28px;padding:0">全選</button></h2>
+      <div class="card" id="pick" lang="ja"></div>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">標記後</h2>
+      <ul class="list">
+        <li><label class="list-row">
+          <div class="list-row__main"><div class="list-row__title">不再出現在每日學習</div><div class="list-row__sub">暫停排程。之後可在假名詳細頁恢復</div></div>
+          <input type="radio" name="mode" checked style="width:20px;height:20px;accent-color:var(--c-primary)">
+        </label></li>
+        <li><label class="list-row">
+          <div class="list-row__main"><div class="list-row__title">偶爾複習</div><div class="list-row__sub">約 3 個月後出現一次，確認沒忘記</div></div>
+          <input type="radio" name="mode" style="width:20px;height:20px;accent-color:var(--c-primary)">
+        </label></li>
+      </ul>
+    </section>
+  </main>
+
+  <div class="sticky-foot">
+    <button class="btn btn--primary btn--lg btn--block" type="button" id="submit">標記 25 個假名的「讀」為已會</button>
+  </div>
+</div>
+<script src="assets/mock.js"></script>
+<script>
+  const rows = [['あ行','あいうえお'],['か行','かきくけこ'],['さ行','さしすせそ'],['た行','たちつてと'],['な行','なにぬねの'],['は行','はひふへほ'],['ま行','まみむめも'],['や行','や・ゆ・よ'],['ら行','らりるれろ'],['わ行','わ・・・を']];
+  const selected = new Set('あいうえおかきくけこさしすせそたちつてとはひふへほ');
+  const pick = document.getElementById('pick');
+  function render() {
+    pick.innerHTML = rows.map(([label, ks]) => `
+      <div class="row-pick">
+        <button class="chip" type="button" data-row="${ks}" aria-pressed="${[...ks].filter(k => k !== '・').every(k => selected.has(k))}">${label}</button>
+        <div class="kana-table">${[...ks].map(k => k === '・' ? '<span class="kana-cell is-empty"></span>' :
+          `<button type="button" class="kana-cell ${selected.has(k) ? 'is-selected' : ''}" data-k="${k}" aria-pressed="${selected.has(k)}">
+            ${selected.has(k) ? '<span class="check"><svg class="i"><use href="#i-check"/></svg></span>' : ''}<span class="k">${k}</span></button>`).join('')}</div>
+      </div>`).join('');
+    document.getElementById('submit').textContent = `標記 ${selected.size} 個假名的「讀」為已會`;
+  }
+  pick.addEventListener('click', e => {
+    const cell = e.target.closest('[data-k]'); const row = e.target.closest('[data-row]');
+    if (cell) { const k = cell.dataset.k; selected.has(k) ? selected.delete(k) : selected.add(k); }
+    if (row) { const ks = [...row.dataset.row].filter(k => k !== '・'); const all = ks.every(k => selected.has(k)); ks.forEach(k => all ? selected.delete(k) : selected.add(k)); }
+    render();
+  });
+  render();
+</script>
+</body>
+</html>

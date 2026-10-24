@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>學習：單字卡 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="app session">
+  <header class="session-top">
+    <a class="icon-btn" href="home.html" aria-label="結束學習"><svg class="i"><use href="#i-x"/></svg></a>
+    <div class="progress" role="progressbar" aria-valuenow="20" aria-valuemax="32"><span style="width:62%"></span></div>
+    <span class="count num">20 / 32</span>
+    <button class="icon-btn" type="button" aria-label="回報內容錯誤"><svg class="i sm"><use href="#i-flag"/></svg></button>
+  </header>
+
+  <main class="session-body">
+    <span class="badge badge--primary">單字 · 認得</span>
+    <p class="prompt-label">這個單字是什麼意思？</p>
+    <div class="row" style="gap:var(--sp-2)">
+      <p class="prompt-word ja-display" lang="ja"><ruby>食<rt>た</rt></ruby>べる</p>
+      <button class="icon-btn icon-btn--filled" type="button" aria-label="播放讀音"><svg class="i"><use href="#i-volume"/></svg></button>
+    </div>
+
+    <div class="card stack" style="width:100%;text-align:left" data-revealed hidden>
+      <div class="row row--between">
+        <strong style="font-size:var(--fs-title)">吃</strong>
+        <span class="badge">動詞（一段）</span>
+      </div>
+      <hr class="divider">
+      <div class="stack" style="gap:var(--sp-1)">
+        <div class="row" style="gap:var(--sp-2)">
+          <p lang="ja" style="font-size:var(--fs-callout)">りんごを<ruby>食<rt>た</rt></ruby>べる。</p>
+          <button class="icon-btn" type="button" aria-label="播放例句" style="width:36px;height:36px"><svg class="i sm"><use href="#i-volume"/></svg></button>
+        </div>
+        <p class="small muted">吃蘋果。</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="session-foot">
+    <div data-reveal-wrap>
+      <button class="btn btn--primary btn--lg btn--block" type="button" data-reveal>顯示答案</button>
+    </div>
+    <div class="stack" data-revealed hidden>
+      <p class="rating-note">你剛才想起來的程度？</p>
+      <div class="rating">
+        <button class="again" type="button">重來<small>1 分</small></button>
+        <button class="hard" type="button">困難<small>2 天</small></button>
+        <button class="good" type="button">良好<small>5 天</small></button>
+        <button class="easy" type="button">簡單<small>12 天</small></button>
+      </div>
+    </div>
+  </footer>
+  <p class="mock-note">範例互動：按「顯示答案」後出現意思、例句與評分列。單字卡由使用者自評，不預先建議評分。</p>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

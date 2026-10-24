@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>〜てください — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .formula { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2); font-size: var(--fs-callout); }
+  .formula .part { padding: var(--sp-1) var(--sp-3); border-radius: var(--r-sm); background: var(--c-surface-2); }
+  .formula .part--target { background: var(--c-primary-soft); color: var(--c-primary); font-weight: 600; }
+  .ex { font-size: var(--fs-callout); line-height: 2; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="icon-btn" href="grammar-list.html" aria-label="返回"><svg class="i"><use href="#i-chev-l"/></svg></a>
+    <h1 class="topbar__title">第 14 課</h1>
+    <button class="icon-btn" type="button" aria-label="回報內容錯誤"><svg class="i sm"><use href="#i-flag"/></svg></button>
+  </header>
+
+  <main class="page" style="gap:var(--sp-5)">
+    <section class="stack" style="gap:var(--sp-2)">
+      <div class="row" style="gap:var(--sp-2)"><span class="badge">N5</span><span class="badge badge--primary">今天的新卡</span></div>
+      <h2 class="ja-display" lang="ja" style="font-size:2rem;font-weight:600">〜てください</h2>
+      <p class="muted">請（對方）做～</p>
+    </section>
+
+    <section class="card stack">
+      <h3 class="small muted" style="font-weight:600">接續</h3>
+      <div class="formula" lang="ja">
+        <span class="part">動詞て形</span><span class="faint">＋</span><span class="part part--target">ください</span>
+      </div>
+      <div class="small muted" lang="ja"><ruby>書<rt>か</rt></ruby>く → <ruby>書<rt>か</rt></ruby>いて → <ruby>書<rt>か</rt></ruby>い<span class="target">てください</span></div>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">說明</h2>
+      <p style="padding:0 var(--sp-1)">用來禮貌地請求對方做某件事。語氣比命令形柔和，日常對話、店員對客人都很常用。</p>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">例句</h2>
+      <ul class="list">
+        <li class="list-row" style="align-items:flex-start">
+          <div class="list-row__main">
+            <p class="ex" lang="ja">ここに<ruby>名前<rt>なまえ</rt></ruby>を<ruby>書<rt>か</rt></ruby>い<span class="target">てください</span>。</p>
+            <p class="small muted">請在這裡寫名字。</p>
+          </div>
+          <button class="icon-btn" type="button" aria-label="播放例句"><svg class="i sm"><use href="#i-volume"/></svg></button>
+        </li>
+        <li class="list-row" style="align-items:flex-start">
+          <div class="list-row__main">
+            <p class="ex" lang="ja">ちょっと<ruby>待<rt>ま</rt></ruby>っ<span class="target">てください</span>。</p>
+            <p class="small muted">請稍等一下。</p>
+          </div>
+          <button class="icon-btn" type="button" aria-label="播放例句"><svg class="i sm"><use href="#i-volume"/></svg></button>
+        </li>
+        <li class="list-row" style="align-items:flex-start">
+          <div class="list-row__main">
+            <p class="ex" lang="ja">もう<ruby>少<rt>すこ</rt></ruby>しゆっくり<ruby>話<rt>はな</rt></ruby>し<span class="target">てください</span>。</p>
+            <p class="small muted">請再說慢一點。</p>
+          </div>
+          <button class="icon-btn" type="button" aria-label="播放例句"><svg class="i sm"><use href="#i-volume"/></svg></button>
+        </li>
+      </ul>
+    </section>
+
+    <div class="banner banner--warn">
+      <svg class="i sm"><use href="#i-alert"/></svg>
+      <div>對長輩或上司要更客氣時，可以用「〜ていただけませんか」（第 26 課）。</div>
+    </div>
+
+    <section class="stack">
+      <h2 class="section-title">學習狀態</h2>
+      <ul class="list">
+        <li class="list-row"><div class="list-row__main"><div class="list-row__title">理解</div><div class="list-row__sub">看句子選意思</div></div><span class="badge badge--primary">學習中</span></li>
+        <li class="list-row"><div class="list-row__main"><div class="list-row__title">運用</div><div class="list-row__sub">挖空填入</div></div><span class="badge">理解後開始</span></li>
+      </ul>
+    </section>
+
+    <a class="btn btn--secondary btn--block" href="quiz.html">做幾題練習</a>
+  </main>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

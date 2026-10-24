@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>今日 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="app has-tabbar">
+  <header class="topbar">
+    <h1 class="topbar__title topbar__title--left">今日</h1>
+    <a class="icon-btn" href="settings.html" aria-label="同步狀態：已同步"><svg class="i"><use href="#i-cloud-check"/></svg></a>
+    <a class="icon-btn" href="settings.html" aria-label="設定"><svg class="i"><use href="#i-sliders"/></svg></a>
+  </header>
+
+  <main class="page">
+    <p class="muted small" style="margin-top:-12px">10 月 24 日（五）</p>
+
+    <!-- 今日進度 -->
+    <section class="card stack" style="gap:var(--sp-4)">
+      <div class="row" style="gap:var(--sp-5)">
+        <div class="ring" style="--p:40;--size:104px">
+          <div>
+            <div class="num" style="font-size:1.75rem;font-weight:700;line-height:1">8</div>
+            <div class="caption faint">/ 20 分鐘</div>
+          </div>
+        </div>
+        <div class="grow stack" style="gap:var(--sp-2)">
+          <div class="row row--between"><span class="muted">待複習</span><strong class="num">23</strong></div>
+          <div class="row row--between"><span class="muted">新卡</span><strong class="num">9</strong></div>
+          <div class="row row--between"><span class="muted">預估時間</span><strong class="num">約 12 分</strong></div>
+        </div>
+      </div>
+      <a class="btn btn--primary btn--lg btn--block" href="session-recognize.html">繼續學習</a>
+    </section>
+
+    <!-- 通勤模式 -->
+    <section class="list">
+      <label class="list-row">
+        <svg class="i" style="color:var(--c-primary)"><use href="#i-train"/></svg>
+        <div class="list-row__main">
+          <div class="list-row__title">今天先不手寫</div>
+          <div class="list-row__sub">手寫題延後到今天稍晚，只出點選題</div>
+        </div>
+        <span class="switch"><input type="checkbox" aria-label="今天先不手寫"><span></span></span>
+      </label>
+    </section>
+
+    <!-- 今天的內容 -->
+    <section class="stack">
+      <h2 class="section-title">今天的內容</h2>
+      <ul class="list">
+        <li><a class="list-row" href="kana-chart.html">
+          <span class="ja-display" lang="ja" style="font-size:1.5rem;width:28px;text-align:center">あ</span>
+          <div class="list-row__main">
+            <div class="list-row__title">假名</div>
+            <div class="list-row__sub">複習 14 · 新卡 5（は行）</div>
+          </div>
+          <svg class="i sm chev"><use href="#i-chev-r"/></svg>
+        </a></li>
+        <li><a class="list-row" href="vocab-list.html">
+          <svg class="i" style="width:28px;color:var(--c-ink-2)"><use href="#i-layers"/></svg>
+          <div class="list-row__main">
+            <div class="list-row__title">單字</div>
+            <div class="list-row__sub">複習 9 · 新卡 3</div>
+          </div>
+          <svg class="i sm chev"><use href="#i-chev-r"/></svg>
+        </a></li>
+        <li><a class="list-row" href="grammar-list.html">
+          <svg class="i" style="width:28px;color:var(--c-ink-2)"><use href="#i-book"/></svg>
+          <div class="list-row__main">
+            <div class="list-row__title">文法</div>
+            <div class="list-row__sub">新卡 1（第 14 課）</div>
+          </div>
+          <svg class="i sm chev"><use href="#i-chev-r"/></svg>
+        </a></li>
+      </ul>
+    </section>
+
+    <!-- 連續天數 -->
+    <section class="card row">
+      <svg class="i lg" style="color:var(--c-shu)"><use href="#i-flame"/></svg>
+      <div class="grow">
+        <div style="font-weight:600">連續 <span class="num">12</span> 天</div>
+        <div class="small faint">最長紀錄 21 天</div>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="stats.html">統計</a>
+    </section>
+
+    <!-- 自由練習 -->
+    <section class="stack">
+      <h2 class="section-title">自由練習<span class="caption faint">不影響複習排程</span></h2>
+      <div class="chips">
+        <a class="chip" href="kana-detail.html"><svg class="i sm"><use href="#i-target"/></svg>弱點專練 · 4</a>
+        <a class="chip" href="kana-chart.html"><svg class="i sm"><use href="#i-shuffle"/></svg>易混淆對照</a>
+        <a class="chip" href="kana-chart.html"><svg class="i sm"><use href="#i-pencil"/></svg>自由手寫</a>
+        <a class="chip" href="quiz.html"><svg class="i sm"><use href="#i-check"/></svg>小測驗</a>
+      </div>
+    </section>
+
+    <button class="btn btn--secondary btn--block" type="button"><svg class="i sm"><use href="#i-plus"/></svg>今天想多學一點</button>
+  </main>
+
+  <nav class="tabbar" aria-label="主要分頁">
+    <a href="home.html" aria-current="page"><svg class="i"><use href="#i-home"/></svg>今日</a>
+    <a href="kana-chart.html"><span class="glyph" lang="ja">あ</span>假名</a>
+    <a href="vocab-list.html"><svg class="i"><use href="#i-layers"/></svg>單字</a>
+    <a href="grammar-list.html"><svg class="i"><use href="#i-book"/></svg>文法</a>
+    <a href="stats.html"><svg class="i"><use href="#i-chart"/></svg>統計</a>
+  </nav>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

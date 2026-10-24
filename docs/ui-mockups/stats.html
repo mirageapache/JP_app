@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>統計 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .weak { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-2); }
+  .weak a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: var(--sp-3) 0; border-radius: var(--r-md); background: var(--c-shu-soft); color: var(--c-ink); }
+  .weak .k { font-family: var(--font-ja-display); font-size: 1.75rem; line-height: 1.1; }
+  .weak .r { font-size: var(--fs-caption); color: var(--c-shu); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="app has-tabbar">
+  <header class="topbar">
+    <h1 class="topbar__title topbar__title--left">統計</h1>
+  </header>
+
+  <main class="page">
+    <section class="stat-grid">
+      <div class="stat"><div class="stat__value">12<span class="small"> 天</span></div><div class="stat__label">連續天數</div></div>
+      <div class="stat"><div class="stat__value">96<span class="small"> 分</span></div><div class="stat__label">本週時間</div></div>
+      <div class="stat"><div class="stat__value">1,284</div><div class="stat__label">累積題數</div></div>
+    </section>
+
+    <section class="card stack">
+      <div class="row row--between"><h2 style="font-size:var(--fs-body);font-weight:600">最近 7 天</h2><span class="small faint">每日目標 20 分</span></div>
+      <div class="bars" aria-label="最近 7 天每日學習分鐘數">
+        <span style="height:70%" title="18 分"></span>
+        <span style="height:85%" title="22 分"></span>
+        <span style="height:40%" title="10 分"></span>
+        <span style="height:78%" title="20 分"></span>
+        <span style="height:62%" title="16 分"></span>
+        <span style="height:92%" title="24 分"></span>
+        <span style="height:31%" class="is-today" title="8 分"></span>
+      </div>
+      <div class="bars-labels"><span>六</span><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>今天</span></div>
+    </section>
+
+    <section class="card stack">
+      <div class="row row--between"><h2 style="font-size:var(--fs-body);font-weight:600">學習紀錄</h2><span class="small faint">最近 15 週</span></div>
+      <div class="heat" id="heat" aria-label="最近 15 週每日學習量"></div>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">N5 完成度</h2>
+      <ul class="list">
+        <li class="list-row"><div class="list-row__main stack" style="gap:6px"><div class="row row--between"><span>假名</span><span class="small muted num">92%</span></div><div class="progress progress--ok"><span style="width:92%"></span></div></div></li>
+        <li class="list-row"><div class="list-row__main stack" style="gap:6px"><div class="row row--between"><span>單字</span><span class="small muted num">126 / 684</span></div><div class="progress"><span style="width:18%"></span></div></div></li>
+        <li class="list-row"><div class="list-row__main stack" style="gap:6px"><div class="row row--between"><span>文法</span><span class="small muted num">第 14 / 25 課</span></div><div class="progress"><span style="width:56%"></span></div></div></li>
+      </ul>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">手寫弱點<span class="caption faint">錯誤率</span></h2>
+      <div class="weak" lang="ja">
+        <a href="kana-detail.html"><span class="k">ぬ</span><span class="r num">38%</span></a>
+        <a href="kana-detail.html"><span class="k">そ</span><span class="r num">31%</span></a>
+        <a href="kana-detail.html"><span class="k">き</span><span class="r num">24%</span></a>
+        <a href="kana-detail.html"><span class="k">ね</span><span class="r num">20%</span></a>
+      </div>
+      <a class="btn btn--secondary btn--block" href="session-write.html"><svg class="i sm"><use href="#i-target"/></svg>弱點專練</a>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="主要分頁">
+    <a href="home.html"><svg class="i"><use href="#i-home"/></svg>今日</a>
+    <a href="kana-chart.html"><span class="glyph" lang="ja">あ</span>假名</a>
+    <a href="vocab-list.html"><svg class="i"><use href="#i-layers"/></svg>單字</a>
+    <a href="grammar-list.html"><svg class="i"><use href="#i-book"/></svg>文法</a>
+    <a href="stats.html" aria-current="page"><svg class="i"><use href="#i-chart"/></svg>統計</a>
+  </nav>
+</div>
+<script src="assets/mock.js"></script>
+<script>
+  // 15 週 × 7 天，固定亂數產生範例資料；網格依「週」為欄
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const cells = [];
+  for (let d = 0; d < 7; d++) for (let w = 0; w < 15; w++) {
+    const v = w < 3 ? 0 : rnd(); const lv = v < .15 ? '' : v < .45 ? 'l1' : v < .8 ? 'l2' : 'l3';
+    cells.push(`<i class="${lv}"></i>`);
+  }
+  document.getElementById('heat').innerHTML = cells.join('');
+</script>
+</body>
+</html>

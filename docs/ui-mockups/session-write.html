@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>學習：手寫題 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="app session">
+  <header class="session-top">
+    <a class="icon-btn" href="home.html" aria-label="結束學習"><svg class="i"><use href="#i-x"/></svg></a>
+    <div class="progress" role="progressbar" aria-valuenow="13" aria-valuemax="32"><span style="width:40%"></span></div>
+    <span class="count num">13 / 32</span>
+  </header>
+
+  <main class="session-body" style="justify-content:flex-start;gap:var(--sp-3)">
+    <div class="row" style="gap:var(--sp-2)">
+      <span class="badge badge--primary">假名 · 書寫</span>
+      <span class="badge">空白模式</span>
+    </div>
+    <div class="row" style="gap:var(--sp-2)">
+      <p class="prompt-word" style="font-weight:600">nu</p>
+      <button class="icon-btn icon-btn--filled" type="button" aria-label="播放讀音"><svg class="i"><use href="#i-volume"/></svg></button>
+    </div>
+
+    <div class="writing-box" data-writing id="box">
+      <canvas aria-label="書寫區：在此寫出平假名 nu"></canvas>
+    </div>
+
+    <div id="status" class="feedback feedback--hint" aria-live="polite">
+      第 <span class="num" id="n">1</span> / 2 筆
+    </div>
+  </main>
+
+  <footer class="session-foot">
+    <div class="row" id="tools" style="justify-content:space-between">
+      <button class="btn btn--secondary btn--sm" type="button" onclick="box.writing.undo()"><svg class="i sm"><use href="#i-undo"/></svg>復原</button>
+      <button class="btn btn--secondary btn--sm" type="button" id="hint"><svg class="i sm"><use href="#i-bulb"/></svg>提示</button>
+      <button class="btn btn--ghost btn--sm" type="button" id="skip"><svg class="i sm"><use href="#i-skip"/></svg>跳過</button>
+    </div>
+
+    <div class="stack" id="done" hidden>
+      <p class="rating-note">全部筆畫一次通過，建議「良好」</p>
+      <div class="rating">
+        <button class="again" type="button">重來<small>1 分</small></button>
+        <button class="hard" type="button">困難<small>1 天</small></button>
+        <button class="good is-suggested" type="button">良好<small>3 天</small></button>
+        <button class="easy" type="button">簡單<small>7 天</small></button>
+      </div>
+    </div>
+
+    <div class="row" style="gap:var(--sp-2);justify-content:center">
+      <button class="btn btn--ghost btn--sm" type="button" id="demoWrong">示範：判錯</button>
+      <button class="btn btn--ghost btn--sm" type="button" id="demoDone">示範：完成</button>
+    </div>
+  </footer>
+  <p class="mock-note">範例互動：可直接在田字格中書寫（只畫墨跡，不做判定）。「示範：判錯」會讓最後一筆變朱色、晃動後消失；「示範：完成」會顯示評分列。</p>
+</div>
+<script src="assets/mock.js"></script>
+<script>
+  const box = document.getElementById('box');
+  const status = document.getElementById('status');
+  const n = document.getElementById('n');
+  function setStatus(kind, html) { status.className = 'feedback feedback--' + kind; status.innerHTML = html; }
+  box.addEventListener('stroke', e => {
+    const k = Math.min(e.detail.count + 1, 2);
+    setStatus('hint', `第 <span class="num">${k}</span> / 2 筆`);
+  });
+  document.getElementById('demoWrong').onclick = () => {
+    if (!box.writing.flagLastWrong()) { setStatus('shu', '請先寫一筆'); return; }
+    setStatus('shu', '<svg class="i sm"><use href="#i-x"/></svg>方向反了，從左上往右下寫');
+  };
+  document.getElementById('hint').onclick = () => setStatus('hint', '<svg class="i sm"><use href="#i-bulb"/></svg>第 1 筆從左上開始，往右下斜寫');
+  document.getElementById('skip').onclick = () => setStatus('shu', '已跳過，這題記為「重來」');
+  document.getElementById('demoDone').onclick = () => {
+    setStatus('ok', '<svg class="i sm"><use href="#i-check"/></svg>寫對了');
+    document.getElementById('tools').hidden = true;
+    document.getElementById('done').hidden = false;
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>測驗 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .cloze { font-size: 1.375rem; line-height: 2.2; }
+  .blank { display: inline-block; min-width: 4.5em; border-bottom: 2px solid var(--c-primary); margin: 0 2px; }
+  .choices--1col { grid-template-columns: 1fr; }
+  .choices--1col .choice { text-align: left; padding-left: var(--sp-4); }
+</style>
+</head>
+<body>
+<div class="app session">
+  <header class="session-top">
+    <a class="icon-btn" href="home.html" aria-label="結束測驗"><svg class="i"><use href="#i-x"/></svg></a>
+    <div class="progress" role="progressbar" aria-valuenow="4" aria-valuemax="10"><span style="width:40%"></span></div>
+    <span class="count num">4 / 10</span>
+  </header>
+
+  <main class="session-body" style="gap:var(--sp-3)">
+    <span class="badge">測驗 · 第 14 課 · 不影響複習排程</span>
+    <p class="prompt-label">選出最適合填入空格的答案</p>
+    <p class="cloze" lang="ja">すみませんが、ここに<ruby>名前<rt>なまえ</rt></ruby>を<ruby>書<rt>か</rt></ruby>い<span class="blank" aria-label="空格"></span>。</p>
+    <p class="muted small">不好意思，請在這裡寫名字。</p>
+  </main>
+
+  <footer class="session-foot">
+    <div class="choices choices--1col" data-answer="a" lang="ja">
+      <button class="choice" data-value="b" type="button">ています</button>
+      <button class="choice" data-value="a" type="button">てください</button>
+      <button class="choice" data-value="c" type="button">てもいいです</button>
+      <button class="choice" data-value="d" type="button">たいです</button>
+    </div>
+    <div class="stack" data-after-answer hidden>
+      <div class="banner">
+        <svg class="i sm"><use href="#i-bulb"/></svg>
+        <div><strong>〜てください：請做～</strong>中文的「請…」對應請求的語氣，所以用「てください」。</div>
+      </div>
+      <button class="btn btn--primary btn--lg btn--block" type="button">下一題</button>
+    </div>
+  </footer>
+  <p class="mock-note">範例互動：點選任一選項會顯示正確答案與解說。測驗結果只寫入 quizLogs，不影響 FSRS 排程。</p>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

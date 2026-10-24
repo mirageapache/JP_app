@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>假名 — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="app has-tabbar">
+  <header class="topbar">
+    <h1 class="topbar__title topbar__title--left">假名</h1>
+    <a class="btn btn--ghost btn--sm" href="mark-known.html">標記已會</a>
+  </header>
+
+  <main class="page" style="gap:var(--sp-4)">
+    <div class="segmented" id="script">
+      <button type="button" aria-pressed="true" data-script="hira">平假名</button>
+      <button type="button" aria-pressed="false" data-script="kata">片假名</button>
+    </div>
+
+    <div class="row row--between">
+      <div class="chips" data-single id="set">
+        <button class="chip" type="button" aria-pressed="true" data-set="seion">清音</button>
+        <button class="chip" type="button" aria-pressed="false" data-set="dakuon">濁音・半濁音</button>
+        <button class="chip" type="button" aria-pressed="false" data-set="youon">拗音</button>
+      </div>
+    </div>
+
+    <div class="row row--between">
+      <span class="small muted">顯示進度</span>
+      <div class="segmented" id="skill" style="width:140px">
+        <button type="button" aria-pressed="true" data-skill="read">讀</button>
+        <button type="button" aria-pressed="false" data-skill="write">寫</button>
+      </div>
+    </div>
+
+    <div class="kana-table" id="table" lang="ja"></div>
+
+    <div class="legend">
+      <span><i style="background:var(--c-ok-soft);border-color:transparent"></i>已熟</span>
+      <span><i style="background:var(--c-surface)"></i>學習中</span>
+      <span><i style="border-style:dashed;background:var(--c-paper)"></i>未學</span>
+      <span><i style="background:var(--c-surface-2);border-color:transparent"></i>標記已會</span>
+      <span><i style="background:var(--c-shu);border-radius:50%;width:8px;height:8px;border:0"></i>弱點</span>
+    </div>
+
+    <div class="stack">
+      <h2 class="section-title">練習</h2>
+      <ul class="list">
+        <li><a class="list-row" href="kana-detail.html">
+          <svg class="i" style="color:var(--c-shu)"><use href="#i-target"/></svg>
+          <div class="list-row__main"><div class="list-row__title">弱點專練</div><div class="list-row__sub">ぬ、ね、き、そ 等 4 個</div></div>
+          <svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+        <li><a class="list-row" href="session-recognize.html">
+          <svg class="i" style="color:var(--c-primary)"><use href="#i-shuffle"/></svg>
+          <div class="list-row__main"><div class="list-row__title">易混淆對照</div><div class="list-row__sub" lang="ja">ぬ／め、シ／ツ、ソ／ン…</div></div>
+          <svg class="i sm chev"><use href="#i-chev-r"/></svg></a></li>
+      </ul>
+      <p class="small faint" style="padding:0 var(--sp-1)">點任一假名可看筆順並自由練習。自由練習不影響複習排程。</p>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="主要分頁">
+    <a href="home.html"><svg class="i"><use href="#i-home"/></svg>今日</a>
+    <a href="kana-chart.html" aria-current="page"><span class="glyph" lang="ja">あ</span>假名</a>
+    <a href="vocab-list.html"><svg class="i"><use href="#i-layers"/></svg>單字</a>
+    <a href="grammar-list.html"><svg class="i"><use href="#i-book"/></svg>文法</a>
+    <a href="stats.html"><svg class="i"><use href="#i-chart"/></svg>統計</a>
+  </nav>
+</div>
+<script src="assets/mock.js"></script>
+<script>
+  // 範例資料
+  const SETS = {
+    seion: { cols: 5,
+      kana: 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもや・ゆ・よらりるれろわ・・・をん・・・・',
+      roma: 'a i u e o ka ki ku ke ko sa shi su se so ta chi tsu te to na ni nu ne no ha hi fu he ho ma mi mu me mo ya - yu - yo ra ri ru re ro wa - - - wo n - - - -'.split(' ') },
+    dakuon: { cols: 5,
+      kana: 'がぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ',
+      roma: 'ga gi gu ge go za ji zu ze zo da ji zu de do ba bi bu be bo pa pi pu pe po'.split(' ') },
+    youon: { cols: 3,
+      kana: ['きゃ','きゅ','きょ','しゃ','しゅ','しょ','ちゃ','ちゅ','ちょ','にゃ','にゅ','にょ','ひゃ','ひゅ','ひょ','みゃ','みゅ','みょ','りゃ','りゅ','りょ','ぎゃ','ぎゅ','ぎょ','じゃ','じゅ','じょ','びゃ','びゅ','びょ','ぴゃ','ぴゅ','ぴょ'],
+      roma: 'kya kyu kyo sha shu sho cha chu cho nya nyu nyo hya hyu hyo mya myu myo rya ryu ryo gya gyu gyo ja ju jo bya byu byo pya pyu pyo'.split(' ') }
+  };
+  // 每個假名的狀態（只是範例）
+  function state(k, skill, script) {
+    if (script === 'kata') return { s: 'new' };
+    const rows = 'あかさたなはまやらわん';
+    const base = k[0];
+    const seionIdx = SETS.seion.kana.indexOf(base);
+    const row = seionIdx >= 0 ? Math.floor(seionIdx / 5) : -1;
+    if (skill === 'read') {
+      if ('ぬね'.includes(k)) return { s: 'learning', weak: true };
+      if (k.length > 1) return { s: 'new' };
+      if (row >= 0 && row <= 4) return { s: 'mastered' };
+      if (row > 4) return { s: 'known' };
+      return { s: 'known' }; // 濁音
+    }
+    if ('きそ'.includes(k)) return { s: 'learning', weak: true };
+    if (row === 0) return { s: 'mastered' };
+    if (row === 1 || row === 2) return { s: 'learning' };
+    return { s: 'new' };
+  }
+  const toKata = s => [...s].map(c => { const n = c.codePointAt(0); return n >= 0x3041 && n <= 0x3096 ? String.fromCodePoint(n + 0x60) : c; }).join('');
+  let cur = { script: 'hira', set: 'seion', skill: 'read' };
+  function render() {
+    const def = SETS[cur.set];
+    const list = Array.isArray(def.kana) ? def.kana : [...def.kana];
+    const table = document.getElementById('table');
+    table.style.gridTemplateColumns = `repeat(${def.cols}, 1fr)`;
+    table.innerHTML = list.map((k, i) => {
+      if (k === '・') return '<span class="kana-cell is-empty"></span>';
+      const shown = cur.script === 'kata' ? toKata(k) : k;
+      const st = state(k, cur.skill, cur.script);
+      const cls = { mastered: 'is-mastered', known: 'is-known', new: 'is-new', learning: '' }[st.s];
+      return `<a class="kana-cell ${cls}" href="kana-detail.html" aria-label="${shown}（${def.roma[i]}）">
+        ${st.weak ? '<span class="dot" aria-label="弱點"></span>' : ''}
+        <span class="k">${shown}</span><span class="r">${def.roma[i]}</span></a>`;
+    }).join('');
+  }
+  document.getElementById('script').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { cur.script = b.dataset.script; render(); } });
+  document.getElementById('set').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { cur.set = b.dataset.set; render(); } });
+  document.getElementById('skill').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { cur.skill = b.dataset.skill; render(); } });
+  render();
+</script>
+</body>
+</html>

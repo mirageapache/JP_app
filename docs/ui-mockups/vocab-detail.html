@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>食べる — 日語練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="icon-btn" href="vocab-list.html" aria-label="返回"><svg class="i"><use href="#i-chev-l"/></svg></a>
+    <h1 class="topbar__title">單字</h1>
+    <button class="icon-btn" type="button" aria-label="回報內容錯誤"><svg class="i sm"><use href="#i-flag"/></svg></button>
+  </header>
+
+  <main class="page" style="gap:var(--sp-5)">
+    <section class="stack" style="align-items:center;text-align:center;gap:var(--sp-2);padding-top:var(--sp-4)">
+      <div class="row" style="gap:var(--sp-2)">
+        <span class="badge">N5</span><span class="badge">飲食</span>
+      </div>
+      <p class="ja-display" lang="ja" style="font-size:3rem;line-height:1.4"><ruby>食<rt>た</rt></ruby>べる</p>
+      <div class="row" style="gap:var(--sp-2)">
+        <span class="muted" lang="ja">たべる</span>
+        <button class="icon-btn icon-btn--filled" type="button" aria-label="播放讀音" style="width:36px;height:36px"><svg class="i sm"><use href="#i-volume"/></svg></button>
+      </div>
+    </section>
+
+    <section class="card stack" style="gap:var(--sp-3)">
+      <div class="row row--between"><span class="muted small">意思</span><strong style="font-size:var(--fs-title)">吃</strong></div>
+      <hr class="divider">
+      <div class="row row--between"><span class="muted small">詞性</span><span>動詞（一段）</span></div>
+      <hr class="divider">
+      <div class="row row--between"><span class="muted small">て形</span><span lang="ja"><ruby>食<rt>た</rt></ruby>べて</span></div>
+      <hr class="divider">
+      <div class="row row--between"><span class="muted small">ます形</span><span lang="ja"><ruby>食<rt>た</rt></ruby>べます</span></div>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">例句</h2>
+      <ul class="list">
+        <li class="list-row" style="align-items:flex-start">
+          <div class="list-row__main stack" style="gap:2px">
+            <p lang="ja" style="font-size:var(--fs-callout)">りんごを<ruby>食<rt>た</rt></ruby>べる。</p>
+            <p class="small muted">吃蘋果。</p>
+          </div>
+          <button class="icon-btn" type="button" aria-label="播放例句"><svg class="i sm"><use href="#i-volume"/></svg></button>
+        </li>
+        <li class="list-row" style="align-items:flex-start">
+          <div class="list-row__main stack" style="gap:2px">
+            <p lang="ja" style="font-size:var(--fs-callout)"><ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べましたか。</p>
+            <p class="small muted">吃過早餐了嗎？</p>
+          </div>
+          <button class="icon-btn" type="button" aria-label="播放例句"><svg class="i sm"><use href="#i-volume"/></svg></button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="stack">
+      <h2 class="section-title">學習狀態</h2>
+      <ul class="list">
+        <li class="list-row"><div class="list-row__main"><div class="list-row__title">認得</div><div class="list-row__sub">看日文想意思</div></div><span class="badge badge--ok">已熟</span><span class="small faint num" style="width:72px;text-align:right">11/20</span></li>
+        <li class="list-row"><div class="list-row__main"><div class="list-row__title">說得出</div><div class="list-row__sub">看中文想日文</div></div><span class="badge badge--primary">學習中</span><span class="small faint num" style="width:72px;text-align:right">10/27</span></li>
+        <li class="list-row"><div class="list-row__main"><div class="list-row__title">聽得懂</div><div class="list-row__sub">聽讀音想意思</div></div><span class="badge">未開始</span><span class="small faint" style="width:72px;text-align:right">—</span></li>
+      </ul>
+    </section>
+
+    <button class="btn btn--secondary btn--block" type="button"><svg class="i sm"><use href="#i-flag"/></svg>這個單字有錯誤</button>
+  </main>
+</div>
+<script src="assets/mock.js"></script>
+</body>
+</html>

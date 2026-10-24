@@ -8,8 +8,11 @@
 
 | 文件 | 內容 |
 |---|---|
-| [japanese-app-project-plan.md](japanese-app-project-plan.md) | 專案規劃書：需求、架構、資料設計、里程碑 |
-| [plan-review-questions.md](plan-review-questions.md) | 規劃書 v0.1 審查問題與回答（決策紀錄） |
+| [japanese-app-project-plan.md](docs/japanese-app-project-plan.md) | 專案規劃書：需求、架構、資料設計、里程碑 |
+| [plan-review-questions.md](docs/plan-review-questions.md) | 規劃書 v0.1 審查問題與回答（決策紀錄） |
+| [development-phases.md](docs/development-phases.md) | 各開發階段的工作項目清單（P0～P5） |
+| [design-system.md](docs/design-system.md) | 設計系統：色彩、字體、元件、手寫練習的視覺規範 |
+| [ui-mockups/index.html](docs/ui-mockups/index.html) | 所有頁面的 UI 範例（用瀏覽器開啟） |
 
 ## 主要功能
 
