@@ -383,7 +383,8 @@ button.list-row { width: 100%; border: 0; background: none; text-align: left; }
 
 /* ---------- 田字格 ---------- */
 .writing-box {
-  position: relative; width: min(100%, 340px); aspect-ratio: 1; margin: 0 auto;
+  /* 寬度 = 螢幕寬 − 左右各 24（.page 已留 16）；大螢幕上限 400 */
+  position: relative; width: min(calc(100% - 16px), 400px); aspect-ratio: 1; margin: 0 auto;
   border: 1.5px solid var(--c-line); border-radius: var(--r-md);
   background:
     linear-gradient(var(--c-surface), var(--c-surface));

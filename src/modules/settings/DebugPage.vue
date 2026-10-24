@@ -4,12 +4,13 @@ import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import { db, type ErrorLog } from '@/core/db'
 import { getDeviceInfo, type DeviceInfo } from '@/core/debug/deviceInfo'
+import { copyText, useToast } from '@/core/ui/useToast'
 
 const version = __APP_VERSION__
 const logs = ref<ErrorLog[]>([])
 const filter = ref<'all' | 'error' | 'warn'>('all')
 const info = ref<DeviceInfo | null>(null)
-const toast = ref('')
+const { toast, show: showToast } = useToast()
 
 const shown = computed(() =>
   logs.value.filter((l) =>
@@ -31,23 +32,13 @@ function fmtTime(t: number) {
   return new Date(t).toLocaleTimeString('zh-TW', { hour12: false })
 }
 
-function showToast(msg: string) {
-  toast.value = msg
-  setTimeout(() => (toast.value = ''), 2000)
-}
-
 async function copyAll() {
   const text = [
     `日語練習帳 ${version}`,
     JSON.stringify(info.value, null, 2),
     ...shown.value.map((l) => `[${fmtTime(l.at)}] ${l.level}: ${l.message}${l.stack ? '\n' + l.stack : ''}`),
   ].join('\n')
-  try {
-    await navigator.clipboard.writeText(text)
-    showToast('已複製')
-  } catch {
-    showToast('無法存取剪貼簿')
-  }
+  showToast((await copyText(text)) ? '已複製' : '無法存取剪貼簿')
 }
 
 function testError() {

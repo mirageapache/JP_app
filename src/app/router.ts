@@ -7,6 +7,7 @@ export const router = createRouter({
     { path: '/settings', name: 'settings', component: () => import('@/modules/settings/SettingsPage.vue') },
     { path: '/settings/debug', name: 'debug', component: () => import('@/modules/settings/DebugPage.vue') },
     { path: '/p0', name: 'p0', component: () => import('@/modules/p0/P0IndexPage.vue') },
+    { path: '/p0/handwriting', name: 'p0-handwriting', component: () => import('@/modules/p0/P0HandwritingPage.vue') },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/modules/home/NotFoundPage.vue') },
   ],
   scrollBehavior: () => ({ top: 0 }),

@@ -38,9 +38,9 @@
 - [x] Python 腳本：從 KanjiVG 取出假名，重取樣輸出 JSON（已直接處理全部 178 個假名）
 - [x] 確認 KanjiVG 有無濁音、半濁音、小寫假名的獨立檔案（都有，見 tools/README.md）
 - [x] 確認 §12 候選變體（き、さ、そ、り、ふ）KanjiVG 收錄的是哪種寫法（き4 さ3 そ1 り2 ふ4）
-- [ ] 田字格畫布：Pointer Events 收集筆畫、`devicePixelRatio`、`touch-action: none`
-- [ ] 逐筆比對（平均距離、Fréchet、起訖點、長度、順序錯誤）
-- [ ] 判定結果的視覺回饋（通過、位置偏差、方向錯誤、順序錯誤）
+- [x] 田字格畫布：Pointer Events 收集筆畫、`devicePixelRatio`、`touch-action: none`
+- [x] 逐筆比對（平均距離、Fréchet、起訖點、長度、方向、順序錯誤）
+- [x] 判定結果的視覺回饋（通過、位置偏差、方向錯誤、順序錯誤、形狀不像）
 
 ### Firebase 原型
 - [ ] 建立 Firebase 專案、啟用電子郵件登入與 Firestore
