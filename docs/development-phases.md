@@ -43,9 +43,10 @@
 - [x] 判定結果的視覺回饋（通過、位置偏差、方向錯誤、順序錯誤、形狀不像）
 
 ### Firebase 原型
-- [ ] 建立 Firebase 專案、啟用電子郵件登入與 Firestore
-- [ ] 電子郵件登入、上傳一份 chunk、讀回
-- [ ] 試做 Google 登入
+- [ ] 建立 Firebase 專案、啟用電子郵件登入與 Firestore（專案擁有者；步驟見 firebase/README.md）
+- [x] 電子郵件登入、上傳一份 chunk、讀回（程式已完成，待 .env.local 設定後實測）
+- [x] 試做 Google 登入（彈出視窗，不支援時改重新導向）
+- [x] Firestore 安全規則與規則測試（測試需 Java 執行 Emulator）
 
 ### UI 函式庫試做
 - [ ] Vant 4 做一頁（首頁）

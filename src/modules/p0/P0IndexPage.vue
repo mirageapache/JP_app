@@ -7,7 +7,7 @@ import type { IconName } from '@/components/icons'
 const items: { to?: string; title: string; sub: string; icon: IconName; phase: string }[] = [
   { to: '/settings/debug', title: '除錯面板', sub: 'console 輸出與未捕捉錯誤', icon: 'bug', phase: '可測' },
   { to: '/p0/handwriting', title: '手寫原型', sub: '田字格、逐筆判定、手指與 Apple Pencil', icon: 'pencil', phase: '可測' },
-  { title: 'Firebase', sub: '登入、隔天仍登入、離線後上傳', icon: 'cloud', phase: '製作中' },
+  { to: '/p0/firebase', title: 'Firebase', sub: '登入、隔天仍登入、離線後上傳', icon: 'cloud', phase: '待設定' },
   { title: '裝置能力', sub: 'TTS、持久儲存、安裝狀態', icon: 'wifi', phase: '製作中' },
   { title: 'UI 函式庫試做', sub: 'Vant 4 與 Konsta UI 各一頁', icon: 'layers', phase: '製作中' },
 ]

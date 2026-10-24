@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// 規劃書 §7.4：每個人只能讀寫自己的資料；chunk 只增不改，createdAt 由伺服器決定
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+
+      match /chunks/{chunkId} {
+        allow read: if request.auth != null && request.auth.uid == uid;
+        allow create: if request.auth != null && request.auth.uid == uid
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.deviceId is string
+          && request.resource.data.schemaVersion is int;
+        allow update: if false;
+        // 僅供「刪除帳號與雲端資料」使用
+        allow delete: if request.auth != null && request.auth.uid == uid;
+      }
+
+      match /settings/{doc} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+  }
+}

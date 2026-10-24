@@ -20,5 +20,6 @@
     "baseUrl": ".",
     "paths": { "@/*": ["src/*"] }
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "tests/**/*.ts", "env.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.vue", "tests/**/*.ts", "env.d.ts"],
+  "exclude": ["firebase"]
 }
