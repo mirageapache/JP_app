@@ -79,6 +79,17 @@ export async function setSetting<K extends Key>(key: K, value: SettingsSchema[K]
   ;(state as SettingsSchema)[key] = value
 }
 
+/** 從 Dexie 重新讀取，不經過預設值（同步或匯入改了設定後呼叫，避免畫面短暫回到預設值） */
+export async function reloadSettings(): Promise<void> {
+  const rows = await db.settings.toArray()
+  const next: Record<string, unknown> = { ...SETTING_DEFAULTS }
+  for (const row of rows) {
+    if (row.key in SETTING_DEFAULTS) next[row.key] = row.value
+  }
+  Object.assign(state, next)
+  loaded = Promise.resolve()
+}
+
 /** 測試用：清除快取狀態 */
 export function resetSettingsCache(): void {
   Object.assign(state, SETTING_DEFAULTS)

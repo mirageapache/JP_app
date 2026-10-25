@@ -46,7 +46,7 @@ export const isSignedIn = computed(() => !!state.user)
 export async function refreshPending(): Promise<void> {
   state.pending = await countPending()
   const meta = await getSyncMeta()
-  state.lastSyncAt = Math.max(meta.lastPulledAt ?? 0, meta.lastPushedAt ?? 0) || null
+  state.lastSyncAt = meta.lastSyncAt
   state.lastError = meta.lastError
 }
 

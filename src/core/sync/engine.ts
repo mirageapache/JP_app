@@ -1,5 +1,5 @@
 import { db, type HandwritingLog } from '@/core/db'
-import { resetSettingsCache, SETTING_SCOPE } from '@/core/settings'
+import { reloadSettings, SETTING_SCOPE } from '@/core/settings'
 import { rebuildCards } from '@/core/srs/repository'
 import type { CardEventRecord, ReviewLogRecord } from '@/core/srs/types'
 import { getDeviceId } from './deviceId'
@@ -15,6 +15,8 @@ import { SCHEMA_VERSION, type ChunkDoc, type ChunkPayload, type RemoteSettings, 
 
 /** 單一 chunk 的紀錄數上限（Firestore 文件 1 MiB；手寫紀錄較大，保守估計） */
 export const CHUNK_MAX_RECORDS = 400
+/** 下載一頁的 chunk 數 */
+export const PULL_PAGE = 200
 
 export interface SyncMeta {
   key: 'main'
@@ -22,6 +24,8 @@ export interface SyncMeta {
   lastPulledAt: number | null
   lastPushedAt: number | null
   lastSettingsPushAt: number | null
+  /** 最近一次成功完成整輪同步的時間（即使沒有東西要傳） */
+  lastSyncAt: number | null
   lastError: string | null
 }
 
@@ -33,7 +37,18 @@ export interface SyncResult {
   settingsPushed: number
 }
 
-const EMPTY_META: SyncMeta = { key: 'main', uid: null, lastPulledAt: null, lastPushedAt: null, lastSettingsPushAt: null, lastError: null }
+const EMPTY_META: SyncMeta = { key: 'main', uid: null, lastPulledAt: null, lastPushedAt: null, lastSettingsPushAt: null, lastSyncAt: null, lastError: null }
+
+/** 把所有紀錄標回未上傳（換帳號、刪除雲端後） */
+async function markAllUnsynced(): Promise<void> {
+  await db.transaction('rw', [db.reviewLogs, db.cardEvents, db.handwritingLogs], async () => {
+    await Promise.all([
+      db.reviewLogs.toCollection().modify({ syncedAt: null }),
+      db.cardEvents.toCollection().modify({ syncedAt: null }),
+      db.handwritingLogs.toCollection().modify({ syncedAt: null }),
+    ])
+  })
+}
 
 export async function getSyncMeta(): Promise<SyncMeta> {
   return (await db.syncMeta.get('main')) ?? { ...EMPTY_META }
@@ -56,8 +71,10 @@ export async function countPending(): Promise<number> {
 export function createSyncEngine(transport: SyncTransport) {
   async function ensureUid(uid: string) {
     const meta = await getSyncMeta()
-    // 換了帳號：之前的下載基準不適用，從頭下載
-    if (meta.uid !== uid) await db.syncMeta.put({ ...EMPTY_META, uid })
+    if (meta.uid === uid) return
+    // 換了帳號：下載基準不適用，從頭下載；本機紀錄全部視為未上傳，才會進到新帳號
+    await db.syncMeta.put({ ...EMPTY_META, uid })
+    if (meta.uid !== null) await markAllUnsynced()
   }
 
   /** 上傳所有尚未同步的紀錄 */
@@ -98,20 +115,32 @@ export function createSyncEngine(transport: SyncTransport) {
   /** 下載其他裝置的新 chunk，合併並重建受影響的卡片 */
   async function pull(uid: string): Promise<{ pulled: number; rebuiltCards: number }> {
     const meta = await getSyncMeta()
-    const chunks = await transport.listChunks(uid, meta.lastPulledAt ?? undefined)
     const deviceId = getDeviceId()
+    // 首次（或重設後）全量下載時不略過自己裝置的 chunk：本機 IndexedDB 被清但 localStorage 的 deviceId 還在時，才還原得回來
+    const skipOwn = meta.lastPulledAt !== null
     let pulled = 0
     const affected = new Set<string>()
     let maxCreated = meta.lastPulledAt ?? 0
-    for (const c of chunks) {
-      maxCreated = Math.max(maxCreated, c.createdAt)
-      if (c.deviceId === deviceId) continue
-      const added = await mergeChunk(c)
-      pulled += added.count
-      for (const id of added.cardIds) affected.add(id)
+    let since = meta.lastPulledAt ?? undefined
+    let any = false
+    // 分頁：一次最多 PULL_PAGE 份，拿滿就以最後一份的 createdAt 繼續（>= 重疊，uuid 去重）
+    for (;;) {
+      const chunks = await transport.listChunks(uid, since, PULL_PAGE)
+      for (const c of chunks) {
+        maxCreated = Math.max(maxCreated, c.createdAt)
+        if (skipOwn && c.deviceId === deviceId) continue
+        const added = await mergeChunk(c)
+        pulled += added.count
+        for (const id of added.cardIds) affected.add(id)
+      }
+      any ||= chunks.length > 0
+      if (chunks.length < PULL_PAGE) break
+      const last = chunks[chunks.length - 1]!.createdAt
+      if (since !== undefined && last <= since) break // 同一時間戳超過一頁，避免無窮迴圈
+      since = last
     }
     const rebuiltCards = affected.size ? await rebuildCards(affected) : 0
-    if (chunks.length) await patchMeta({ lastPulledAt: maxCreated })
+    if (any) await patchMeta({ lastPulledAt: maxCreated })
     return { pulled, rebuiltCards }
   }
 
@@ -129,7 +158,7 @@ export function createSyncEngine(transport: SyncTransport) {
         pulled++
       }
     }
-    if (pulled) resetSettingsCache()
+    if (pulled) await reloadSettings()
 
     const meta = await getSyncMeta()
     const patch: RemoteSettings = {}
@@ -152,7 +181,7 @@ export function createSyncEngine(transport: SyncTransport) {
       const s = await syncSettings(uid)
       const p = await pull(uid)
       const pushed = await push(uid)
-      await patchMeta({ lastError: null })
+      await patchMeta({ lastError: null, lastSyncAt: Date.now() })
       return { pushed, pulled: p.pulled, rebuiltCards: p.rebuiltCards, settingsPulled: s.pulled, settingsPushed: s.pushed }
     } catch (e) {
       await patchMeta({ lastError: e instanceof Error ? e.message : String(e) })
@@ -165,13 +194,7 @@ export function createSyncEngine(transport: SyncTransport) {
     const n = await transport.deleteAll(uid)
     await db.syncMeta.put({ ...EMPTY_META })
     // 本機紀錄視為未上傳，之後若再登入會重新上傳
-    await db.transaction('rw', [db.reviewLogs, db.cardEvents, db.handwritingLogs], async () => {
-      await Promise.all([
-        db.reviewLogs.toCollection().modify({ syncedAt: null }),
-        db.cardEvents.toCollection().modify({ syncedAt: null }),
-        db.handwritingLogs.toCollection().modify({ syncedAt: null }),
-      ])
-    })
+    await markAllUnsynced()
     return n
   }
 

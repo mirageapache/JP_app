@@ -30,6 +30,7 @@ export function describeAuthError(e: unknown): string {
     'auth/too-many-requests': '嘗試次數過多，請稍後再試',
     'auth/network-request-failed': '網路連線失敗',
     'auth/operation-not-allowed': 'Firebase 尚未啟用這種登入方式',
+    'auth/requires-recent-login': '為了安全，請重新輸入密碼後再執行',
   }
   return map[code] ?? (e instanceof Error ? e.message : String(e))
 }
@@ -66,7 +67,16 @@ export async function onAuthChanged(cb: (user: AuthUser | null) => void): Promis
   return onAuthStateChanged(auth, (u) => cb(u ? toAuthUser(u) : null))
 }
 
-/** 刪除帳號（Firebase 要求最近登入過；逾時需重新登入） */
+/** 以密碼重新驗證（刪除帳號前 Firebase 要求最近登入過） */
+export async function reauthenticate(password: string): Promise<void> {
+  const { auth } = await getFirebase()
+  const { EmailAuthProvider, reauthenticateWithCredential } = await import('firebase/auth')
+  const user = auth.currentUser
+  if (!user?.email) throw new Error('尚未登入')
+  await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, password))
+}
+
+/** 刪除帳號（Firebase 要求最近登入過；請先 reauthenticate） */
 export async function deleteAccount(): Promise<void> {
   const { auth } = await getFirebase()
   const { deleteUser } = await import('firebase/auth')

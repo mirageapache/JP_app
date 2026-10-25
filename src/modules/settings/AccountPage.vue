@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
-import { deleteAccount, describeAuthError, sendPasswordReset, signInWithEmail, signOut, signUpWithEmail } from '@/core/sync/auth'
+import { deleteAccount, describeAuthError, reauthenticate, sendPasswordReset, signInWithEmail, signOut, signUpWithEmail } from '@/core/sync/auth'
 import { deleteCloudData, refreshPending, requestSync, syncState } from '@/core/sync/useSync'
 import { useToast } from '@/core/ui/useToast'
 
@@ -12,7 +12,7 @@ const password = ref('')
 const busy = ref(false)
 const error = ref('')
 const confirm = ref<'delete' | null>(null)
-const confirmText = ref('')
+const confirmPassword = ref('')
 const { toast, show } = useToast()
 
 const lastSyncText = computed(() => (syncState.lastSyncAt ? new Date(syncState.lastSyncAt).toLocaleString('zh-TW', { hour12: false }) : '尚未同步'))
@@ -35,7 +35,8 @@ const doSignIn = () =>
     await signInWithEmail(email.value.trim(), password.value)
     password.value = ''
     const r = await requestSync()
-    if (r && (r.pulled > 0 || r.settingsPulled > 0)) show(`已從雲端還原 ${r.pulled} 筆紀錄`)
+    if (r && r.pulled > 0) show(`已從雲端還原 ${r.pulled} 筆紀錄`)
+    else if (r && r.settingsPulled > 0) show('已登入，設定已從雲端同步')
     else show('已登入，紀錄會自動同步')
   })
 const doSignUp = () =>
@@ -54,9 +55,12 @@ const doSync = () =>
   })
 
 async function doDelete() {
+  const pw = confirmPassword.value
   confirm.value = null
-  confirmText.value = ''
+  confirmPassword.value = ''
   await run(async () => {
+    // 先重新驗證，確定能刪帳號，再清雲端；否則雲端清空後帳號仍在，下次同步會把本機資料重傳
+    await reauthenticate(pw)
     await deleteCloudData()
     await deleteAccount()
   }, '已刪除帳號與雲端資料；本機紀錄保留')
@@ -134,9 +138,9 @@ onMounted(refreshPending)
     <div v-if="confirm === 'delete'" class="sheet" role="dialog" aria-labelledby="delTitle">
       <div class="sheet__handle"></div>
       <h2 id="delTitle" style="font-size: var(--fs-title)">刪除帳號與雲端資料</h2>
-      <p class="muted">雲端上的所有紀錄與設定會被刪除，無法復原；這台裝置上的紀錄會保留。請輸入「刪除」確認。</p>
-      <div class="input"><input v-model="confirmText" type="text" placeholder="刪除" /></div>
-      <button class="btn btn--block btn--lg" type="button" style="background: var(--c-shu); color: #fff" :disabled="confirmText !== '刪除' || busy" @click="doDelete">確認刪除</button>
+      <p class="muted">雲端上的所有紀錄與設定會被刪除，無法復原；這台裝置上的紀錄會保留。請輸入密碼確認。</p>
+      <div class="input"><AppIcon name="lock" size="sm" /><input v-model="confirmPassword" type="password" autocomplete="current-password" placeholder="密碼" /></div>
+      <button class="btn btn--block btn--lg" type="button" style="background: var(--c-shu); color: #fff" :disabled="confirmPassword.length < 6 || busy" @click="doDelete">確認刪除</button>
       <button class="btn btn--secondary btn--block" type="button" @click="confirm = null">取消</button>
     </div>
     <div v-if="toast" class="toast" role="status">{{ toast }}</div>

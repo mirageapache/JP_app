@@ -19,6 +19,7 @@ describe('備份與還原', () => {
     expect(b.reviewLogs).toHaveLength(1)
     expect(b.settings.find((s) => s.key === 'dailyNewKana')?.value).toBe(7)
     expect('cards' in b).toBe(false)
+    expect(b.reviewLogs[0]!.syncedAt).toBeNull()
   })
 
   it('readBackupFile 可讀 JSON 與 gzip；舊版欄位缺漏時補預設', async () => {

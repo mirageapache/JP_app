@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { db } from '@/core/db'
 import { resetSettingsCache, setSetting } from '@/core/settings'
 import { recordReview } from '@/core/srs/repository'
-import { CHUNK_MAX_RECORDS, countPending, createSyncEngine, getSyncMeta } from './engine'
+import { CHUNK_MAX_RECORDS, countPending, createSyncEngine, getSyncMeta, PULL_PAGE } from './engine'
 import type { ChunkDoc, ChunkPayload, RemoteSettings, SyncTransport } from './transport'
 import { getDeviceId } from './deviceId'
 
@@ -121,14 +121,46 @@ describe('同步引擎', () => {
     expect(cloud.settings.tuningMode?.value).toBe(true) // 原本雲端就有，維持不變
   })
 
-  it('換帳號會重設下載基準；刪除雲端後本機紀錄回到未同步', async () => {
+  it('本機資料被清但 deviceId 還在：首次下載不略過自己的 chunk，能還原', async () => {
+    const cloud = fakeCloud()
+    const engine = createSyncEngine(cloud.transport)
+    await recordReview('kana:あ#read', 3, 1000, T0)
+    await engine.sync('u1')
+    // 模擬 IndexedDB 被清除（deviceId 存在 localStorage，不變）
+    await Promise.all([db.cards.clear(), db.reviewLogs.clear(), db.syncMeta.clear()])
+    const r = await engine.sync('u1')
+    expect(r.pulled).toBe(1)
+    expect(await db.reviewLogs.count()).toBe(1)
+    expect((await db.cards.get('kana:あ#read'))?.reps).toBe(1)
+    expect((await getSyncMeta()).lastSyncAt).toBeTypeOf('number')
+  })
+
+  it('chunk 超過一頁時會分頁續抓', async () => {
+    const cloud = fakeCloud()
+    for (let i = 0; i < PULL_PAGE + 3; i++) {
+      await cloud.transport.uploadChunk('u1', {
+        deviceId: 'other',
+        schemaVersion: 1,
+        reviewLogs: [{ uuid: `p${i}`, cardId: 'kana:あ#read', rating: 3, reviewedAt: T0 + i, durationMs: 1, mode: 'session', paramsVersion: 'fsrs-default-v1', deviceId: 'other', syncedAt: null }],
+        cardEvents: [],
+        handwritingLogs: [],
+      })
+    }
+    const engine = createSyncEngine(cloud.transport)
+    const r = await engine.sync('u1')
+    expect(r.pulled).toBe(PULL_PAGE + 3)
+  })
+
+  it('換帳號會重設下載基準並把紀錄標回未上傳；刪除雲端後本機紀錄回到未同步', async () => {
     const cloud = fakeCloud()
     const engine = createSyncEngine(cloud.transport)
     await recordReview('kana:あ#read', 3, 1000, T0)
     await engine.sync('u1')
     expect((await getSyncMeta()).uid).toBe('u1')
+    const before = cloud.chunks.length
     await engine.sync('u2')
     expect((await getSyncMeta()).uid).toBe('u2')
+    expect(cloud.chunks.length).toBe(before + 1) // 舊紀錄重新上傳到新帳號
     expect(await engine.deleteCloud('u2')).toBeGreaterThan(0)
     expect(await countPending()).toBe(1)
     expect((await getSyncMeta()).uid).toBeNull()

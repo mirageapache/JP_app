@@ -2,7 +2,7 @@ import { db, type HandwritingLog, type Setting } from '@/core/db'
 import { getDeviceId } from '@/core/sync/deviceId'
 import { rebuildAllCards } from '@/core/srs/repository'
 import type { CardEventRecord, ReviewLogRecord } from '@/core/srs/types'
-import { resetSettingsCache } from '@/core/settings'
+import { reloadSettings } from '@/core/settings'
 
 /**
  * JSON 匯出／匯入（規劃書 §7.6）：不依賴雲端的備份。
@@ -38,14 +38,16 @@ export async function collectBackup(appVersion: string): Promise<BackupFile> {
     db.handwritingLogs.toArray(),
     db.settings.toArray(),
   ])
+  // 同步狀態是裝置與帳號相關的，不隨備份帶走：匯入到別處時這些紀錄要重新上傳
+  const unsynced = <T extends { syncedAt: number | null }>(rows: T[]) => rows.map((r) => ({ ...r, syncedAt: null }))
   return {
     schemaVersion: BACKUP_SCHEMA_VERSION,
     appVersion,
     exportedAt: new Date().toISOString(),
     deviceId: getDeviceId(),
-    reviewLogs,
-    cardEvents,
-    handwritingLogs,
+    reviewLogs: unsynced(reviewLogs),
+    cardEvents: unsynced(cardEvents),
+    handwritingLogs: unsynced(handwritingLogs),
     settings,
   }
 }
@@ -122,7 +124,7 @@ export async function importBackup(input: BackupFile, options: { applySettings: 
       }
     }
   })
-  if (options.applySettings) resetSettingsCache()
+  if (options.applySettings) await reloadSettings()
   const rebuiltCards = await rebuildAllCards()
   return { added, settingsApplied: options.applySettings, rebuiltCards }
 }
@@ -159,6 +161,6 @@ export async function restoreSnapshot(id: number): Promise<void> {
       db.settings.bulkAdd(data.settings),
     ])
   })
-  resetSettingsCache()
+  await reloadSettings()
   await rebuildAllCards()
 }
