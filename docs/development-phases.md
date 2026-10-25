@@ -27,7 +27,7 @@
 - [x] 建立 Vue 3 + TypeScript + Vite 專案
 - [x] 設定 `vite-plugin-pwa`（Manifest、App Shell 預快取、`registerType: 'prompt'`）
 - [x] 設定 ESLint、Prettier、Vitest
-- [ ] 部署到 Cloudflare Pages，確認 HTTPS 與「加入主畫面」可用（專案擁有者連接 repo；`_redirects`、`_headers` 已備妥）
+- [x] 部署到 Cloudflare Pages，確認 HTTPS 與「加入主畫面」可用（https://jp-app-ebf.pages.dev/）
 - [x] 套用 `design-system.md` 的設計 token（CSS 變數）
 
 ### 除錯面板
@@ -43,31 +43,34 @@
 - [x] 判定結果的視覺回饋（通過、位置偏差、方向錯誤、順序錯誤、形狀不像）
 
 ### Firebase 原型
-- [ ] 建立 Firebase 專案、啟用電子郵件登入與 Firestore（專案擁有者；步驟見 firebase/README.md）
-- [x] 電子郵件登入、上傳一份 chunk、讀回（程式已完成，待 .env.local 設定後實測）
+- [x] 建立 Firebase 專案、啟用電子郵件登入與 Firestore（jpapp-85d5e，安全規則已部署）
+- [x] 電子郵件登入、上傳一份 chunk、讀回（程式完成，正式站連線確認；iPhone 實測待回報）
 - [x] 試做 Google 登入 → iPhone 實測不可靠（兩步驟驗證切換 App 後失敗），已移除，只提供電子郵件登入
 - [x] Firestore 安全規則與規則測試（測試需 Java 執行 Emulator）
 
 ### UI 函式庫試做
 - [x] Vant 4 做一頁（首頁）
 - [x] Konsta UI 做同一頁
-- [ ] 比較操作手感後選定（iPhone 實測）
+- [ ] 比較操作手感後選定（實測：兩者差不多；建議都不用、沿用自訂元件，待決定）
 
 ### P0 驗證清單（在 iPhone 主畫面 App 上實測）
-- [ ] 除錯面板可顯示 console 輸出與未捕捉的錯誤
-- [ ] 書寫流暢無明顯延遲
-- [ ] 正確書寫不被誤判；反向書寫與順序錯誤可被抓出
-- [ ] 手指與 Apple Pencil 各測一次
-- [ ] 畫布不觸發邊緣返回手勢與頁面捲動
-- [ ] 電子郵件登入成功；關閉 App 隔天再開仍維持登入
-- [ ] 飛航模式下產生紀錄，恢復網路後自動上傳
+
+> 詳細結果與分析見 [p0-verification.md](p0-verification.md)（第一輪：2026-10-25）
+
+- [x] 除錯面板可顯示 console 輸出與未捕捉的錯誤
+- [ ] 書寫流暢無明顯延遲（待回報）
+- [ ] 正確書寫不被誤判；反向書寫與順序錯誤可被抓出（⚠️ 正確寫法餘裕不足、連筆誤判為順序錯誤 → P1a 修正）
+- [ ] 手指與 Apple Pencil 各測一次（目前只有手指資料）
+- [ ] 畫布不觸發邊緣返回手勢與頁面捲動（待回報）
+- [ ] 電子郵件登入成功；關閉 App 隔天再開仍維持登入（待回報）
+- [ ] 飛航模式下產生紀錄，恢復網路後自動上傳（待回報）
 - [x] Google 登入是否可用 → 不可用，只提供電子郵件登入
-- [ ] Cloudflare Pages 預覽子網域是否需加入 Firebase 授權網域
-- [ ] TTS：主畫面模式下 `ja-JP` 語音可用、`voiceschanged` 載入時機
-- [ ] TTS：靜音開關撥下時是否仍有聲音
-- [ ] TTS：頁面互動過後，卡片顯示時能否自動播放
-- [ ] `navigator.storage.persist()` 回傳結果；重開機後資料仍在
-- [ ] 選定 UI 函式庫
+- [x] Cloudflare Pages 預覽子網域是否需加入 Firebase 授權網域 → 不需處理（正式網域已授權）
+- [x] TTS：主畫面模式下 `ja-JP` 語音可用（Kyoko）
+- [x] TTS：靜音開關撥下時是否仍有聲音 → 有聲音
+- [ ] TTS：頁面互動過後，卡片顯示時能否自動播放（待回報）
+- [ ] `navigator.storage.persist()` 回傳結果；重開機後資料仍在（回傳「未允許」，待確認）
+- [ ] 選定 UI 函式庫（待決定）
 
 ---
 
@@ -87,6 +90,7 @@
 - [ ] `settings` 的 account／device 範圍
 
 ### 手寫引擎
+- [ ] 依 P0 回饋修正（p0-verification.md §2.4）：去除重複起點、形狀改用正規化 Fréchet 並與位置分開、收緊順序錯誤並偵測連筆、P0 筆跡存成回歸測試
 - [ ] 筆畫收集、重取樣、比對（由 P0 原型整理成正式模組）
 - [ ] 判錯流程：該筆消失重寫、連錯 3 次顯示提示動畫、跳過
 - [ ] 手指／Apple Pencil 分開門檻
