@@ -1,0 +1,3623 @@
+{
+ "version": 1,
+ "vowels": [
+  "a",
+  "i",
+  "u",
+  "e",
+  "o"
+ ],
+ "rows": {
+  "seion": [
+   "あ行",
+   "か行",
+   "さ行",
+   "た行",
+   "な行",
+   "は行",
+   "ま行",
+   "や行",
+   "ら行",
+   "わ行",
+   "ん"
+  ],
+  "dakuon": [
+   "が行",
+   "ざ行",
+   "だ行",
+   "ば行"
+  ],
+  "handakuon": [
+   "ぱ行"
+  ],
+  "youon": [
+   "きゃ行",
+   "しゃ行",
+   "ちゃ行",
+   "にゃ行",
+   "ひゃ行",
+   "みゃ行",
+   "りゃ行",
+   "ぎゃ行",
+   "じゃ行",
+   "びゃ行",
+   "ぴゃ行"
+  ]
+ },
+ "items": [
+  {
+   "id": "kana:あ",
+   "char": "あ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "あ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "a",
+   "order": 1,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:い",
+   "char": "い",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "あ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "i",
+   "order": 2,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:う",
+   "char": "う",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "あ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "u",
+   "order": 3,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:え",
+   "char": "え",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "あ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "e",
+   "order": 4,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:お",
+   "char": "お",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "あ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "o",
+   "order": 5,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:か",
+   "char": "か",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "か行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ka",
+   "order": 6,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:き",
+   "char": "き",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "か行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ki",
+   "order": 7,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:く",
+   "char": "く",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "か行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "ku",
+   "order": 8,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:け",
+   "char": "け",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "か行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "ke",
+   "order": 9,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:こ",
+   "char": "こ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "か行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "ko",
+   "order": 10,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:さ",
+   "char": "さ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "さ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "sa",
+   "order": 11,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:し",
+   "char": "し",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "さ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "shi",
+   "order": 12,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:す",
+   "char": "す",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "さ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "su",
+   "order": 13,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:せ",
+   "char": "せ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "さ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "se",
+   "order": 14,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:そ",
+   "char": "そ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "さ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "so",
+   "order": 15,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ],
+   "strokeVariants": [
+    {
+     "id": "kanjivg",
+     "label": "一筆寫法",
+     "default": true
+    },
+    {
+     "id": "two",
+     "label": "兩筆寫法",
+     "strokes": null
+    }
+   ]
+  },
+  {
+   "id": "kana:た",
+   "char": "た",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "た行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ta",
+   "order": 16,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ち",
+   "char": "ち",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "た行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "chi",
+   "order": 17,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:つ",
+   "char": "つ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "た行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "tsu",
+   "order": 18,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:て",
+   "char": "て",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "た行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "te",
+   "order": 19,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:と",
+   "char": "と",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "た行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "to",
+   "order": 20,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:な",
+   "char": "な",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "な行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "na",
+   "order": 21,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:に",
+   "char": "に",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "な行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ni",
+   "order": 22,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぬ",
+   "char": "ぬ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "な行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "nu",
+   "order": 23,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ね",
+   "char": "ね",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "な行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "ne",
+   "order": 24,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:の",
+   "char": "の",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "な行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "no",
+   "order": 25,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:は",
+   "char": "は",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "は行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ha",
+   "order": 26,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ひ",
+   "char": "ひ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "は行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "hi",
+   "order": 27,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ふ",
+   "char": "ふ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "は行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "fu",
+   "order": 28,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:へ",
+   "char": "へ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "は行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "he",
+   "order": 29,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ほ",
+   "char": "ほ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "は行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "ho",
+   "order": 30,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ま",
+   "char": "ま",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ま行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ma",
+   "order": 31,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:み",
+   "char": "み",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ま行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "mi",
+   "order": 32,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:む",
+   "char": "む",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ま行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "mu",
+   "order": 33,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:め",
+   "char": "め",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ま行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "me",
+   "order": 34,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:も",
+   "char": "も",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ま行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "mo",
+   "order": 35,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:や",
+   "char": "や",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "や行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ya",
+   "order": 36,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ゆ",
+   "char": "ゆ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "や行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "yu",
+   "order": 37,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:よ",
+   "char": "よ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "や行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "yo",
+   "order": 38,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ら",
+   "char": "ら",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ら行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ra",
+   "order": 39,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:り",
+   "char": "り",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ら行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ri",
+   "order": 40,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ],
+   "strokeVariants": [
+    {
+     "id": "kanjivg",
+     "label": "兩筆寫法",
+     "default": true
+    },
+    {
+     "id": "one",
+     "label": "一筆寫法",
+     "strokes": null
+    }
+   ]
+  },
+  {
+   "id": "kana:る",
+   "char": "る",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ら行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "ru",
+   "order": 41,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:れ",
+   "char": "れ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ら行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "re",
+   "order": 42,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ろ",
+   "char": "ろ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ら行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "ro",
+   "order": 43,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:わ",
+   "char": "わ",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "わ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "wa",
+   "order": 44,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:を",
+   "char": "を",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "わ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "wo",
+   "order": 45,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ん",
+   "char": "ん",
+   "script": "hiragana",
+   "group": "seion",
+   "row": "ん",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "n",
+   "order": 46,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:が",
+   "char": "が",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "が行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ga",
+   "order": 47,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぎ",
+   "char": "ぎ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "が行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "gi",
+   "order": 48,
+   "strokeCount": 6,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぐ",
+   "char": "ぐ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "が行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "gu",
+   "order": 49,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:げ",
+   "char": "げ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "が行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "ge",
+   "order": 50,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ご",
+   "char": "ご",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "が行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "go",
+   "order": 51,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ざ",
+   "char": "ざ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ざ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "za",
+   "order": 52,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:じ",
+   "char": "じ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ざ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ji",
+   "order": 53,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ず",
+   "char": "ず",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ざ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "zu",
+   "order": 54,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぜ",
+   "char": "ぜ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ざ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "ze",
+   "order": 55,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぞ",
+   "char": "ぞ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ざ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "zo",
+   "order": 56,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:だ",
+   "char": "だ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "だ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "da",
+   "order": 57,
+   "strokeCount": 6,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぢ",
+   "char": "ぢ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "だ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ji",
+   "order": 58,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:づ",
+   "char": "づ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "だ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "zu",
+   "order": 59,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:で",
+   "char": "で",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "だ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "de",
+   "order": 60,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ど",
+   "char": "ど",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "だ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "do",
+   "order": 61,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ば",
+   "char": "ば",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ば行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ba",
+   "order": 62,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:び",
+   "char": "び",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ば行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "bi",
+   "order": 63,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぶ",
+   "char": "ぶ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ば行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "bu",
+   "order": 64,
+   "strokeCount": 6,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:べ",
+   "char": "べ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ば行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "be",
+   "order": 65,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぼ",
+   "char": "ぼ",
+   "script": "hiragana",
+   "group": "dakuon",
+   "row": "ば行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "bo",
+   "order": 66,
+   "strokeCount": 6,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぱ",
+   "char": "ぱ",
+   "script": "hiragana",
+   "group": "handakuon",
+   "row": "ぱ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "pa",
+   "order": 67,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぴ",
+   "char": "ぴ",
+   "script": "hiragana",
+   "group": "handakuon",
+   "row": "ぱ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "pi",
+   "order": 68,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぷ",
+   "char": "ぷ",
+   "script": "hiragana",
+   "group": "handakuon",
+   "row": "ぱ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "pu",
+   "order": 69,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぺ",
+   "char": "ぺ",
+   "script": "hiragana",
+   "group": "handakuon",
+   "row": "ぱ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "pe",
+   "order": 70,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぽ",
+   "char": "ぽ",
+   "script": "hiragana",
+   "group": "handakuon",
+   "row": "ぱ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "po",
+   "order": 71,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:きゃ",
+   "char": "きゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "きゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "kya",
+   "order": 72,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:きゅ",
+   "char": "きゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "きゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "kyu",
+   "order": 73,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:きょ",
+   "char": "きょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "きゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "kyo",
+   "order": 74,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:しゃ",
+   "char": "しゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "しゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "sha",
+   "order": 75,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:しゅ",
+   "char": "しゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "しゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "shu",
+   "order": 76,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:しょ",
+   "char": "しょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "しゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "sho",
+   "order": 77,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ちゃ",
+   "char": "ちゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ちゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "cha",
+   "order": 78,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ちゅ",
+   "char": "ちゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ちゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "chu",
+   "order": 79,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ちょ",
+   "char": "ちょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ちゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "cho",
+   "order": 80,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:にゃ",
+   "char": "にゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "にゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "nya",
+   "order": 81,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:にゅ",
+   "char": "にゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "にゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "nyu",
+   "order": 82,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:にょ",
+   "char": "にょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "にゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "nyo",
+   "order": 83,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ひゃ",
+   "char": "ひゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ひゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "hya",
+   "order": 84,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ひゅ",
+   "char": "ひゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ひゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "hyu",
+   "order": 85,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ひょ",
+   "char": "ひょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ひゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "hyo",
+   "order": 86,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:みゃ",
+   "char": "みゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "みゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "mya",
+   "order": 87,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:みゅ",
+   "char": "みゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "みゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "myu",
+   "order": 88,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:みょ",
+   "char": "みょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "みゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "myo",
+   "order": 89,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:りゃ",
+   "char": "りゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "りゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "rya",
+   "order": 90,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:りゅ",
+   "char": "りゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "りゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "ryu",
+   "order": 91,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:りょ",
+   "char": "りょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "りゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "ryo",
+   "order": 92,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ぎゃ",
+   "char": "ぎゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ぎゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "gya",
+   "order": 93,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ぎゅ",
+   "char": "ぎゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ぎゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "gyu",
+   "order": 94,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ぎょ",
+   "char": "ぎょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ぎゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "gyo",
+   "order": 95,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:じゃ",
+   "char": "じゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "じゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ja",
+   "order": 96,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:じゅ",
+   "char": "じゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "じゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "ju",
+   "order": 97,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:じょ",
+   "char": "じょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "じゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "jo",
+   "order": 98,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:びゃ",
+   "char": "びゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "びゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "bya",
+   "order": 99,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:びゅ",
+   "char": "びゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "びゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "byu",
+   "order": 100,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:びょ",
+   "char": "びょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "びゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "byo",
+   "order": 101,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ぴゃ",
+   "char": "ぴゃ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ぴゃ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "pya",
+   "order": 102,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ぴゅ",
+   "char": "ぴゅ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ぴゃ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "pyu",
+   "order": 103,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ぴょ",
+   "char": "ぴょ",
+   "script": "hiragana",
+   "group": "youon",
+   "row": "ぴゃ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "pyo",
+   "order": 104,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ぁ",
+   "char": "ぁ",
+   "script": "hiragana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "a",
+   "order": 105,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぃ",
+   "char": "ぃ",
+   "script": "hiragana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "i",
+   "order": 106,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぅ",
+   "char": "ぅ",
+   "script": "hiragana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "u",
+   "order": 107,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぇ",
+   "char": "ぇ",
+   "script": "hiragana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "e",
+   "order": 108,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ぉ",
+   "char": "ぉ",
+   "script": "hiragana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "o",
+   "order": 109,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ゃ",
+   "char": "ゃ",
+   "script": "hiragana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "ya",
+   "order": 110,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ゅ",
+   "char": "ゅ",
+   "script": "hiragana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "yu",
+   "order": 111,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ょ",
+   "char": "ょ",
+   "script": "hiragana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "yo",
+   "order": 112,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:っ",
+   "char": "っ",
+   "script": "hiragana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "tsu",
+   "order": 113,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ア",
+   "char": "ア",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ア行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "a",
+   "order": 114,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:イ",
+   "char": "イ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ア行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "i",
+   "order": 115,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ウ",
+   "char": "ウ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ア行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "u",
+   "order": 116,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:エ",
+   "char": "エ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ア行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "e",
+   "order": 117,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:オ",
+   "char": "オ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ア行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "o",
+   "order": 118,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:カ",
+   "char": "カ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "カ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ka",
+   "order": 119,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:キ",
+   "char": "キ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "カ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ki",
+   "order": 120,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ク",
+   "char": "ク",
+   "script": "katakana",
+   "group": "seion",
+   "row": "カ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "ku",
+   "order": 121,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ケ",
+   "char": "ケ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "カ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "ke",
+   "order": 122,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:コ",
+   "char": "コ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "カ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "ko",
+   "order": 123,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:サ",
+   "char": "サ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "サ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "sa",
+   "order": 124,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:シ",
+   "char": "シ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "サ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "shi",
+   "order": 125,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ス",
+   "char": "ス",
+   "script": "katakana",
+   "group": "seion",
+   "row": "サ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "su",
+   "order": 126,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:セ",
+   "char": "セ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "サ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "se",
+   "order": 127,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ソ",
+   "char": "ソ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "サ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "so",
+   "order": 128,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:タ",
+   "char": "タ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "タ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ta",
+   "order": 129,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:チ",
+   "char": "チ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "タ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "chi",
+   "order": 130,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ツ",
+   "char": "ツ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "タ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "tsu",
+   "order": 131,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:テ",
+   "char": "テ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "タ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "te",
+   "order": 132,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ト",
+   "char": "ト",
+   "script": "katakana",
+   "group": "seion",
+   "row": "タ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "to",
+   "order": 133,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ナ",
+   "char": "ナ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ナ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "na",
+   "order": 134,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ニ",
+   "char": "ニ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ナ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ni",
+   "order": 135,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ヌ",
+   "char": "ヌ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ナ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "nu",
+   "order": 136,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ネ",
+   "char": "ネ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ナ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "ne",
+   "order": 137,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ノ",
+   "char": "ノ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ナ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "no",
+   "order": 138,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ハ",
+   "char": "ハ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ハ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ha",
+   "order": 139,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ヒ",
+   "char": "ヒ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ハ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "hi",
+   "order": 140,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:フ",
+   "char": "フ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ハ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "fu",
+   "order": 141,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ヘ",
+   "char": "ヘ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ハ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "he",
+   "order": 142,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ホ",
+   "char": "ホ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ハ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "ho",
+   "order": 143,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:マ",
+   "char": "マ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "マ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ma",
+   "order": 144,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ミ",
+   "char": "ミ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "マ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "mi",
+   "order": 145,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ム",
+   "char": "ム",
+   "script": "katakana",
+   "group": "seion",
+   "row": "マ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "mu",
+   "order": 146,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:メ",
+   "char": "メ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "マ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "me",
+   "order": 147,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:モ",
+   "char": "モ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "マ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "mo",
+   "order": 148,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ヤ",
+   "char": "ヤ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ヤ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ya",
+   "order": 149,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ユ",
+   "char": "ユ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ヤ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "yu",
+   "order": 150,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ヨ",
+   "char": "ヨ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ヤ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "yo",
+   "order": 151,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ラ",
+   "char": "ラ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ラ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ra",
+   "order": 152,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:リ",
+   "char": "リ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ラ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ri",
+   "order": 153,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ル",
+   "char": "ル",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ラ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "ru",
+   "order": 154,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:レ",
+   "char": "レ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ラ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "re",
+   "order": 155,
+   "strokeCount": 1,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ロ",
+   "char": "ロ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ラ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "ro",
+   "order": 156,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ワ",
+   "char": "ワ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ワ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "wa",
+   "order": 157,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ヲ",
+   "char": "ヲ",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ワ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "wo",
+   "order": 158,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ン",
+   "char": "ン",
+   "script": "katakana",
+   "group": "seion",
+   "row": "ン",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "n",
+   "order": 159,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ガ",
+   "char": "ガ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ガ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ga",
+   "order": 160,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ギ",
+   "char": "ギ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ガ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "gi",
+   "order": 161,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:グ",
+   "char": "グ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ガ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "gu",
+   "order": 162,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ゲ",
+   "char": "ゲ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ガ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "ge",
+   "order": 163,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ゴ",
+   "char": "ゴ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ガ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "go",
+   "order": 164,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ザ",
+   "char": "ザ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ザ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "za",
+   "order": 165,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ジ",
+   "char": "ジ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ザ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ji",
+   "order": 166,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ズ",
+   "char": "ズ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ザ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "zu",
+   "order": 167,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ゼ",
+   "char": "ゼ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ザ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "ze",
+   "order": 168,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ゾ",
+   "char": "ゾ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ザ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "zo",
+   "order": 169,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ダ",
+   "char": "ダ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ダ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "da",
+   "order": 170,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ヂ",
+   "char": "ヂ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ダ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "ji",
+   "order": 171,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ヅ",
+   "char": "ヅ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ダ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "zu",
+   "order": 172,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:デ",
+   "char": "デ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ダ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "de",
+   "order": 173,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ド",
+   "char": "ド",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "ダ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "do",
+   "order": 174,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:バ",
+   "char": "バ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "バ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ba",
+   "order": 175,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ビ",
+   "char": "ビ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "バ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "bi",
+   "order": 176,
+   "strokeCount": 4,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ブ",
+   "char": "ブ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "バ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "bu",
+   "order": 177,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ベ",
+   "char": "ベ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "バ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "be",
+   "order": 178,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ボ",
+   "char": "ボ",
+   "script": "katakana",
+   "group": "dakuon",
+   "row": "バ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "bo",
+   "order": 179,
+   "strokeCount": 6,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:パ",
+   "char": "パ",
+   "script": "katakana",
+   "group": "handakuon",
+   "row": "パ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "pa",
+   "order": 180,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ピ",
+   "char": "ピ",
+   "script": "katakana",
+   "group": "handakuon",
+   "row": "パ行",
+   "vowel": "i",
+   "column": 1,
+   "romaji": "pi",
+   "order": 181,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:プ",
+   "char": "プ",
+   "script": "katakana",
+   "group": "handakuon",
+   "row": "パ行",
+   "vowel": "u",
+   "column": 2,
+   "romaji": "pu",
+   "order": 182,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ペ",
+   "char": "ペ",
+   "script": "katakana",
+   "group": "handakuon",
+   "row": "パ行",
+   "vowel": "e",
+   "column": 3,
+   "romaji": "pe",
+   "order": 183,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ポ",
+   "char": "ポ",
+   "script": "katakana",
+   "group": "handakuon",
+   "row": "パ行",
+   "vowel": "o",
+   "column": 4,
+   "romaji": "po",
+   "order": 184,
+   "strokeCount": 5,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:キャ",
+   "char": "キャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "キャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "kya",
+   "order": 185,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:キュ",
+   "char": "キュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "キャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "kyu",
+   "order": 186,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:キョ",
+   "char": "キョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "キャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "kyo",
+   "order": 187,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:シャ",
+   "char": "シャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "シャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "sha",
+   "order": 188,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:シュ",
+   "char": "シュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "シャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "shu",
+   "order": 189,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ショ",
+   "char": "ショ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "シャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "sho",
+   "order": 190,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:チャ",
+   "char": "チャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "チャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "cha",
+   "order": 191,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:チュ",
+   "char": "チュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "チャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "chu",
+   "order": 192,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:チョ",
+   "char": "チョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "チャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "cho",
+   "order": 193,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ニャ",
+   "char": "ニャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ニャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "nya",
+   "order": 194,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ニュ",
+   "char": "ニュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ニャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "nyu",
+   "order": 195,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ニョ",
+   "char": "ニョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ニャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "nyo",
+   "order": 196,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ヒャ",
+   "char": "ヒャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ヒャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "hya",
+   "order": 197,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ヒュ",
+   "char": "ヒュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ヒャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "hyu",
+   "order": 198,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ヒョ",
+   "char": "ヒョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ヒャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "hyo",
+   "order": 199,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ミャ",
+   "char": "ミャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ミャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "mya",
+   "order": 200,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ミュ",
+   "char": "ミュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ミャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "myu",
+   "order": 201,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ミョ",
+   "char": "ミョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ミャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "myo",
+   "order": 202,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:リャ",
+   "char": "リャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "リャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "rya",
+   "order": 203,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:リュ",
+   "char": "リュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "リャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "ryu",
+   "order": 204,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:リョ",
+   "char": "リョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "リャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "ryo",
+   "order": 205,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ギャ",
+   "char": "ギャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ギャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "gya",
+   "order": 206,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ギュ",
+   "char": "ギュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ギャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "gyu",
+   "order": 207,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ギョ",
+   "char": "ギョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ギャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "gyo",
+   "order": 208,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ジャ",
+   "char": "ジャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ジャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "ja",
+   "order": 209,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ジュ",
+   "char": "ジュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ジャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "ju",
+   "order": 210,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ジョ",
+   "char": "ジョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ジャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "jo",
+   "order": 211,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ビャ",
+   "char": "ビャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ビャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "bya",
+   "order": 212,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ビュ",
+   "char": "ビュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ビャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "byu",
+   "order": 213,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ビョ",
+   "char": "ビョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ビャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "byo",
+   "order": 214,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ピャ",
+   "char": "ピャ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ピャ行",
+   "vowel": "a",
+   "column": 0,
+   "romaji": "pya",
+   "order": 215,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ピュ",
+   "char": "ピュ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ピャ行",
+   "vowel": "u",
+   "column": 1,
+   "romaji": "pyu",
+   "order": 216,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ピョ",
+   "char": "ピョ",
+   "script": "katakana",
+   "group": "youon",
+   "row": "ピャ行",
+   "vowel": "o",
+   "column": 2,
+   "romaji": "pyo",
+   "order": 217,
+   "strokeCount": null,
+   "skills": [
+    "read"
+   ]
+  },
+  {
+   "id": "kana:ァ",
+   "char": "ァ",
+   "script": "katakana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "a",
+   "order": 218,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ィ",
+   "char": "ィ",
+   "script": "katakana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "i",
+   "order": 219,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ゥ",
+   "char": "ゥ",
+   "script": "katakana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "u",
+   "order": 220,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ェ",
+   "char": "ェ",
+   "script": "katakana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "e",
+   "order": 221,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ォ",
+   "char": "ォ",
+   "script": "katakana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "o",
+   "order": 222,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ャ",
+   "char": "ャ",
+   "script": "katakana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "ya",
+   "order": 223,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ュ",
+   "char": "ュ",
+   "script": "katakana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "yu",
+   "order": 224,
+   "strokeCount": 2,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ョ",
+   "char": "ョ",
+   "script": "katakana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "yo",
+   "order": 225,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  },
+  {
+   "id": "kana:ッ",
+   "char": "ッ",
+   "script": "katakana",
+   "group": "small",
+   "row": "小寫",
+   "vowel": null,
+   "column": null,
+   "romaji": "tsu",
+   "order": 226,
+   "strokeCount": 3,
+   "skills": [
+    "read",
+    "write"
+   ]
+  }
+ ]
+}
