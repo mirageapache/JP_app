@@ -2,7 +2,7 @@
 
 以 iPhone 為主要使用裝置的日語學習 PWA，核心特色是**螢幕手寫練習**，並逐步擴充為涵蓋 N5～N1 的學習工具。個人自用，不商業化。
 
-> **目前狀態**：P1a 平假名自由練習。50 音表、假名詳細（筆順動畫、描摹／空白練習）、手寫調校模式已完成，等待 iPhone 實際使用數天並依筆跡樣本調整門檻。部署於 https://jp-app-ebf.pages.dev/ 。
+> **目前狀態**：P1a～P1.5 程式完成（假名 50 音表與手寫練習、每日學習 SRS、標記已會、JSON 備份、Firebase 同步），等待 iPhone 實測與手寫門檻調校。測試項目見 [docs/p1-verification.md](docs/p1-verification.md)。部署於 https://jp-app-ebf.pages.dev/ 。
 
 ## 文件
 
@@ -12,15 +12,16 @@
 | [plan-review-questions.md](docs/plan-review-questions.md) | 規劃書 v0.1 審查問題與回答（決策紀錄） |
 | [development-phases.md](docs/development-phases.md) | 各開發階段的工作項目清單（P0～P5） |
 | [p0-verification.md](docs/p0-verification.md) | P0 iPhone 實機驗證結果與手寫判定分析 |
+| [p1-verification.md](docs/p1-verification.md) | P1a～P1.5 的 iPhone 測試指南與結果表 |
 | [design-system.md](docs/design-system.md) | 設計系統：色彩、字體、元件、手寫練習的視覺規範 |
 | [ui-mockups/index.html](docs/ui-mockups/index.html) | 所有頁面的 UI 範例（用瀏覽器開啟） |
 
 ## 主要功能
 
-- 50 音：辨識練習、筆順動畫、手寫練習（描摹／提示／空白，逐筆判定）
-- 單字、文法學習，以 FSRS 間隔重複排程每日複習
-- 測驗、進度統計
-- 離線可用；有網路時自動同步到 Firebase，可跨裝置使用
+- 50 音：辨識練習、筆順動畫、手寫練習（描摹／提示／空白，逐筆判定）、易混淆對照、弱點專練、標記已會
+- 每日學習：FSRS 間隔重複排程（讀與寫分開排程、技能錯開、通勤模式）
+- 單字、文法、測驗、進度統計（P2 起）
+- 離線可用；登入後自動同步到 Firebase，可跨裝置使用
 - 匯出／匯入 JSON 作為不依賴雲端的備份
 
 ## 技術架構
