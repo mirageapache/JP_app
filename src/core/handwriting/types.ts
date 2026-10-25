@@ -37,14 +37,18 @@ export interface UserStroke {
 
 export type Difficulty = 'trace' | 'hint' | 'blank'
 
-export type VerdictKind = 'pass' | 'position' | 'direction' | 'order' | 'shape'
+/** connected：把這一筆和下一筆連成一筆寫（連筆） */
+export type VerdictKind = 'pass' | 'position' | 'direction' | 'order' | 'connected' | 'shape'
 
 export interface StrokeMetrics {
   /** 依順序逐點平均距離 */
   avgDistance: number
   /** 反向逐點平均距離（判斷反向書寫） */
   avgDistanceReversed: number
+  /** 未正規化的 Fréchet（座標單位），僅供調校參考 */
   frechet: number
+  /** 正規化 Fréchet：純形狀差異（無單位），判定用 */
+  shape: number
   startDistance: number
   endDistance: number
   /** 使用者筆畫長度 ÷ 標準筆畫長度 */
@@ -64,7 +68,8 @@ export interface Verdict {
 
 export interface Thresholds {
   avgDistance: number
-  frechet: number
+  /** 正規化形狀距離上限（無單位） */
+  shape: number
   startDistance: number
   endDistance: number
   lengthRatioMin: number

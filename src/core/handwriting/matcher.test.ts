@@ -80,8 +80,10 @@ describe('matchStroke', () => {
     expect(v.matchedIndex).toBe(4)
   })
 
-  it('稍微潦草的第 2 筆仍判為順序錯誤（比預期那筆更接近即可）', () => {
-    const sloppy = jitter(あ.strokes[1]!.points, 4, 7)
+  it('稍微偏移、放大的第 2 筆仍判為順序錯誤', () => {
+    const pts = あ.strokes[1]!.points
+    const c = pts[Math.floor(pts.length / 2)]!
+    const sloppy = translate(pts.map((p) => [c[0] + (p[0] - c[0]) * 1.15, c[1] + (p[1] - c[1]) * 1.15] as Point), 6, 4)
     const v = matchStroke(stroke(sloppy), あ, 0, allOf(あ), opts)
     expect(v.kind).toBe('order')
     expect(v.matchedIndex).toBe(1)
@@ -90,7 +92,7 @@ describe('matchStroke', () => {
   it('手指與描摹模式的門檻比 Pencil／空白寬鬆', () => {
     const base = thresholdsFor('blank', 'pen')
     expect(thresholdsFor('blank', 'touch').avgDistance).toBeGreaterThan(base.avgDistance)
-    expect(thresholdsFor('trace', 'pen').frechet).toBeGreaterThan(base.frechet)
+    expect(thresholdsFor('trace', 'pen').shape).toBeGreaterThan(base.shape)
     expect(thresholdsFor('trace', 'touch').lengthRatioMin).toBeLessThan(base.lengthRatioMin)
   })
 
@@ -98,6 +100,7 @@ describe('matchStroke', () => {
     const m = computeMetrics(あ.strokes[0]!.points, あ.strokes[0]!)
     expect(m.avgDistance).toBeCloseTo(0, 1)
     expect(m.frechet).toBeCloseTo(0, 1)
+    expect(m.shape).toBeCloseTo(0, 1)
     expect(m.lengthRatio).toBeCloseTo(1, 1)
   })
 })
@@ -140,5 +143,35 @@ describe('session', () => {
     const sum = summarize(s, あ, 0)
     expect(sum.skipped).toBe(true)
     expect(sum.rating).toBe('again')
+  })
+})
+
+describe('連筆與順序錯誤的區分（code review 回饋）', () => {
+  const strokeFiles = import.meta.glob<CharTemplate>('../../../public/content/strokes/0*.json', {
+    eager: true,
+    import: 'default',
+  })
+  const byChar = new Map(Object.values(strokeFiles).map((t) => [t.char, t]))
+  const get = (c: string) => byChar.get(c)!
+  const touch = (pts: readonly Point[]) => stroke(jitter(pts, 1.5, 3), 'touch')
+
+  // ム 的第 2 筆是很短的勾，連起來幾乎就是第 1 筆，判為通過是可接受的，故不列入
+  it.each(['あ', 'い', 'け', 'ぬ', 'た', 'マ'])('%s：第 1、2 筆連成一筆 → connected', (c) => {
+    const t = get(c)
+    const joined = [...t.strokes[0]!.points, ...t.strokes[1]!.points]
+    const v = matchStroke(touch(joined), t, 0, allOf(t), opts)
+    expect(v.kind).toBe('connected')
+  })
+
+  it.each([
+    ['け', 1, 2],
+    ['ぱ', 1, 2],
+    ['あ', 0, 1],
+    ['た', 1, 2],
+  ] as const)('%s：該寫第 %i 筆卻寫了第 %i 筆 → order', (c, expected, actual) => {
+    const t = get(c)
+    const v = matchStroke(touch(t.strokes[actual]!.points), t, expected, allOf(t).slice(expected), opts)
+    expect(v.kind).toBe('order')
+    expect(v.matchedIndex).toBe(actual)
   })
 })

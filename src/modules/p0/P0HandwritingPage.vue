@@ -63,6 +63,7 @@ const VERDICT_TEXT: Record<Verdict['kind'], string> = {
   position: '位置偏了',
   direction: '方向反了',
   order: '順序錯誤',
+  connected: '好像把兩筆連在一起了',
   shape: '形狀不像',
 }
 const RATING_TEXT = { again: '重來', hard: '困難', good: '良好', easy: '簡單' } as const
@@ -227,9 +228,17 @@ onMounted(load)
       <!-- 門檻調整（調校用） -->
       <section v-if="showTuning" class="card stack" style="gap: var(--sp-3)">
         <h2 class="section-title" style="padding: 0">判定門檻（109 座標單位，未乘係數）</h2>
-        <label v-for="k in (['avgDistance', 'frechet', 'startDistance', 'endDistance', 'dotLength'] as const)" :key="k" class="stack" style="gap: 2px">
+        <label v-for="k in (['avgDistance', 'startDistance', 'endDistance', 'dotLength'] as const)" :key="k" class="stack" style="gap: 2px">
           <span class="row row--between small"><span>{{ k }}</span><span class="num muted">{{ thresholds[k] }}</span></span>
           <input v-model.number="thresholds[k]" type="range" min="2" max="60" step="1" />
+        </label>
+        <label class="stack" style="gap: 2px">
+          <span class="row row--between small"><span>shape（正規化形狀，無單位）</span><span class="num muted">{{ thresholds.shape }}</span></span>
+          <input v-model.number="thresholds.shape" type="range" min="0.2" max="2" step="0.05" />
+        </label>
+        <label class="stack" style="gap: 2px">
+          <span class="row row--between small"><span>directionMin（方向相似度下限）</span><span class="num muted">{{ thresholds.directionMin }}</span></span>
+          <input v-model.number="thresholds.directionMin" type="range" min="-1" max="1" step="0.05" />
         </label>
         <label class="stack" style="gap: 2px">
           <span class="row row--between small"><span>lengthRatio 範圍</span><span class="num muted">{{ thresholds.lengthRatioMin }} – {{ thresholds.lengthRatioMax }}</span></span>
@@ -256,7 +265,7 @@ onMounted(load)
         <li v-for="(l, i) in log" :key="i" class="list-row" style="min-height: 44px">
           <span class="badge" :class="l.verdict.kind === 'pass' ? 'badge--ok' : 'badge--shu'">第 {{ l.stroke }} 筆 {{ VERDICT_TEXT[l.verdict.kind] }}</span>
           <div class="list-row__main caption faint num">
-            avg {{ fmt(l.verdict.metrics.avgDistance) }} · rev {{ fmt(l.verdict.metrics.avgDistanceReversed) }} · fr {{ fmt(l.verdict.metrics.frechet) }} · s {{ fmt(l.verdict.metrics.startDistance) }} · e {{ fmt(l.verdict.metrics.endDistance) }} · len {{ l.verdict.metrics.lengthRatio.toFixed(2) }} · {{ l.pointerType }} · {{ l.ms.toFixed(1) }}ms
+            avg {{ fmt(l.verdict.metrics.avgDistance) }} · rev {{ fmt(l.verdict.metrics.avgDistanceReversed) }} · shape {{ l.verdict.metrics.shape.toFixed(2) }} · fr {{ fmt(l.verdict.metrics.frechet) }} · s {{ fmt(l.verdict.metrics.startDistance) }} · e {{ fmt(l.verdict.metrics.endDistance) }} · len {{ l.verdict.metrics.lengthRatio.toFixed(2) }} · {{ l.pointerType }} · {{ l.ms.toFixed(1) }}ms
           </div>
         </li>
       </ul>

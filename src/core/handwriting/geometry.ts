@@ -103,3 +103,31 @@ export function translate(pts: Polyline, dx: number, dy: number): Point[] {
 export function reverse(pts: Polyline): Point[] {
   return [...pts].reverse()
 }
+
+/** 平移到重心、以 RMS 半徑縮放成單位大小：之後比較只剩「形狀」，不受位置與大小影響 */
+export function normalizeShape(pts: Polyline): Point[] {
+  const c = centroid(pts)
+  let sum = 0
+  for (const p of pts) sum += (p[0] - c[0]) ** 2 + (p[1] - c[1]) ** 2
+  const rms = Math.sqrt(sum / Math.max(1, pts.length)) || 1
+  return pts.map((p) => [(p[0] - c[0]) / rms, (p[1] - c[1]) / rms] as Point)
+}
+
+/** 正規化 Fréchet：兩條折線的純形狀差異（無單位，0 = 完全相同） */
+export function shapeDistance(a: Polyline, b: Polyline): number {
+  return frechetDistance(normalizeShape(a), normalizeShape(b))
+}
+
+/**
+ * 去除與最近幾個點完全相同的點。iOS 第一次 pointermove 的 getCoalescedEvents() 會重送已處理的點，
+ * 造成起點 a, b, c, b, c… 的折返（P0 驗證 §2.3）。
+ */
+export function dropRepeatedPoints(pts: Polyline, lookback = 8): Point[] {
+  const out: Point[] = []
+  for (const p of pts) {
+    const recent = out.slice(-lookback)
+    if (recent.some((q) => q[0] === p[0] && q[1] === p[1])) continue
+    out.push(p)
+  }
+  return out
+}

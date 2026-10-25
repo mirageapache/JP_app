@@ -45,6 +45,8 @@ interface LiveStroke {
   points: Point[]
   pointerType: UserStroke['pointerType']
   startedAt: number
+  /** 最後一個已收錄事件的時間戳；iOS 會在第一次 pointermove 重送已處理的點，用來去重 */
+  lastEventTime: number
 }
 let current: LiveStroke | null = null
 let wrongStroke: { points: Point[]; alpha: number } | null = null
@@ -103,7 +105,7 @@ function pointerType(e: PointerEvent): UserStroke['pointerType'] {
 function onDown(e: PointerEvent) {
   if (props.disabled || current) return
   canvas.value?.setPointerCapture(e.pointerId)
-  current = { points: [toViewBox(e)], pointerType: pointerType(e), startedAt: performance.now() }
+  current = { points: [toViewBox(e)], pointerType: pointerType(e), startedAt: performance.now(), lastEventTime: e.timeStamp }
   redraw()
 }
 
@@ -111,7 +113,15 @@ function onMove(e: PointerEvent) {
   if (!current) return
   // 支援時取得完整軌跡（Apple Pencil 240Hz），不支援時退回單一事件
   const events = typeof e.getCoalescedEvents === 'function' ? e.getCoalescedEvents() : [e]
-  for (const ev of events.length ? events : [e]) current.points.push(toViewBox(ev))
+  for (const ev of events.length ? events : [e]) {
+    // 較舊的事件是 iOS 重送的點；同一時間戳只在座標也相同時才略過（Pencil 的事件可能共用時間戳）
+    const p = toViewBox(ev)
+    const last = current.points[current.points.length - 1]
+    if (ev.timeStamp < current.lastEventTime) continue
+    if (ev.timeStamp === current.lastEventTime && last && last[0] === p[0] && last[1] === p[1]) continue
+    current.lastEventTime = ev.timeStamp
+    current.points.push(p)
+  }
   redraw()
 }
 
