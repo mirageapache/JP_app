@@ -1,7 +1,10 @@
 import type { User } from 'firebase/auth'
 import { getFirebase } from './firebaseApp'
 
-/** 登入（規劃書 §7.2）：預設電子郵件 + 密碼；Google 登入為選項，P0 驗證可行後才開放 */
+/**
+ * 登入（規劃書 §7.2）：只提供電子郵件 + 密碼。
+ * Google 登入於 P0 實測不可靠（iOS 主畫面 App 的彈出視窗在切換到 Gmail 做兩步驟驗證後會被重置），已移除。
+ */
 
 export interface AuthUser {
   uid: string
@@ -26,9 +29,6 @@ export function describeAuthError(e: unknown): string {
     'auth/user-not-found': '找不到這個帳號',
     'auth/too-many-requests': '嘗試次數過多，請稍後再試',
     'auth/network-request-failed': '網路連線失敗',
-    'auth/popup-blocked': '彈出視窗被封鎖',
-    'auth/popup-closed-by-user': '登入視窗已關閉',
-    'auth/unauthorized-domain': '此網域未列入 Firebase 授權網域',
     'auth/operation-not-allowed': 'Firebase 尚未啟用這種登入方式',
   }
   return map[code] ?? (e instanceof Error ? e.message : String(e))
@@ -52,35 +52,6 @@ export async function sendPasswordReset(email: string): Promise<void> {
   const { auth } = await getFirebase()
   const { sendPasswordResetEmail } = await import('firebase/auth')
   await sendPasswordResetEmail(auth, email)
-}
-
-/**
- * Google 登入：先試彈出視窗；iOS 主畫面 App 若不支援彈出視窗則改用重新導向
- *（重新導向在第三方儲存受限的瀏覽器可能失敗，P0 實測）
- */
-export async function signInWithGoogle(): Promise<AuthUser | 'redirecting'> {
-  const { auth } = await getFirebase()
-  const { GoogleAuthProvider, signInWithPopup, signInWithRedirect } = await import('firebase/auth')
-  const provider = new GoogleAuthProvider()
-  try {
-    const cred = await signInWithPopup(auth, provider)
-    return toAuthUser(cred.user)
-  } catch (e) {
-    const code = (e as { code?: string })?.code
-    if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment') {
-      await signInWithRedirect(auth, provider)
-      return 'redirecting'
-    }
-    throw e
-  }
-}
-
-/** 重新導向登入回來後取得結果；沒有待處理的結果時回傳 null */
-export async function consumeRedirectResult(): Promise<AuthUser | null> {
-  const { auth } = await getFirebase()
-  const { getRedirectResult } = await import('firebase/auth')
-  const cred = await getRedirectResult(auth)
-  return cred ? toAuthUser(cred.user) : null
 }
 
 export async function signOut(): Promise<void> {

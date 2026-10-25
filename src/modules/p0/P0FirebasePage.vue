@@ -3,12 +3,10 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import {
-  consumeRedirectResult,
   describeAuthError,
   onAuthChanged,
   sendPasswordReset,
   signInWithEmail,
-  signInWithGoogle,
   signOut,
   signUpWithEmail,
   type AuthUser,
@@ -19,7 +17,7 @@ import { isFirebaseConfigured } from '@/core/sync/firebaseApp'
 import { useToast } from '@/core/ui/useToast'
 
 /**
- * P0 Firebase 原型：驗證電子郵件登入、隔天仍維持登入、Google 登入可行性、
+ * P0 Firebase 原型：驗證電子郵件登入、隔天仍維持登入、
  * 以及「離線時排入 → 恢復網路後自動上傳」的流程（規劃書 §7.7）。
  */
 
@@ -90,11 +88,6 @@ function markSignedIn() {
 const doSignIn = () => run('電子郵件登入', () => signInWithEmail(email.value.trim(), password.value))
 const doSignUp = () => run('建立帳號', () => signUpWithEmail(email.value.trim(), password.value))
 const doReset = () => run('寄送重設密碼信', () => sendPasswordReset(email.value.trim()))
-const doGoogle = () =>
-  run('Google 登入', async () => {
-    const r = await signInWithGoogle()
-    if (r === 'redirecting') log('彈出視窗不可用，改用重新導向…')
-  })
 const doSignOut = () =>
   run('登出', async () => {
     await signOut()
@@ -163,13 +156,6 @@ onMounted(async () => {
   window.addEventListener('online', onOnline)
   window.addEventListener('offline', onOffline)
   if (!configured) return
-  try {
-    const redirected = await consumeRedirectResult()
-    if (redirected) log(`重新導向登入完成：${redirected.email}`)
-  } catch (e) {
-    error.value = describeAuthError(e)
-    log(`重新導向登入失敗 — ${error.value}`)
-  }
   unsubscribe = await onAuthChanged((u) => {
     user.value = u
     authReady.value = true
@@ -243,9 +229,6 @@ function fmt(ms: number) {
             <button class="btn btn--ghost btn--sm" type="button" :disabled="busy" @click="doSignUp">建立帳號</button>
             <button class="btn btn--ghost btn--sm" type="button" :disabled="busy || !email" @click="doReset">忘記密碼</button>
           </div>
-          <hr class="divider" />
-          <button class="btn btn--secondary btn--lg btn--block" type="button" :disabled="busy" @click="doGoogle">使用 Google 登入（實驗）</button>
-          <p class="caption faint">先試彈出視窗，不支援時改用重新導向。P0 驗證主畫面 App 中是否可用。</p>
         </form>
 
         <p v-if="error" class="banner banner--shu"><AppIcon name="alert" size="sm" />{{ error }}</p>

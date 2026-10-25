@@ -1,6 +1,6 @@
 # 日語學習 PWA 專案規劃書
 
-> 版本：v0.4（v0.2 依審查問題清單 `plan-review-questions.md` 修訂；v0.3 改用 Firebase 同步；v0.4 第二輪審查修訂）
+> 版本：v0.4.1（v0.2 依審查問題清單 `plan-review-questions.md` 修訂；v0.3 改用 Firebase 同步；v0.4 第二輪審查修訂）
 > 更新日期：2026-10-24
 > 性質：個人自用，不商業化
 > 介面語言：繁體中文
@@ -455,7 +455,7 @@ public/content/
 | 項目 | 設計 |
 |---|---|
 | 服務 | Firebase（Spark 免費方案，不需綁信用卡） |
-| 登入 | Firebase Auth：**預設電子郵件 + 密碼**（流程在 App 內完成，不需彈出視窗）；Google 登入為選項，P0 驗證可行後才開放 |
+| 登入 | Firebase Auth：**只提供電子郵件 + 密碼**（流程在 App 內完成，不需彈出視窗）。Google 登入於 P0 實測不可靠，不提供（見 7.7） |
 | 雲端資料庫 | Cloud Firestore，前端使用 `firebase/firestore/lite`（體積較小；離線由 Dexie 負責，不使用 Firestore 的離線快取） |
 | 本機資料庫 | Dexie 仍為主要資料庫；學習時只讀寫 Dexie，同步在背景進行 |
 | 後端 | 不自行架設伺服器、不使用 BFF 或 Cloud Functions |
@@ -560,7 +560,7 @@ match /users/{uid}/settings/{doc} {
 | 風險 | 驗證／對策 |
 |---|---|
 | 登入狀態在 iOS 主畫面 App 中能否長期維持 | P0：登入後關閉 App，隔天再開，確認仍維持登入 |
-| Google 登入在主畫面 App 中的相容性（彈出視窗、`signInWithRedirect` 受第三方儲存限制影響） | P0 驗證；不穩定則只提供電子郵件登入 |
+| Google 登入在主畫面 App 中的相容性 | **P0 結果（2026-10-25）：不可靠**。彈出視窗在切換到 Gmail 做兩步驟驗證後被 iOS 重置，Google 顯示「發生問題」。重新導向方式需在 Cloudflare 加轉接程式且仍不保證成功，故決定只提供電子郵件登入 |
 | 離線期間的紀錄能否在恢復網路後正確上傳 | P0：飛航模式下練習，恢復網路後確認上傳 |
 | Cloudflare Pages 預覽部署的子網域未列入授權網域 | P0 確認；必要時只在正式網域測試登入 |
 | 免費額度 | 紀錄打包上傳；個人使用量遠低於每日 5 萬次讀取、2 萬次寫入 |
@@ -663,7 +663,7 @@ JP_app/
 | 筆畫資料 | KanjiVG 是否有濁音、半濁音、小寫假名的獨立檔案；確認 §12 候選變體清單中各字 KanjiVG 收錄的寫法 |
 | Firebase | 電子郵件登入成功；關閉 App 隔天再開仍維持登入 |
 | Firebase | 飛航模式下練習，恢復網路後紀錄自動上傳 |
-| Firebase | Google 登入是否可用（不可用則只提供電子郵件登入） |
+| Firebase | ~~Google 登入是否可用~~ → 已驗證不可靠，只提供電子郵件登入 |
 | Firebase | Cloudflare Pages 預覽子網域是否需加入授權網域 |
 | TTS | 主畫面模式下 `ja-JP` 語音可用、`voiceschanged` 載入時機 |
 | TTS | 靜音開關撥下時是否仍有聲音 |
@@ -758,7 +758,7 @@ JP_app/
 |---|---|
 | 雲端由 Google Drive 改為 Firebase（Auth + Firestore） | 登入狀態長期維持、自動同步、只增不改，取代「點一下備份」與防覆蓋流程 |
 | 不採用 BFF | Firebase 設計為前端直接存取，BFF 不解決任何現有問題 |
-| 登入預設電子郵件 + 密碼 | 避開 iOS 主畫面 App 的彈出視窗問題；Google 登入待 P0 驗證 |
+| 登入只提供電子郵件 + 密碼 | 避開 iOS 主畫面 App 的彈出視窗問題；Google 登入經 P0 驗證不可靠，已移除（v0.4.1） |
 | 紀錄打包成 chunk 上傳 | 降低讀取次數，避免超過免費額度 |
 | Firebase 同步排在 P1.5 | P1 以 JSON 匯出作為備份；P0 改為驗證 Firebase |
 | 新增 `syncMeta` 表與 `syncedAt` 欄位，移除 `backupMeta` | 支援增量上傳與下載 |

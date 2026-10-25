@@ -49,9 +49,9 @@ export function getFirebase(): Promise<FirebaseServices> {
     ])
     const app = getApps()[0] ?? initializeApp(config)
     // 登入狀態存在 IndexedDB，關閉 App 後仍維持（P0 驗證項目：隔天仍登入）
+    // 只用電子郵件登入，不載入彈出視窗／重新導向的 resolver
     const auth = authMod.initializeAuth(app, {
       persistence: [authMod.indexedDBLocalPersistence, authMod.browserLocalPersistence],
-      popupRedirectResolver: authMod.browserPopupRedirectResolver,
     })
     return { app, auth, db: getFirestore(app) }
   })()

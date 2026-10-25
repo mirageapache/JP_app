@@ -41,7 +41,6 @@ const checklist = ref<{ id: string; text: string; done: boolean; note: string }[
   { id: 'hw-gesture', text: '畫布不觸發邊緣返回手勢與頁面捲動', done: false, note: '' },
   { id: 'fb-login', text: '電子郵件登入成功；關閉 App 隔天再開仍維持登入', done: false, note: '' },
   { id: 'fb-offline', text: '飛航模式下產生紀錄，恢復網路後自動上傳', done: false, note: '' },
-  { id: 'fb-google', text: 'Google 登入是否可用', done: false, note: '' },
   { id: 'fb-domain', text: 'Cloudflare Pages 預覽子網域是否需加入授權網域', done: false, note: '' },
   { id: 'tts-voice', text: 'TTS：主畫面模式下 ja-JP 語音可用', done: false, note: '' },
   { id: 'tts-silent', text: 'TTS：靜音開關撥下時是否仍有聲音', done: false, note: '' },

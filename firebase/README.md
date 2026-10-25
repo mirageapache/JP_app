@@ -5,7 +5,7 @@ Firestore 安全規則與測試（規劃書 §7.4）。
 ## 前置作業（由專案擁有者在 Firebase 主控台完成）
 
 1. 建立 Firebase 專案（Spark 免費方案）
-2. Authentication → 登入方式 → 啟用「電子郵件／密碼」；Google 登入也一併啟用（P0 要測）
+2. Authentication → 登入方式 → 啟用「電子郵件／密碼」（Google 登入經 P0 驗證不可靠，不使用）
 3. Firestore Database → 建立資料庫（區域建議 `asia-east1`）
 4. 專案設定 → 新增 Web 應用程式 → 把設定值填進專案根目錄的 `.env.local`（格式見 `.env.example`）
 5. Authentication → 設定 → 授權網域：加入 Cloudflare Pages 的網域
