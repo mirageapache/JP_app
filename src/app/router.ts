@@ -12,6 +12,7 @@ export const router = createRouter({
     { path: '/kana/:char', name: 'kana-detail', component: () => import('@/modules/kana/KanaDetailPage.vue') },
     { path: '/settings', name: 'settings', component: () => import('@/modules/settings/SettingsPage.vue') },
     { path: '/settings/calibration', name: 'calibration', component: () => import('@/modules/settings/CalibrationPage.vue') },
+    { path: '/settings/backup', name: 'backup', component: () => import('@/modules/settings/BackupPage.vue') },
     { path: '/settings/about', name: 'about', component: () => import('@/modules/settings/AboutPage.vue') },
     { path: '/settings/debug', name: 'debug', component: () => import('@/modules/settings/DebugPage.vue') },
     { path: '/p0', name: 'p0', component: () => import('@/modules/p0/P0IndexPage.vue') },

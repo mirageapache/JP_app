@@ -11,6 +11,12 @@ const standalone = ref(false)
 
 async function finish(route: string) {
   await setSetting('onboardingDone', true)
+  // 申請持久儲存（規劃書 §11）；結果不影響流程
+  try {
+    await navigator.storage?.persist?.()
+  } catch {
+    /* 不支援時略過 */
+  }
   router.replace(route)
 }
 

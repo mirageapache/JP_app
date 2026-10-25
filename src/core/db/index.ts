@@ -7,6 +7,7 @@ import type { CardEventRecord, CardRecord, ReviewLogRecord } from '@/core/srs/ty
  * v1：errorLogs
  * v2：handwritingLogs、strokeSamples、settings（P1a）
  * v3：cards（快取）、reviewLogs、cardEvents（P1b）
+ * v4：snapshots（匯入前快照）
  */
 
 /** 除錯面板用的錯誤／console 紀錄，不同步 */
@@ -58,6 +59,15 @@ export interface StrokeSample {
   recordedAt: number
 }
 
+/** 匯入前的本機快照（規劃書 §7.6），不同步 */
+export interface Snapshot {
+  id?: number
+  at: number
+  reason: 'import'
+  /** 備份檔 JSON 字串 */
+  json: string
+}
+
 /** 設定：account 範圍會同步（P1.5），device 範圍只在本機 */
 export interface Setting {
   key: string
@@ -75,6 +85,7 @@ export class JpAppDB extends Dexie {
   cards!: EntityTable<CardRecord, 'id'>
   reviewLogs!: EntityTable<ReviewLogRecord, 'uuid'>
   cardEvents!: EntityTable<CardEventRecord, 'uuid'>
+  snapshots!: EntityTable<Snapshot, 'id'>
 
   constructor(name = 'jp-app') {
     super(name)
@@ -95,6 +106,16 @@ export class JpAppDB extends Dexie {
       cards: 'id, itemId, skill, due, state',
       reviewLogs: 'uuid, cardId, reviewedAt, syncedAt',
       cardEvents: 'uuid, cardId, at, syncedAt',
+    })
+    this.version(4).stores({
+      errorLogs: '++id, at, level',
+      handwritingLogs: 'uuid, cardId, at, syncedAt',
+      strokeSamples: 'uuid, cardId, recordedAt',
+      settings: 'key, scope',
+      cards: 'id, itemId, skill, due, state',
+      reviewLogs: 'uuid, cardId, reviewedAt, syncedAt',
+      cardEvents: 'uuid, cardId, at, syncedAt',
+      snapshots: '++id, at',
     })
   }
 }
