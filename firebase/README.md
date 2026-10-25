@@ -14,8 +14,7 @@ Firestore 安全規則與測試（規劃書 §7.4）。
 
 ```bash
 npx firebase-tools login            # 第一次需用瀏覽器登入
-cd firebase
-npx firebase-tools use --add        # 選擇專案，會產生 .firebaserc
+cd firebase                         # .firebaserc 已指定專案 jpapp-85d5e
 npx firebase-tools deploy --only firestore:rules
 ```
 
