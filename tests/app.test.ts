@@ -5,11 +5,13 @@ import App from '@/App.vue'
 import { router } from '@/app/router'
 
 describe('App', () => {
-  it('首頁可以掛載並顯示 P0 入口', async () => {
+  it('首頁可以掛載並顯示今日學習入口', async () => {
     await router.push('/')
     await router.isReady()
     const wrapper = mount(App, { global: { plugins: [createPinia(), router] } })
     await router.isReady()
-    expect(wrapper.text()).toContain('P0 驗證清單')
+    await new Promise((r) => setTimeout(r, 50))
+    expect(wrapper.text()).toContain('今日')
+    expect(wrapper.text()).toContain('今天先不手寫')
   })
 })

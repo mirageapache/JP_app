@@ -4,6 +4,7 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: () => import('@/modules/home/HomePage.vue') },
+    { path: '/session', name: 'session', component: () => import('@/modules/session/SessionPage.vue') },
     { path: '/kana', name: 'kana', component: () => import('@/modules/kana/KanaChartPage.vue') },
     { path: '/kana/:char', name: 'kana-detail', component: () => import('@/modules/kana/KanaDetailPage.vue') },
     { path: '/settings', name: 'settings', component: () => import('@/modules/settings/SettingsPage.vue') },
