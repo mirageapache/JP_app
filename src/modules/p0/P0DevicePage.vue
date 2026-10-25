@@ -44,7 +44,9 @@ const checklist = ref<{ id: string; text: string; done: boolean; note: string }[
   { id: 'fb-domain', text: 'Cloudflare Pages 預覽子網域是否需加入授權網域', done: false, note: '' },
   { id: 'tts-voice', text: 'TTS：主畫面模式下 ja-JP 語音可用', done: false, note: '' },
   { id: 'tts-silent', text: 'TTS：靜音開關撥下時是否仍有聲音', done: false, note: '' },
-  { id: 'tts-auto', text: 'TTS：頁面互動過後，卡片顯示時能否自動播放', done: false, note: '' },
+  { id: 'tts-delay', text: 'TTS：點按鈕 3 秒後延遲播放', done: false, note: '' },
+  { id: 'tts-auto', text: 'TTS：換頁後自動播放（點過連結）', done: false, note: '' },
+  { id: 'tts-cold', text: 'TTS：重新載入後自動播放（完全沒點擊）', done: false, note: '' },
   { id: 'storage', text: 'storage.persist() 回傳結果；重開機後資料仍在', done: false, note: '' },
 ])
 
@@ -155,8 +157,9 @@ onMounted(async () => {
             <button class="btn btn--secondary btn--sm" type="button" lang="ja" @click="speak('あ')">あ</button>
             <button class="btn btn--secondary btn--sm" type="button" lang="ja" @click="speak('たべる')">たべる</button>
             <button class="btn btn--secondary btn--sm" type="button" lang="ja" @click="speak('ここに名前を書いてください。')">例句</button>
-            <button class="btn btn--primary btn--sm" type="button" @click="speakLater">測試自動播放</button>
+            <button class="btn btn--primary btn--sm" type="button" @click="speakLater">延遲 3 秒播放</button>
           </div>
+          <RouterLink class="btn btn--secondary btn--sm" to="/p0/tts-auto" style="align-self: flex-start">換頁自動播放測試 →</RouterLink>
           <p class="small muted" aria-live="polite">{{ ttsStatus || '點按鈕播放。靜音開關撥下再播一次，確認是否有聲音。' }}</p>
         </div>
       </section>

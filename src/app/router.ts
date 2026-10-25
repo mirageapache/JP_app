@@ -10,6 +10,7 @@ export const router = createRouter({
     { path: '/p0/handwriting', name: 'p0-handwriting', component: () => import('@/modules/p0/P0HandwritingPage.vue') },
     { path: '/p0/firebase', name: 'p0-firebase', component: () => import('@/modules/p0/P0FirebasePage.vue') },
     { path: '/p0/device', name: 'p0-device', component: () => import('@/modules/p0/P0DevicePage.vue') },
+    { path: '/p0/tts-auto', name: 'p0-tts-auto', component: () => import('@/modules/p0/P0TtsAutoPage.vue') },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/modules/home/NotFoundPage.vue') },
   ],
   scrollBehavior: () => ({ top: 0 }),
