@@ -52,6 +52,8 @@ export function useWritingPractice(options: {
   const finished = computed(() => template.value !== null && isFinished(session.value, template.value))
   const summary = computed(() => (finished.value && template.value ? summarize(session.value, template.value, FAST_MS) : null))
   const hintIndex = computed(() => (session.value.hintShown && !finished.value ? session.value.expectedIndex : null))
+  /** 提示模式：永遠顯示下一筆的起點與方向 */
+  const guideIndex = computed(() => (options.difficulty.value === 'hint' && !finished.value ? session.value.expectedIndex : null))
   const strokeCount = computed(() => template.value?.strokes.length ?? 0)
 
   function setFeedback(kind: PracticeFeedback['kind'], text: string) {
@@ -185,6 +187,7 @@ export function useWritingPractice(options: {
     finished,
     summary,
     hintIndex,
+    guideIndex,
     strokeCount,
     onStroke,
     skip,

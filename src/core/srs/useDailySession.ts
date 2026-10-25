@@ -36,6 +36,8 @@ export function useDailySession() {
   const wrongItems = ref<string[]>([])
   const loading = ref(false)
   const error = ref('')
+  /** 評分寫入中，避免連點重複記錄 */
+  const answering = ref(false)
   let cardShownAt = 0
 
   const commuteMode = computed(() => settings.commuteDate === dayKey(Date.now()))
@@ -99,25 +101,32 @@ export function useDailySession() {
       pending.value = retry.value
       retry.value = []
     }
-    current.value = pending.value.shift() ?? null
+    // 複製一份：重試的卡若是同一個物件，Vue 會判定 current 沒有變化而不觸發 watch
+    const nextEntry = pending.value.shift()
+    current.value = nextEntry ? { ...nextEntry } : null
     cardShownAt = performance.now()
   }
 
   /** 記錄目前這張卡的評分並前進 */
   async function answer(rating: Rating, firstTry: boolean) {
     const entry = current.value
-    if (!entry) return
-    const durationMs = performance.now() - cardShownAt
-    await recordReview(entry.cardId, rating, durationMs)
-    counters.value.elapsedMs += durationMs
-    if (rating === 1) {
-      retry.value.push(entry)
-      if (!wrongItems.value.includes(entry.itemId)) wrongItems.value.push(entry.itemId)
-    } else {
-      counters.value.done++
-      if (firstTry) counters.value.correctFirstTry++
+    if (!entry || answering.value) return
+    answering.value = true
+    try {
+      const durationMs = performance.now() - cardShownAt
+      await recordReview(entry.cardId, rating, durationMs)
+      counters.value.elapsedMs += durationMs
+      if (rating === 1) {
+        retry.value.push({ ...entry })
+        if (!wrongItems.value.includes(entry.itemId)) wrongItems.value.push(entry.itemId)
+      } else {
+        counters.value.done++
+        if (firstTry) counters.value.correctFirstTry++
+      }
+      next()
+    } finally {
+      answering.value = false
     }
-    next()
   }
 
   function itemOf(entry: QueueEntry): KanaItem | undefined {
@@ -142,6 +151,7 @@ export function useDailySession() {
     wrongItems,
     loading,
     error,
+    answering,
     finished,
     progress,
     commuteMode,

@@ -110,8 +110,9 @@ onMounted(load)
       <section v-if="canWrite" class="stack">
         <div class="row row--between">
           <h2 class="section-title" style="padding: 0">自由練習<span class="caption faint">不影響複習排程</span></h2>
-          <div class="segmented" style="width: 150px">
+          <div class="segmented" style="width: 210px">
             <button type="button" :aria-pressed="difficulty === 'trace'" @click="difficulty = 'trace'">描摹</button>
+            <button type="button" :aria-pressed="difficulty === 'hint'" @click="difficulty = 'hint'">提示</button>
             <button type="button" :aria-pressed="difficulty === 'blank'" @click="difficulty = 'blank'">空白</button>
           </div>
         </div>
@@ -122,6 +123,7 @@ onMounted(load)
           :show-ghost="difficulty === 'trace'"
           :accepted="practice.session.value.accepted"
           :hint-index="practice.hintIndex.value"
+          :guide-index="practice.guideIndex.value"
           :disabled="practice.finished.value"
           @stroke="practice.onStroke"
         />

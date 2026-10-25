@@ -1,12 +1,13 @@
 import type { KanaItem } from '@/core/content/kana'
-import { endOfDay } from './day'
+import { dayKey, endOfDay } from './day'
 import type { CardRecord, Skill } from './types'
 
 /**
  * 每日佇列（規劃書 §6.2「每日佇列」）：純函式，輸入卡片與內容，輸出今天要出的卡片。
  * - 到期複習卡（越久沒複習的越先）→ 新卡（依學習順序）
  * - 新卡上限以「項目」計：一個項目的第一張卡（辨識類）出現才算一個新項目
- * - 技能錯開：產出類（write）在同項目的辨識卡（read）畢業（進入 Review 狀態）後才加入，不佔新項目額度
+ * - 技能錯開：產出類（write）在同項目的辨識卡（read）畢業（Review 狀態且不是今天畢業）或被標記已會後才加入，
+ *   不佔新項目額度；同一項目的兩種技能不會同一天第一次出現
  * - 到期複習超過 newPauseThreshold 時暫停新卡
  * - 通勤模式：排除 write 卡（延後到當天稍晚，不算逾期）
  */
@@ -74,7 +75,9 @@ export function buildDailyQueue(input: QueueInput): DailyQueue {
     const read = byId.get(`${item.id}#${UNLOCK_AFTER}`)
     const write = byId.get(`${item.id}#write`)
     const writeStarted = write ? write.reps > 0 || write.suspended : false
-    if (read && read.state === 2 && !read.suspended && !writeStarted && !newPaused) {
+    const readKnown = read?.suspended === true // 標記已會（讀）後，寫仍要練
+    const readGraduated = !!read && read.state === 2 && !read.suspended && read.lastReview !== null && dayKey(read.lastReview) !== dayKey(input.now)
+    if (read && (readKnown || readGraduated) && !writeStarted && !newPaused) {
       entries.push({ cardId: `${item.id}#write`, itemId: item.id, skill: 'write', kind: 'new' })
       newCount++
     }

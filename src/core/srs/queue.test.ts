@@ -51,19 +51,28 @@ describe('每日佇列', () => {
     const q = buildDailyQueue(base({ cards: [due1, due2, future, suspended] }))
     expect(q.entries.slice(0, 2).map((e) => e.cardId)).toEqual(['kana:い#read', 'kana:あ#read'])
     expect(q.dueCount).toBe(2)
-    // 已開始／暫停的項目不再算新項目
-    expect(q.entries.filter((e) => e.kind === 'new').map((e) => e.itemId)).not.toContain('kana:あ')
-    expect(q.entries.filter((e) => e.kind === 'new').map((e) => e.itemId)).not.toContain('kana:え')
+    // 已開始／暫停的項目不再算新項目（え 的 read 已標記已會，只會解鎖 write）
+    const newReads = q.entries.filter((e) => e.kind === 'new' && e.skill === 'read').map((e) => e.itemId)
+    expect(newReads).not.toContain('kana:あ')
+    expect(newReads).not.toContain('kana:え')
+    expect(q.entries.map((e) => e.cardId)).toContain('kana:え#write')
   })
 
   it('read 卡畢業後解鎖 write 卡，且不佔新項目額度', () => {
     const read = graduated('kana:あ#read', T0 - 86400000 * 5)
-    read.due = addDays(T0, 10) // 今天不到期
+    read.due = addDays(T0, 10) // 今天不到期（最後複習在 3 天前）
     const q = buildDailyQueue(base({ cards: [read], dailyNewItems: 1 }))
     const news = q.entries.filter((e) => e.kind === 'new').map((e) => e.cardId)
     expect(news).toContain('kana:あ#write')
     expect(news).toContain('kana:い#read') // 額度 1 仍給了下一個新項目
     expect(news).toHaveLength(2)
+  })
+
+  it('read 今天才畢業不解鎖 write（技能不同天出現）；read 標記已會則解鎖 write', () => {
+    const todayGrad = { ...graduated('kana:あ#read', T0 - 86400000 * 2), lastReview: T0 - 1000, due: addDays(T0, 10) }
+    expect(buildDailyQueue(base({ cards: [todayGrad] })).entries.map((e) => e.cardId)).not.toContain('kana:あ#write')
+    const known = { ...emptyCardRecord('kana:い#read', T0), suspended: true }
+    expect(buildDailyQueue(base({ cards: [known] })).entries.map((e) => e.cardId)).toContain('kana:い#write')
   })
 
   it('通勤模式延後 write 卡；到期過多時暫停新卡', () => {

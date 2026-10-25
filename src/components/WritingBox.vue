@@ -17,9 +17,11 @@ const props = withDefaults(
     accepted?: readonly number[]
     /** 要以提示動畫顯示的筆畫索引（null 不顯示） */
     hintIndex?: number | null
+    /** 提示模式：只顯示這一筆的起點與方向（design-system §7.1） */
+    guideIndex?: number | null
     disabled?: boolean
   }>(),
-  { showGhost: false, accepted: () => [], hintIndex: null, disabled: false },
+  { showGhost: false, accepted: () => [], hintIndex: null, guideIndex: null, disabled: false },
 )
 
 const emit = defineEmits<{ stroke: [stroke: UserStroke] }>()
@@ -40,6 +42,15 @@ const scale = computed(() => (size.value > 0 ? size.value / VIEWBOX : 1))
 const hintStroke = computed(() =>
   props.hintIndex !== null && props.template ? (props.template.strokes[props.hintIndex] ?? null) : null,
 )
+/** 提示模式的起點與方向：起點圓點 + 指向前 1/4 處的短箭頭 */
+const guide = computed(() => {
+  if (props.guideIndex === null || !props.template) return null
+  const s = props.template.strokes[props.guideIndex]
+  if (!s) return null
+  const p0 = s.points[0]!
+  const p1 = s.points[Math.min(s.points.length - 1, Math.floor(s.points.length / 4))]!
+  return { x: p0[0], y: p0[1], x2: p1[0], y2: p1[1] }
+})
 
 interface LiveStroke {
   points: Point[]
@@ -196,6 +207,15 @@ watch(() => props.template, redraw)
         <path v-for="i in accepted" :key="'a' + i" :d="template.strokes[i]?.d" />
       </g>
       <!-- TODO(P1a)：prefers-reduced-motion 時提供暫停（design-system §8） -->
+      <g v-if="guide && !hintStroke" class="guide">
+        <line :x1="guide.x" :y1="guide.y" :x2="guide.x2" :y2="guide.y2" marker-end="url(#guide-arrow)" />
+        <circle :cx="guide.x" :cy="guide.y" r="4" />
+        <defs>
+          <marker id="guide-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" />
+          </marker>
+        </defs>
+      </g>
       <g v-if="hintStroke" class="hint">
         <path :key="'h' + hintIndex" class="hint-path" :d="hintStroke.d" />
         <circle :cx="hintStroke.points[0]![0]" :cy="hintStroke.points[0]![1]" r="4" />
@@ -243,6 +263,15 @@ watch(() => props.template, redraw)
   animation: hint-draw 1s var(--ease) forwards;
 }
 .hint circle {
+  fill: var(--c-primary);
+}
+.guide line {
+  stroke: var(--c-primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.guide circle,
+.guide marker path {
   fill: var(--c-primary);
 }
 @keyframes hint-draw {

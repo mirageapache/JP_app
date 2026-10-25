@@ -60,6 +60,7 @@ onMounted(() => session.start())
         :pool="pool"
         :intervals="intervals"
         :attempt="attempt"
+        :disabled="session.answering.value"
         @rate="rate"
       />
       <WriteCard
@@ -68,6 +69,8 @@ onMounted(() => session.start())
         :item="currentItem"
         :is-new="session.current.value.kind === 'new'"
         :intervals="intervals"
+        :attempt="attempt"
+        :disabled="session.answering.value"
         @rate="rate"
       />
     </template>

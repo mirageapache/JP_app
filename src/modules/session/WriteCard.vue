@@ -19,12 +19,19 @@ const props = defineProps<{
   item: KanaItem
   isNew: boolean
   intervals: Record<Rating, string>
+  /** 本輪第幾次出現；答錯重出時改用提示模式 */
+  attempt?: number
+  disabled?: boolean
 }>()
 const emit = defineEmits<{ rate: [rating: Rating, firstTry: boolean] }>()
 
 const char = computed(() => props.item.char)
 const cardId = computed(() => kanaCardId(props.item.char, 'write'))
-const difficulty = ref<Difficulty>(props.isNew ? 'trace' : 'blank')
+function pick(): Difficulty {
+  if (props.isNew) return 'trace'
+  return (props.attempt ?? 1) > 1 ? 'hint' : 'blank'
+}
+const difficulty = ref<Difficulty>(pick())
 const box = ref<InstanceType<typeof WritingBox>>()
 const practice = useWritingPractice({ char, cardId, difficulty, mode: 'session' })
 
@@ -36,7 +43,7 @@ watch(practice.lastWrongPoints, (pts) => {
 watch(
   () => props.item.id,
   () => {
-    difficulty.value = props.isNew ? 'trace' : 'blank'
+    difficulty.value = pick()
   },
 )
 
@@ -49,7 +56,7 @@ function speak() {
   <div class="session-body" style="justify-content: flex-start; gap: var(--sp-3)">
     <div class="row" style="gap: var(--sp-2)">
       <span class="badge badge--primary">假名 · 書寫</span>
-      <span class="badge">{{ difficulty === 'trace' ? '描摹' : '空白' }}</span>
+      <span class="badge">{{ { trace: '描摹', hint: '提示', blank: '空白' }[difficulty] }}</span>
     </div>
     <div class="row" style="gap: var(--sp-2)">
       <p class="prompt-word" style="font-weight: 600">{{ item.romaji }}</p>
@@ -62,6 +69,7 @@ function speak() {
       :show-ghost="difficulty === 'trace'"
       :accepted="practice.session.value.accepted"
       :hint-index="practice.hintIndex.value"
+      :guide-index="practice.guideIndex.value"
       :disabled="practice.finished.value"
       @stroke="practice.onStroke"
     />
@@ -78,8 +86,9 @@ function speak() {
       v-if="practice.summary.value && suggested"
       :intervals="intervals"
       :suggested="suggested"
+      :disabled="disabled"
       :note="practice.summary.value.skipped ? '已跳過，建議「重來」' : `重寫 ${practice.summary.value.misses} 次，建議${['', '重來', '困難', '良好', '簡單'][suggested]}`"
-      @rate="(r) => emit('rate', r, practice.summary.value!.misses === 0)"
+      @rate="(r) => emit('rate', r, practice.summary.value!.misses === 0 && !practice.summary.value!.skipped)"
     />
     <div v-else class="row" style="justify-content: space-between">
       <button class="btn btn--secondary btn--sm" type="button" @click="practice.reset()"><AppIcon name="undo" size="sm" />重寫</button>

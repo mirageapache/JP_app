@@ -18,6 +18,7 @@ const props = defineProps<{
   intervals: Record<Rating, string>
   /** 本輪第幾次出現，用來變換選項順序 */
   attempt: number
+  disabled?: boolean
 }>()
 const emit = defineEmits<{ rate: [rating: Rating, firstTry: boolean] }>()
 
@@ -61,6 +62,6 @@ watch(() => props.item.id, () => (chosen.value = null))
         <AppIcon v-else-if="answered && chosen === c.romaji" name="x" size="sm" class="mark" />
       </button>
     </div>
-    <RatingBar v-if="answered" :intervals="intervals" :suggested="suggested" :note="correct ? '答對了，點選評分繼續' : '答錯了，這張卡稍後會再出現'" @rate="(r) => emit('rate', r, correct)" />
+    <RatingBar v-if="answered" :intervals="intervals" :suggested="suggested" :disabled="disabled" :note="correct ? '答對了，點選評分繼續' : '答錯了，這張卡稍後會再出現'" @rate="(r) => emit('rate', r, correct)" />
   </footer>
 </template>

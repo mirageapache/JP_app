@@ -6,6 +6,7 @@ defineProps<{
   intervals: Record<Rating, string>
   suggested?: Rating | null
   note?: string
+  disabled?: boolean
 }>()
 const emit = defineEmits<{ rate: [rating: Rating] }>()
 
@@ -21,7 +22,7 @@ const LABELS: { rating: Rating; cls: string; text: string }[] = [
   <div class="stack" style="gap: var(--sp-2)">
     <p v-if="note" class="rating-note">{{ note }}</p>
     <div class="rating" role="group" aria-label="評分">
-      <button v-for="l in LABELS" :key="l.rating" :class="[l.cls, { 'is-suggested': suggested === l.rating }]" type="button" @click="emit('rate', l.rating)">
+      <button v-for="l in LABELS" :key="l.rating" :class="[l.cls, { 'is-suggested': suggested === l.rating }]" type="button" :disabled="disabled" @click="emit('rate', l.rating)">
         {{ l.text }}<small>{{ intervals[l.rating] }}</small>
       </button>
     </div>

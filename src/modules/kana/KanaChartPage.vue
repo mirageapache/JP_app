@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import AppIcon from '@/components/AppIcon.vue'
 import AppTabbar from '@/components/AppTabbar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import { kanaCardId, kanaTable, loadKanaPack, type KanaGroup, type KanaItem, type KanaPack, type KanaScript } from '@/core/content/kana'
@@ -98,7 +99,34 @@ onMounted(load)
         <span><i style="border-style: dashed; background: var(--c-paper)"></i>未練習</span>
         <span><i style="background: var(--c-surface)"></i>練習過</span>
       </div>
-      <p class="small faint" style="padding: 0 var(--sp-1)">點任一假名可看筆順並自由練習。學習狀態（已熟、弱點）會在每日學習功能加入後顯示。</p>
+
+      <div class="stack">
+        <h2 class="section-title">練習</h2>
+        <ul class="list">
+          <li>
+            <RouterLink class="list-row" to="/kana/weak">
+              <AppIcon name="target" style="color: var(--c-shu)" />
+              <div class="list-row__main"><div class="list-row__title">弱點專練</div><div class="list-row__sub">常寫錯的字排在前面</div></div>
+              <AppIcon name="chev-r" size="sm" class="chev" />
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink class="list-row" to="/kana/confusables">
+              <AppIcon name="shuffle" style="color: var(--c-primary)" />
+              <div class="list-row__main"><div class="list-row__title">易混淆對照</div><div class="list-row__sub" lang="ja">ぬ／め、シ／ツ、ソ／ン…</div></div>
+              <AppIcon name="chev-r" size="sm" class="chev" />
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink class="list-row" to="/kana/mark-known">
+              <AppIcon name="check" style="color: var(--c-ink-2)" />
+              <div class="list-row__main"><div class="list-row__title">標記已會</div><div class="list-row__sub">跳過已經熟悉的字</div></div>
+              <AppIcon name="chev-r" size="sm" class="chev" />
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <p class="small faint" style="padding: 0 var(--sp-1)">點任一假名可看筆順並自由練習。自由練習不影響複習排程。</p>
     </main>
 
     <AppTabbar />
