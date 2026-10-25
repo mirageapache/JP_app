@@ -5,6 +5,7 @@ import JaText from '@/components/JaText.vue'
 import { useDailySession } from '@/core/srs/useDailySession'
 import { getCard } from '@/core/srs/repository'
 import { previewIntervals } from '@/core/srs/fsrs'
+import { requestSync } from '@/core/sync/useSync'
 import type { Rating } from '@/core/srs/types'
 import RecognizeCard from './RecognizeCard.vue'
 import WriteCard from './WriteCard.vue'
@@ -33,6 +34,8 @@ watch(
 
 async function rate(rating: Rating, firstTry: boolean) {
   await session.answer(rating, firstTry)
+  // 完成一輪練習時觸發同步（規劃書 §7.5）
+  if (session.finished.value) void requestSync()
 }
 
 const accuracy = computed(() => {

@@ -11,7 +11,7 @@ import {
   signUpWithEmail,
   type AuthUser,
 } from '@/core/sync/auth'
-import { listChunks, recordCount, SCHEMA_VERSION, uploadChunk, type ChunkDoc, type ChunkPayload } from '@/core/sync/chunks'
+import { firestoreTransport, recordCount, SCHEMA_VERSION, type ChunkDoc, type ChunkPayload } from '@/core/sync/transport'
 import { getDeviceId } from '@/core/sync/deviceId'
 import { isFirebaseConfigured } from '@/core/sync/firebaseApp'
 import { useToast } from '@/core/ui/useToast'
@@ -100,18 +100,18 @@ function makeChunk(): ChunkPayload {
   return {
     deviceId: getDeviceId(),
     schemaVersion: SCHEMA_VERSION,
-    reviewLogs: [{ uuid: crypto.randomUUID(), cardId: 'kana:あ#read', rating: 3, reviewedAt: Date.now(), mode: 'p0-test' }],
+    reviewLogs: [
+      { uuid: crypto.randomUUID(), cardId: 'kana:あ#read', rating: 3, reviewedAt: Date.now(), durationMs: 0, mode: 'session', paramsVersion: 'p0-test', deviceId: getDeviceId(), syncedAt: null },
+    ],
     cardEvents: [],
     handwritingLogs: [],
-    quizLogs: [],
-    contentReports: [],
   }
 }
 
 const doUpload = () =>
   run('上傳測試 chunk', async () => {
     if (!user.value) throw new Error('尚未登入')
-    const id = await uploadChunk(user.value.uid, makeChunk())
+    const id = await firestoreTransport.uploadChunk(user.value.uid, makeChunk())
     log(`chunk ${id} 已寫入`)
     await refresh()
   })
@@ -119,7 +119,7 @@ const doUpload = () =>
 const refresh = () =>
   run('讀取雲端 chunk', async () => {
     if (!user.value) throw new Error('尚未登入')
-    chunks.value = (await listChunks(user.value.uid)).reverse()
+    chunks.value = (await firestoreTransport.listChunks(user.value.uid)).reverse()
   })
 
 function enqueue() {
@@ -134,7 +134,7 @@ async function flush() {
   await run(`同步待上傳 ${queue.value.length} 筆`, async () => {
     while (queue.value.length) {
       const next = queue.value[0]!
-      await uploadChunk(user.value!.uid, next)
+      await firestoreTransport.uploadChunk(user.value!.uid, next)
       queue.value.shift()
       saveQueue()
     }

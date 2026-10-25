@@ -5,6 +5,7 @@ import AppTabbar from '@/components/AppTabbar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import { settings } from '@/core/settings'
 import { useDailySession } from '@/core/srs/useDailySession'
+import { daysSinceSync, REMIND_AFTER_DAYS, syncState } from '@/core/sync/useSync'
 
 /** 今日（規劃書 §6.2；docs/ui-mockups/home.html） */
 const session = useDailySession()
@@ -26,6 +27,13 @@ const estimateMin = computed(() => {
   return Math.max(1, Math.round(((q.entries.length - write) * 7 + write * 15) / 60))
 })
 const goalReached = computed(() => minutesDone.value >= goal.value)
+/** 已登入但超過 3 天沒同步成功時提醒（規劃書 §7.5） */
+const syncReminder = computed(() => {
+  if (!syncState.user) return ''
+  const d = daysSinceSync()
+  if (d === null) return '尚未同步過，請確認網路連線'
+  return d >= REMIND_AFTER_DAYS ? `已 ${d} 天沒有同步，請確認網路連線` : ''
+})
 
 onMounted(() => session.refresh())
 </script>
@@ -41,6 +49,7 @@ onMounted(() => session.refresh())
     <main class="page">
       <p class="muted small" style="margin-top: -12px">{{ dateText }}</p>
       <p v-if="session.error.value" class="banner banner--shu">{{ session.error.value }}</p>
+      <RouterLink v-if="syncReminder" class="banner banner--warn" to="/settings/account"><AppIcon name="cloud" size="sm" /><span>{{ syncReminder }}</span></RouterLink>
 
       <section class="card stack" style="gap: var(--sp-4)">
         <div class="row" style="gap: var(--sp-5)">

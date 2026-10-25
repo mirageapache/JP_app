@@ -6,6 +6,7 @@ import AppTabbar from '@/components/AppTabbar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import { useTapToReveal } from '@/core/debug/useTapToReveal'
 import { loadSettings, setSetting, settings } from '@/core/settings'
+import { refreshPending, syncState } from '@/core/sync/useSync'
 
 const version = __APP_VERSION__
 const router = useRouter()
@@ -17,13 +18,33 @@ function step(key: 'dailyNewKana' | 'dailyGoalMinutes' | 'newPauseThreshold', de
   if (next !== settings[key]) void setSetting(key, next)
 }
 
-onMounted(loadSettings)
+onMounted(() => {
+  void loadSettings()
+  void refreshPending()
+})
 </script>
 
 <template>
   <div class="app has-tabbar">
     <AppTopbar title="設定" large />
     <main class="page" style="gap: var(--sp-5)">
+      <!-- 帳號與同步 -->
+      <section class="stack" style="gap: var(--sp-2)">
+        <h2 class="section-title">帳號與同步</h2>
+        <ul class="list">
+          <li>
+            <RouterLink class="list-row" to="/settings/account">
+              <AppIcon :name="syncState.user ? 'cloud-check' : 'cloud'" :style="{ color: syncState.user ? 'var(--c-ok)' : 'var(--c-ink-2)' }" />
+              <div class="list-row__main">
+                <div class="list-row__title">{{ syncState.user ? syncState.user.email : '尚未登入' }}</div>
+                <div class="list-row__sub">{{ syncState.user ? (syncState.status === 'error' ? '上次同步失敗' : `已同步 · 待上傳 ${syncState.pending} 筆`) : '登入後紀錄會自動同步到雲端' }}</div>
+              </div>
+              <AppIcon name="chev-r" size="sm" class="chev" />
+            </RouterLink>
+          </li>
+        </ul>
+      </section>
+
       <!-- 每日學習 -->
       <section class="stack" style="gap: var(--sp-2)">
         <h2 class="section-title">每日學習</h2>

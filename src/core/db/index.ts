@@ -1,6 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie'
 import type { Difficulty, Point, Verdict, VerdictKind } from '@/core/handwriting/types'
 import type { CardEventRecord, CardRecord, ReviewLogRecord } from '@/core/srs/types'
+import type { SyncMeta } from '@/core/sync/engine'
 
 /**
  * 本機資料庫（規劃書 §5.3）。每次 schema 變更都升版本號並寫遷移。
@@ -8,6 +9,7 @@ import type { CardEventRecord, CardRecord, ReviewLogRecord } from '@/core/srs/ty
  * v2：handwritingLogs、strokeSamples、settings（P1a）
  * v3：cards（快取）、reviewLogs、cardEvents（P1b）
  * v4：snapshots（匯入前快照）
+ * v5：syncMeta（本機同步狀態，P1.5）
  */
 
 /** 除錯面板用的錯誤／console 紀錄，不同步 */
@@ -86,6 +88,7 @@ export class JpAppDB extends Dexie {
   reviewLogs!: EntityTable<ReviewLogRecord, 'uuid'>
   cardEvents!: EntityTable<CardEventRecord, 'uuid'>
   snapshots!: EntityTable<Snapshot, 'id'>
+  syncMeta!: EntityTable<SyncMeta, 'key'>
 
   constructor(name = 'jp-app') {
     super(name)
@@ -116,6 +119,17 @@ export class JpAppDB extends Dexie {
       reviewLogs: 'uuid, cardId, reviewedAt, syncedAt',
       cardEvents: 'uuid, cardId, at, syncedAt',
       snapshots: '++id, at',
+    })
+    this.version(5).stores({
+      errorLogs: '++id, at, level',
+      handwritingLogs: 'uuid, cardId, at, syncedAt',
+      strokeSamples: 'uuid, cardId, recordedAt',
+      settings: 'key, scope',
+      cards: 'id, itemId, skill, due, state',
+      reviewLogs: 'uuid, cardId, reviewedAt, syncedAt',
+      cardEvents: 'uuid, cardId, at, syncedAt',
+      snapshots: '++id, at',
+      syncMeta: 'key',
     })
   }
 }
