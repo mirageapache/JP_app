@@ -485,3 +485,19 @@ button.list-row { width: 100%; border: 0; background: none; text-align: left; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0ms !important; animation: none !important; }
 }
+
+/* ---------- 字型：Klee One（教科書體）假名子集，離線可用；見 tools/fonts/README.md ---------- */
+@font-face {
+  font-family: 'Klee One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/klee-one-400-kana.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Klee One';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/klee-one-600-kana.woff2') format('woff2');
+}

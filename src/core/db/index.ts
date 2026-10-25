@@ -23,11 +23,13 @@ export interface HandwritingLog {
   /** 卡片 ID，例如 kana:あ#write */
   cardId: string
   variantId: string
+  /** 開始時的難度；中途切換時以各筆 strokeResults.difficulty 為準 */
   difficulty: Difficulty
-  pointerType: 'pen' | 'touch' | 'mouse'
+  /** 沒寫任何一筆就跳過時為 null */
+  pointerType: 'pen' | 'touch' | 'mouse' | null
   /** 0～100 */
   score: number
-  strokeResults: { strokeIndex: number; kind: VerdictKind }[]
+  strokeResults: { strokeIndex: number; kind: VerdictKind; difficulty: Difficulty }[]
   misses: number
   hintsUsed: number
   skipped: boolean

@@ -7,6 +7,8 @@ defineProps<{
   large?: boolean
   /** 顯示返回按鈕，值為返回的路由位置 */
   back?: string
+  /** 標題為日文時標示 lang="ja"（規劃書 §6.6） */
+  titleLang?: string
 }>()
 </script>
 
@@ -15,7 +17,7 @@ defineProps<{
     <RouterLink v-if="back" class="icon-btn" :to="back" aria-label="返回">
       <AppIcon name="chev-l" />
     </RouterLink>
-    <h1 class="topbar__title" :class="{ 'topbar__title--left': large }">{{ title }}</h1>
+    <h1 class="topbar__title" :class="{ 'topbar__title--left': large }" :lang="titleLang">{{ title }}</h1>
     <slot name="actions">
       <span v-if="back" class="spacer" />
     </slot>

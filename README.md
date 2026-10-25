@@ -128,5 +128,6 @@ PWA 的 Service Worker 需要 HTTPS，請用 Cloudflare Pages 的網址測試：
 | [JMdict](https://www.edrdg.org/jmdict/j_jmdict.html)（© Electronic Dictionary Research and Development Group） | 單字資料 | CC BY-SA 4.0 |
 | [Tatoeba](https://tatoeba.org/) | 例句 | CC BY 2.0 FR |
 | Tanos JLPT 清單（Jonathan Waller） | 單字等級 | 待確認 |
+| [Klee One](https://fonts.google.com/specimen/Klee+One)（© Fontworks Inc.） | 教科書體字型（假名子集，自帶離線） | SIL Open Font License 1.1 |
 
 App 內「關於」頁面會標示上述來源。

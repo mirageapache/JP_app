@@ -4,7 +4,10 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: () => import('@/modules/home/HomePage.vue') },
+    { path: '/kana', name: 'kana', component: () => import('@/modules/kana/KanaChartPage.vue') },
+    { path: '/kana/:char', name: 'kana-detail', component: () => import('@/modules/kana/KanaDetailPage.vue') },
     { path: '/settings', name: 'settings', component: () => import('@/modules/settings/SettingsPage.vue') },
+    { path: '/settings/calibration', name: 'calibration', component: () => import('@/modules/settings/CalibrationPage.vue') },
     { path: '/settings/debug', name: 'debug', component: () => import('@/modules/settings/DebugPage.vue') },
     { path: '/p0', name: 'p0', component: () => import('@/modules/p0/P0IndexPage.vue') },
     { path: '/p0/handwriting', name: 'p0-handwriting', component: () => import('@/modules/p0/P0HandwritingPage.vue') },

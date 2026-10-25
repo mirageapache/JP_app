@@ -79,33 +79,33 @@
 **目標**：手寫引擎正式版，可以自由練習平假名，並經過幾天實際使用調校門檻。
 
 ### 內容
-- [ ] `tools/`：KanjiVG 全部平假名（含濁音、半濁音、小寫假名）轉成 `strokes/*.json`
-- [ ] `kana.json`：平假名清單、行別、學習順序、筆畫版本
+- [x] `tools/`：KanjiVG 全部平假名（含濁音、半濁音、小寫假名）轉成 `strokes/*.json`（P0 已處理全部假名）
+- [x] `kana.json`：平假名清單、行別、學習順序、筆畫版本（tools/kana/build_kana.py，含片假名）
 - [ ] 手動補充筆畫變體資料
-- [ ] `src/core/content/`：讀取 manifest、以 ID 查詢內容
+- [x] `src/core/content/`：假名內容載入、以字查詢、五十音表排列（manifest 待多個內容包時再加）
 
 ### 資料層
-- [ ] Dexie schema v1：`handwritingLogs`、`strokeSamples`、`settings`、`errorLogs`
-- [ ] 遷移函式框架
-- [ ] `settings` 的 account／device 範圍
+- [x] Dexie schema v2：`handwritingLogs`、`strokeSamples`、`settings`（v1 已有 `errorLogs`）
+- [x] 遷移框架：Dexie 版本鏈（v1 → v2）
+- [x] `settings` 的 account／device 範圍與 `updatedAt`
 
 ### 手寫引擎
 - [x] 依 P0 回饋修正（p0-verification.md §2.4）：去除重複起點、形狀改用正規化 Fréchet 並與位置分開、收緊順序錯誤並偵測連筆、P0 筆跡存成回歸測試
-- [ ] 筆畫收集、重取樣、比對（由 P0 原型整理成正式模組）
-- [ ] 判錯流程：該筆消失重寫、連錯 3 次顯示提示動畫、跳過
-- [ ] 手指／Apple Pencil 分開門檻
-- [ ] 描摹、空白兩種難度
-- [ ] 筆畫版本選擇與提示
-- [ ] 單元測試
+- [x] 筆畫收集、重取樣、比對（core/handwriting、WritingBox）
+- [x] 判錯流程：該筆消失重寫、連錯 3 次顯示提示動畫、跳過（useWritingPractice）
+- [x] 手指／Apple Pencil 分開門檻
+- [x] 描摹、空白兩種難度
+- [x] 筆畫版本選擇與提示（そ、り 可選；替代版本的筆畫資料待補）
+- [x] 單元測試（幾何、比對、流程、真實筆跡回歸、練習流程）
 
 ### 頁面
-- [ ] 50 音表（平假名，點擊發音）
-- [ ] 假名詳細頁：筆順動畫、自由手寫練習
-- [ ] 調校模式：保存樣本、「判定有誤」標記、匯出、刪除（單筆／單字／全部）
+- [x] 50 音表（平／片假名、清音／濁音／拗音／小寫；點字進入詳細頁，詳細頁可發音）
+- [x] 假名詳細頁：筆順動畫、自由手寫練習、練習紀錄
+- [x] 調校模式：保存樣本、「判定有誤」標記、匯出（分享或複製）、刪除（單筆／單字／全部；關閉時詢問）
 
 ### 其他
 - [ ] 日文顯示共用元件（`lang="ja"`、ruby）
-- [ ] TTS 服務（送假名、`ja-JP`）
+- [x] TTS 服務（送假名、`ja-JP`、第一次點擊解鎖）
 
 ### 完成標準
 - [ ] 實際使用數天，手寫誤判在可接受範圍
