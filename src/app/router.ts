@@ -1,14 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { loadSettings, settings } from '@/core/settings'
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: () => import('@/modules/home/HomePage.vue') },
     { path: '/session', name: 'session', component: () => import('@/modules/session/SessionPage.vue') },
+    { path: '/onboarding', name: 'onboarding', component: () => import('@/modules/home/OnboardingPage.vue') },
     { path: '/kana', name: 'kana', component: () => import('@/modules/kana/KanaChartPage.vue') },
+    { path: '/kana/mark-known', name: 'mark-known', component: () => import('@/modules/kana/MarkKnownPage.vue') },
     { path: '/kana/:char', name: 'kana-detail', component: () => import('@/modules/kana/KanaDetailPage.vue') },
     { path: '/settings', name: 'settings', component: () => import('@/modules/settings/SettingsPage.vue') },
     { path: '/settings/calibration', name: 'calibration', component: () => import('@/modules/settings/CalibrationPage.vue') },
+    { path: '/settings/about', name: 'about', component: () => import('@/modules/settings/AboutPage.vue') },
     { path: '/settings/debug', name: 'debug', component: () => import('@/modules/settings/DebugPage.vue') },
     { path: '/p0', name: 'p0', component: () => import('@/modules/p0/P0IndexPage.vue') },
     { path: '/p0/handwriting', name: 'p0-handwriting', component: () => import('@/modules/p0/P0HandwritingPage.vue') },
@@ -18,4 +22,12 @@ export const router = createRouter({
     { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/modules/home/NotFoundPage.vue') },
   ],
   scrollBehavior: () => ({ top: 0 }),
+})
+
+/** 首次開啟先到引導頁（規劃書 Q23）；P0 驗證頁不受影響 */
+router.beforeEach(async (to) => {
+  if (to.name === 'onboarding' || String(to.path).startsWith('/p0')) return true
+  await loadSettings()
+  if (!settings.onboardingDone) return { name: 'onboarding' }
+  return true
 })
