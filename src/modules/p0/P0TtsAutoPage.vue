@@ -2,7 +2,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import AppTopbar from '@/components/AppTopbar.vue'
-import { isTtsSupported } from '@/core/tts'
+import { isTtsSupported, isTtsUnlocked, speakJa } from '@/core/tts'
 
 /**
  * P0 TTS 自動播放測試：頁面一出現就自動朗讀，不經過任何點擊。
@@ -12,41 +12,38 @@ import { isTtsSupported } from '@/core/tts'
  */
 const route = useRoute()
 const mode = route.query.cold ? '重新載入後（完全沒有點擊）' : '換頁後（之前點過連結）'
+const unlockedAtStart = isTtsUnlocked()
 const status = ref('準備播放…')
 const result = ref<'playing' | 'done' | 'blocked' | 'error' | null>(null)
 let timer: ReturnType<typeof setTimeout> | undefined
 
-function play() {
+async function play() {
   if (!isTtsSupported()) {
     status.value = '此裝置不支援語音合成'
     result.value = 'error'
     return
   }
-  speechSynthesis.cancel()
-  const u = new SpeechSynthesisUtterance('みず')
-  u.lang = 'ja-JP'
-  u.rate = 0.9
   let started = false
-  u.onstart = () => {
-    started = true
-    result.value = 'playing'
-    status.value = '播放中…'
-  }
-  u.onend = () => {
-    result.value = 'done'
-    status.value = '程式判斷：已自動播放完畢'
-  }
-  u.onerror = (e) => {
-    result.value = 'error'
-    status.value = `程式判斷：播放失敗（${e.error}）`
-  }
-  speechSynthesis.speak(u)
   timer = setTimeout(() => {
     if (!started) {
       result.value = 'blocked'
       status.value = '程式判斷：2 秒內沒有開始播放，可能被 iOS 擋下'
     }
   }, 2000)
+  try {
+    await speakJa('みず', {
+      onStart: () => {
+        started = true
+        result.value = 'playing'
+        status.value = '播放中…'
+      },
+    })
+    result.value = 'done'
+    status.value = '程式判斷：已自動播放完畢'
+  } catch (e) {
+    result.value = 'error'
+    status.value = `程式判斷：${e instanceof Error ? e.message : String(e)}`
+  }
 }
 
 function reloadCold() {
@@ -63,6 +60,7 @@ onBeforeUnmount(() => clearTimeout(timer))
     <main class="page" style="gap: var(--sp-4)">
       <section class="card stack" style="gap: var(--sp-2)">
         <div class="row row--between small"><span class="muted">情境</span><span>{{ mode }}</span></div>
+        <div class="row row--between small"><span class="muted">進入時語音已解鎖</span><span>{{ unlockedAtStart ? '是' : '否' }}</span></div>
         <div class="row row--between small"><span class="muted">內容</span><span lang="ja">みず</span></div>
       </section>
 
