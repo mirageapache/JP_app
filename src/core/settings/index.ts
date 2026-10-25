@@ -8,6 +8,18 @@ import { db, type Setting } from '@/core/db'
  */
 
 export interface SettingsSchema {
+  /** 每日新假名（以項目計） */
+  dailyNewKana: number
+  /** 每日目標（分鐘，軟性上限） */
+  dailyGoalMinutes: number
+  /** 到期複習超過此數時暫停新卡 */
+  newPauseThreshold: number
+  /** 通勤模式「今天先不手寫」：記錄開啟的台灣日期，隔天自動失效（device） */
+  commuteDate: string | null
+  /** 「今天想多學一點」：日期與追加的項目數（device） */
+  extraNew: { date: string; count: number } | null
+  /** 首次開啟引導已完成（device） */
+  onboardingDone: boolean
   /** 讀音標注預設顯示 */
   showFurigana: boolean
   /** 假名筆畫版本選擇：char → variantId */
@@ -21,6 +33,12 @@ export interface SettingsSchema {
 type Key = keyof SettingsSchema
 
 export const SETTING_DEFAULTS: SettingsSchema = {
+  dailyNewKana: 5,
+  dailyGoalMinutes: 20,
+  newPauseThreshold: 100,
+  commuteDate: null,
+  extraNew: null,
+  onboardingDone: false,
   showFurigana: true,
   kanaStrokeVariants: {},
   tuningMode: false,
@@ -28,6 +46,12 @@ export const SETTING_DEFAULTS: SettingsSchema = {
 }
 
 export const SETTING_SCOPE: Record<Key, Setting['scope']> = {
+  dailyNewKana: 'account',
+  dailyGoalMinutes: 'account',
+  newPauseThreshold: 'account',
+  commuteDate: 'device',
+  extraNew: 'device',
+  onboardingDone: 'device',
   showFurigana: 'account',
   kanaStrokeVariants: 'account',
   tuningMode: 'device',

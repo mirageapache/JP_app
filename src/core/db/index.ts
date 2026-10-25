@@ -1,11 +1,12 @@
 import Dexie, { type EntityTable } from 'dexie'
 import type { Difficulty, Point, Verdict, VerdictKind } from '@/core/handwriting/types'
+import type { CardEventRecord, CardRecord, ReviewLogRecord } from '@/core/srs/types'
 
 /**
  * 本機資料庫（規劃書 §5.3）。每次 schema 變更都升版本號並寫遷移。
  * v1：errorLogs
  * v2：handwritingLogs、strokeSamples、settings（P1a）
- * 其餘資料表（cards、reviewLogs、cardEvents…）於 P1b 加入。
+ * v3：cards（快取）、reviewLogs、cardEvents（P1b）
  */
 
 /** 除錯面板用的錯誤／console 紀錄，不同步 */
@@ -71,6 +72,9 @@ export class JpAppDB extends Dexie {
   handwritingLogs!: EntityTable<HandwritingLog, 'uuid'>
   strokeSamples!: EntityTable<StrokeSample, 'uuid'>
   settings!: EntityTable<Setting, 'key'>
+  cards!: EntityTable<CardRecord, 'id'>
+  reviewLogs!: EntityTable<ReviewLogRecord, 'uuid'>
+  cardEvents!: EntityTable<CardEventRecord, 'uuid'>
 
   constructor(name = 'jp-app') {
     super(name)
@@ -82,6 +86,15 @@ export class JpAppDB extends Dexie {
       handwritingLogs: 'uuid, cardId, at, syncedAt',
       strokeSamples: 'uuid, cardId, recordedAt',
       settings: 'key, scope',
+    })
+    this.version(3).stores({
+      errorLogs: '++id, at, level',
+      handwritingLogs: 'uuid, cardId, at, syncedAt',
+      strokeSamples: 'uuid, cardId, recordedAt',
+      settings: 'key, scope',
+      cards: 'id, itemId, skill, due, state',
+      reviewLogs: 'uuid, cardId, reviewedAt, syncedAt',
+      cardEvents: 'uuid, cardId, at, syncedAt',
     })
   }
 }
