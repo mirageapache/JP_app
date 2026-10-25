@@ -23,7 +23,8 @@
 | Firebase | 預覽子網域是否需加入授權網域 | ✅ 不需處理 | 正式網域已授權；只在要用 Cloudflare 預覽網址測試登入時才需加入 |
 | TTS | 主畫面模式下 ja-JP 語音可用 | ✅ | 只有 **Kyoko**（本機語音）；可在 iPhone 設定下載增強版提升音質 |
 | TTS | 靜音開關撥下時仍有聲音 | ✅ | |
-| TTS | 頁面互動後可自動播放 | ❓ 待回報 | 影響 P1b 的聽力卡 |
+| TTS | 換頁後自動播放 | ✅（修正後） | 第一輪沒有聲音。原因：iOS 要求第一次發音發生在點擊當下，且 `cancel()` 後立即 `speak()` 會被丟掉。修正：App 第一次點擊時靜音播放解鎖（`installTtsUnlock`）、只在播放中才 cancel（commit 074313c）。P2 聽力卡沿用此做法 |
+| TTS | 重新載入後（完全沒點擊）自動播放 | ❓ 待回報 | 預期會被 iOS 擋；若擋，每次開 App 後第一次點擊即解鎖，不影響實際使用 |
 | 儲存 | `storage.persist()`；重開機後資料仍在 | ⚠️ 回傳「未允許」 | 待確認是否按過「要求持久儲存」。主畫面 App 不受 Safari 7 天清除規則影響，且有雲端同步，影響不大 |
 | API | Pointer Events、getCoalescedEvents、CompressionStream、IndexedDB、Service Worker、storage.persist、Web Share、語音合成、Clipboard | ✅ 全部支援 | |
 | UI | Vant 4 與 Konsta UI 比較 | 兩者差不多 | **決定：都不採用，沿用自訂元件**，見 §3 |
@@ -99,7 +100,8 @@
 - [ ] Apple Pencil（若有）
 - [ ] 電子郵件登入；隔天開啟仍維持登入
 - [ ] 飛航模式離線上傳
-- [ ] TTS 自動播放
+- [x] TTS 換頁後自動播放（修正後有聲音）
+- [ ] TTS 重新載入後自動播放
 - [ ] 是否按過「要求持久儲存」；重開機後資料仍在
 
 **已決定**
