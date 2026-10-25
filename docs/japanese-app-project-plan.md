@@ -90,7 +90,7 @@
 | 框架 | Vue 3 + TypeScript + Vite | 最熟悉的技術 |
 | PWA | `vite-plugin-pwa`（Workbox），`registerType: 'prompt'` | 離線快取、Service Worker、Manifest；有新版本時提示使用者更新。App Shell 預快取；內容包改用執行期快取（CacheFirst），避免每次內容更新都重新下載全部 |
 | 狀態 | Pinia | 只作為設定與畫面狀態的讀取快取，資料以 Dexie 為準 |
-| UI | Vant 4 或 Konsta UI | **P0 各做一頁試用後決定** |
+| UI | 自訂元件（`src/styles/app.css` + `src/components/`） | P0 試用 Vant 4 與 Konsta UI 手感差不多，皆不採用；日後改導入專案擁有者自行開發的個人 UI 元件庫 |
 | 本機資料庫 | IndexedDB + Dexie | PWA 內建，API 友善；App 的主要資料庫 |
 | 雲端同步 | Firebase Auth + Cloud Firestore（`firebase/firestore/lite`） | 登入狀態由 SDK 自動維護；免費方案足夠個人使用；不需自行架設後端。同步模組以動態 `import()` 延遲載入 |
 | SRS | `ts-fsrs` | FSRS 演算法的 TS 實作；固定參數並記錄版本 |
@@ -642,7 +642,7 @@ JP_app/
 
 | 階段 | 內容 | 完成標準 |
 |---|---|---|
-| **P0 驗證** | PWA 骨架；**App 內除錯面板**；**手寫原型**（田字格 + 5～10 個假名，含 ぱ、ぬ 等）；Firebase 最小原型（登入 + 上傳一份 chunk）；Vant 4 與 Konsta UI 各試做一頁 | 下方 P0 驗證清單全部通過；選定 UI 函式庫 |
+| **P0 驗證** | PWA 骨架；**App 內除錯面板**；**手寫原型**（田字格 + 5～10 個假名，含 ぱ、ぬ 等）；Firebase 最小原型（登入 + 上傳一份 chunk）；Vant 4 與 Konsta UI 各試做一頁 | 下方 P0 驗證清單全部通過；UI 決定沿用自訂元件 |
 | **P1a 平假名自由練習** | 平假名 50 音表、筆順動畫、手寫（描摹＋空白）、調校模式 | 可自由練習平假名手寫，手寫引擎經數天實際使用調校 |
 | **P1b 每日使用** | 辨識練習、每日佇列與 SRS、標記已會（依技能）、通勤模式開關、**JSON 匯出入**、首次開啟引導、關於頁（資料來源） | 可每日用來練習平假名，且有備份 |
 | **P1.5 假名完整版與同步** | 片假名、提示模式、易混淆對照、弱點專練；Firebase 登入、自動同步、安全規則與其測試 | 假名可完整練習；學習紀錄自動同步到雲端 |
@@ -669,7 +669,7 @@ JP_app/
 | TTS | 靜音開關撥下時是否仍有聲音 |
 | TTS | 頁面互動過後，卡片顯示時能否自動播放 |
 | 儲存 | `navigator.storage.persist()` 回傳結果；重開機後資料仍在 |
-| UI | Vant 4 與 Konsta UI 各一頁的操作手感 |
+| UI | Vant 4 與 Konsta UI 各一頁的操作手感 → 差不多，皆不採用，沿用自訂元件 |
 
 ---
 

@@ -46,7 +46,6 @@ const checklist = ref<{ id: string; text: string; done: boolean; note: string }[
   { id: 'tts-silent', text: 'TTS：靜音開關撥下時是否仍有聲音', done: false, note: '' },
   { id: 'tts-auto', text: 'TTS：頁面互動過後，卡片顯示時能否自動播放', done: false, note: '' },
   { id: 'storage', text: 'storage.persist() 回傳結果；重開機後資料仍在', done: false, note: '' },
-  { id: 'ui', text: 'Vant 4 與 Konsta UI 哪一個順手', done: false, note: '' },
 ])
 
 function loadChecklist() {

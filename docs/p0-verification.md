@@ -26,7 +26,7 @@
 | TTS | 頁面互動後可自動播放 | ❓ 待回報 | 影響 P1b 的聽力卡 |
 | 儲存 | `storage.persist()`；重開機後資料仍在 | ⚠️ 回傳「未允許」 | 待確認是否按過「要求持久儲存」。主畫面 App 不受 Safari 7 天清除規則影響，且有雲端同步，影響不大 |
 | API | Pointer Events、getCoalescedEvents、CompressionStream、IndexedDB、Service Worker、storage.persist、Web Share、語音合成、Clipboard | ✅ 全部支援 | |
-| UI | Vant 4 與 Konsta UI 比較 | 兩者差不多 | 建議兩者都不用，見 §3 |
+| UI | Vant 4 與 Konsta UI 比較 | 兩者差不多 | **決定：都不採用，沿用自訂元件**，見 §3 |
 
 ---
 
@@ -82,7 +82,7 @@
 
 ## 3. UI 函式庫
 
-兩者實測手感差不多。建議**都不採用，沿用自訂元件**（待確認）：
+兩者實測手感差不多。**決定（2026-10-25）：都不採用，沿用自訂元件；日後導入專案擁有者自行開發的個人 UI 元件庫。** 理由：
 
 - 設計系統元件已在 `src/styles/app.css` 完整實作，與確認過的 UI 範例一致
 - Vant 光 CSS 約 200 KB，需以 themeVars 逐項覆寫；Konsta 需要 Tailwind，預設 iOS 藍也需覆寫
@@ -102,6 +102,6 @@
 - [ ] TTS 自動播放
 - [ ] 是否按過「要求持久儲存」；重開機後資料仍在
 
-**待決定**
+**已決定**
 
-- [ ] UI 函式庫：都不採用、沿用自訂元件？
+- [x] UI 函式庫：都不採用、沿用自訂元件（試做頁與 Vant、Konsta、Tailwind 相依已移除）
