@@ -7,23 +7,30 @@ import StrokeOrderAnimation from '@/components/StrokeOrderAnimation.vue'
 import { CONFUSABLES, type ConfusableGroup } from '@/core/content/confusables'
 import { loadCharTemplate } from '@/core/handwriting/templates'
 import type { CharTemplate } from '@/core/handwriting/types'
-import { speakJa } from '@/core/tts'
+import { speakJaOrNotify } from '@/core/tts'
+import { useToast } from '@/core/ui/useToast'
+import { errorMessage } from '@/core/util/errors'
 
 /** 易混淆對照（規劃書 F8）：並排顯示筆順與辨別要點，點字進入練習 */
 const expanded = ref<string | null>(null)
 const templates = shallowRef<Map<string, CharTemplate>>(new Map())
+const { show } = useToast()
 
 async function toggle(g: ConfusableGroup) {
   expanded.value = expanded.value === g.id ? null : g.id
   if (expanded.value) {
     const m = new Map(templates.value)
-    for (const ch of g.chars) if (!m.has(ch)) m.set(ch, await loadCharTemplate(ch))
+    try {
+      for (const ch of g.chars) if (!m.has(ch)) m.set(ch, await loadCharTemplate(ch))
+    } catch (e) {
+      show(errorMessage(e))
+    }
     templates.value = m
   }
 }
 
 function speak(ch: string) {
-  void speakJa(ch).catch(() => {})
+  void speakJaOrNotify(ch, show)
 }
 
 onMounted(() => {
@@ -51,7 +58,7 @@ onMounted(() => {
                 <StrokeOrderAnimation :template="templates.get(ch) ?? null" style="width: 100%" />
                 <div class="row" style="gap: var(--sp-1)">
                   <RouterLink class="btn btn--secondary btn--sm" :to="`/kana/${encodeURIComponent(ch)}`" lang="ja">{{ ch }} 練習</RouterLink>
-                  <button class="icon-btn" type="button" style="width: 36px; height: 36px" :aria-label="`播放 ${ch}`" @click="speak(ch)"><AppIcon name="volume" size="sm" /></button>
+                  <button class="icon-btn" type="button" :aria-label="`播放 ${ch}`" @click="speak(ch)"><AppIcon name="volume" size="sm" /></button>
                 </div>
               </div>
             </div>

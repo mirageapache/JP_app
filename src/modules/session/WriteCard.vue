@@ -9,7 +9,8 @@ import type { Difficulty } from '@/core/handwriting/types'
 import { GRADE_TO_RATING } from '@/core/handwriting/session'
 import { useWritingPractice } from '@/core/handwriting/useWritingPractice'
 import type { Rating } from '@/core/srs/types'
-import { speakJa } from '@/core/tts'
+import { speakJaOrNotify } from '@/core/tts'
+import { useToast } from '@/core/ui/useToast'
 
 /**
  * 手寫題（規劃書 F3、§6.1）：看音寫字。新卡用描摹、複習用空白；
@@ -27,6 +28,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ rate: [rating: Rating, firstTry: boolean] }>()
 
+const { show } = useToast()
 const char = computed(() => props.item.char)
 const cardId = computed(() => kanaCardId(props.item.char, 'write'))
 function pick(): Difficulty {
@@ -46,7 +48,7 @@ watch(
 )
 
 function speak() {
-  void speakJa(props.item.char).catch(() => {})
+  void speakJaOrNotify(props.item.char, show)
 }
 </script>
 

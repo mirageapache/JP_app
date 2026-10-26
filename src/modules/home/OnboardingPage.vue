@@ -2,12 +2,13 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AppIcon from '@/components/AppIcon.vue'
-import { getDeviceInfo } from '@/core/debug/deviceInfo'
+import { isStandalone } from '@/core/debug/deviceInfo'
 import { loadSettings, setSetting } from '@/core/settings'
 
 /** 首次開啟引導（規劃書 Q23；docs/ui-mockups/onboarding.html）：先加入主畫面，並警告刪除圖示會刪資料 */
 const router = useRouter()
-const standalone = ref(false)
+// 同步判斷，避免卡片先出現再消失
+const standalone = ref(isStandalone())
 
 async function finish(route: string) {
   await setSetting('onboardingDone', true)
@@ -20,10 +21,7 @@ async function finish(route: string) {
   router.replace(route)
 }
 
-onMounted(async () => {
-  await loadSettings()
-  standalone.value = (await getDeviceInfo()).standalone
-})
+onMounted(() => void loadSettings())
 </script>
 
 <template>

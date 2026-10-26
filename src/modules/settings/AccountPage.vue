@@ -141,7 +141,7 @@ onMounted(refreshPending)
       </template>
     </main>
 
-    <ConfirmSheet :open="confirm === 'delete'" title="刪除帳號與雲端資料" @close="confirm = null">
+    <ConfirmSheet :open="confirm === 'delete'" title="刪除帳號與雲端資料" center @close="confirm = null">
       <p class="muted">雲端上的所有紀錄與設定會被刪除，無法復原；這台裝置上的紀錄會保留。請輸入密碼確認。</p>
       <div class="input"><AppIcon name="lock" size="sm" /><input v-model="confirmPassword" type="password" autocomplete="current-password" placeholder="密碼" aria-label="密碼" /></div>
       <button class="btn btn--danger-fill btn--block btn--lg" type="button" :disabled="confirmPassword.length < 6 || busy" @click="doDelete">確認刪除</button>

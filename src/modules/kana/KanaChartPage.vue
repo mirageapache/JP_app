@@ -63,13 +63,13 @@ onMounted(load)
     <AppTopbar title="假名" large />
 
     <main class="page" style="gap: var(--sp-4)">
-      <div class="segmented" role="tablist" aria-label="假名種類">
-        <button v-for="s in (['hiragana', 'katakana'] as const)" :key="s" type="button" role="tab" :aria-pressed="script === s" @click="script = s">
+      <div class="segmented" role="group" aria-label="假名種類">
+        <button v-for="s in (['hiragana', 'katakana'] as const)" :key="s" type="button" :aria-pressed="script === s" @click="script = s">
           {{ SCRIPT_LABEL[s] }}
         </button>
       </div>
 
-      <div class="chips" aria-label="分類">
+      <div class="chips" role="group" aria-label="分類">
         <button v-for="g in GROUPS" :key="g.id" class="chip" type="button" :aria-pressed="group === g.id" @click="group = g.id">{{ g.label }}</button>
       </div>
 

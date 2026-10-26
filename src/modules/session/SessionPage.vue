@@ -39,11 +39,14 @@ const cardProps = computed<CardProps | null>(() =>
 const total = computed(() => session.counters.value.total)
 const done = computed(() => session.counters.value.done)
 
+let previewToken = 0
 watch(
   session.current,
   async (entry) => {
     if (!entry) return
+    const token = ++previewToken
     const card = await getCard(entry.cardId)
+    if (token !== previewToken) return // 已切到下一張，丟棄較慢的回應
     intervals.value = previewIntervals(card, Date.now())
     attempts.value.set(entry.cardId, (attempts.value.get(entry.cardId) ?? 0) + 1)
   },
@@ -68,7 +71,7 @@ onMounted(() => session.start())
   <div class="app session">
     <header class="session-top">
       <RouterLink class="icon-btn" to="/" aria-label="結束學習"><AppIcon name="x" /></RouterLink>
-      <div class="progress" role="progressbar" :aria-valuenow="done" :aria-valuemax="total"><span :style="{ width: `${total ? (100 * done) / total : 0}%` }"></span></div>
+      <div class="progress" role="progressbar" aria-label="今日進度" aria-valuemin="0" :aria-valuenow="done" :aria-valuemax="total"><span :style="{ width: `${total ? (100 * done) / total : 0}%` }"></span></div>
       <span class="count num">{{ done }} / {{ total }}</span>
     </header>
 

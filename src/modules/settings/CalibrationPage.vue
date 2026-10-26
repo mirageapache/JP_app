@@ -151,7 +151,7 @@ onMounted(load)
               <li v-for="s in samplesOf(g.cardId)" :key="s.uuid" class="row small">
                 <span class="badge" :class="s.verdict.kind === 'pass' ? 'badge--ok' : 'badge--shu'">第 {{ s.strokeIndex + 1 }} 筆 {{ KIND_TEXT[s.verdict.kind] }}</span>
                 <span class="faint num grow">{{ s.pointerType === 'pen' ? '筆' : '手指' }} · {{ { trace: '描摹', hint: '提示', blank: '空白' }[s.difficulty] }} · {{ new Date(s.recordedAt).toLocaleTimeString('zh-TW', { hour12: false }) }}<template v-if="s.judgedCorrect === false"> · 已標記誤判</template></span>
-                <button class="icon-btn" type="button" style="width: 36px; height: 36px" aria-label="刪除這筆樣本" @click="deleteOne(s.uuid)"><AppIcon name="x" size="sm" /></button>
+                <button class="icon-btn" type="button" aria-label="刪除這筆樣本" @click="deleteOne(s.uuid)"><AppIcon name="x" size="sm" /></button>
               </li>
             </ul>
           </li>

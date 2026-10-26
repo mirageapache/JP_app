@@ -67,8 +67,18 @@ const shaking = ref(false)
 let wrongTimer: ReturnType<typeof setTimeout> | undefined
 let fadeFrame: number | undefined
 
-const cssColor = (name: string, fallback: string) =>
-  getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
+/** 筆色快取：每個 pointermove 都 getComputedStyle 會強迫 style recalc（Pencil 240Hz）；只在 resize 與主題切換時重讀 */
+const colors = { ink: '#1F1C18', shu: '#C8432B' }
+function refreshColors() {
+  const css = getComputedStyle(document.documentElement)
+  colors.ink = css.getPropertyValue('--c-ink').trim() || '#1F1C18'
+  colors.shu = css.getPropertyValue('--c-shu').trim() || '#C8432B'
+}
+const darkQuery = typeof matchMedia === 'function' ? matchMedia('(prefers-color-scheme: dark)') : null
+const onThemeChange = () => {
+  refreshColors()
+  redraw()
+}
 
 function resize() {
   if (!canvas.value || !box.value) return
@@ -102,8 +112,8 @@ function drawPolyline(points: readonly Point[], color: string, alpha = 1) {
 function redraw() {
   if (!ctx) return
   ctx.clearRect(0, 0, size.value, size.value)
-  if (wrongStroke) drawPolyline(wrongStroke.points, cssColor('--c-shu', '#C8432B'), wrongStroke.alpha)
-  if (current) drawPolyline(current.points, cssColor('--c-ink', '#1F1C18'))
+  if (wrongStroke) drawPolyline(wrongStroke.points, colors.shu, wrongStroke.alpha)
+  if (current) drawPolyline(current.points, colors.ink)
 }
 
 function toViewBox(e: PointerEvent): Point {
@@ -194,11 +204,14 @@ function flashWrong(points: readonly Point[]) {
 defineExpose({ flashWrong })
 
 onMounted(() => {
+  refreshColors()
+  darkQuery?.addEventListener('change', onThemeChange)
   ro = new ResizeObserver(resize)
   if (box.value) ro.observe(box.value)
   resize()
 })
 onBeforeUnmount(() => {
+  darkQuery?.removeEventListener('change', onThemeChange)
   ro?.disconnect()
   clearTimeout(wrongTimer)
   if (fadeFrame) cancelAnimationFrame(fadeFrame)

@@ -48,7 +48,8 @@ async function serviceWorkerState(): Promise<DeviceInfo['serviceWorker']> {
   }
 }
 
-export async function getDeviceInfo(): Promise<DeviceInfo> {
+/** 是否從主畫面（standalone）開啟；同步、可在 setup 階段直接用 */
+export function isStandalone(): boolean {
   const nav = navigator as Navigator & { standalone?: boolean }
   let standalone = nav.standalone === true
   try {
@@ -56,6 +57,11 @@ export async function getDeviceInfo(): Promise<DeviceInfo> {
   } catch {
     /* 舊環境沒有 matchMedia */
   }
+  return standalone
+}
+
+export async function getDeviceInfo(): Promise<DeviceInfo> {
+  const standalone = isStandalone()
 
   const [storage, serviceWorker] = await Promise.all([storageInfo(), serviceWorkerState()])
 

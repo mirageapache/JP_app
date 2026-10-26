@@ -72,6 +72,32 @@ export interface SpeakOptions {
 /** 播放中的 utterance：保留參考，避免 Safari 在播完前回收物件而收不到 onend */
 const active = new Set<SpeechSynthesisUtterance>()
 
+export const NO_JA_VOICE_MESSAGE = '這台裝置沒有日文語音。iPhone：設定 › 輔助使用 › 朗讀內容 › 聲音 › 日文，下載一個語音。'
+
+let jaVoiceChecked: Promise<boolean> | undefined
+/** 是否有日文語音（只查一次；voiceschanged 之前可能是空的，所以等 loadJaVoices） */
+export function hasJaVoice(): Promise<boolean> {
+  jaVoiceChecked ??= loadJaVoices().then((v) => v.length > 0)
+  return jaVoiceChecked
+}
+
+let warnedNoVoice = false
+/**
+ * 頁面用的朗讀：沒有日文語音時以 onMissing 通知一次（之後靜默），其他錯誤吞掉。
+ * iOS 沒有日文語音會用英文語音亂唸或沒聲音，使用者看不出原因。
+ */
+export async function speakJaOrNotify(text: string, onMissing: (message: string) => void): Promise<void> {
+  if (!isTtsSupported()) return
+  if (!(await hasJaVoice())) {
+    if (!warnedNoVoice) {
+      warnedNoVoice = true
+      onMissing(NO_JA_VOICE_MESSAGE)
+    }
+    return
+  }
+  await speakJa(text).catch(() => {})
+}
+
 /** 朗讀；回傳 Promise 於播放結束或失敗時結束 */
 export function speakJa(text: string, options: SpeakOptions = {}): Promise<void> {
   if (!isTtsSupported()) return Promise.reject(new Error('此裝置不支援語音合成'))

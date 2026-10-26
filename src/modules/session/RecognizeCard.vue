@@ -6,7 +6,8 @@ import RatingBar from '@/components/RatingBar.vue'
 import { pickDistractors, shuffleWithSeed } from '@/core/content/distractors'
 import type { KanaItem } from '@/core/content/kana'
 import type { Rating } from '@/core/srs/types'
-import { speakJa } from '@/core/tts'
+import { speakJaOrNotify } from '@/core/tts'
+import { useToast } from '@/core/ui/useToast'
 
 /**
  * 辨識題（規劃書 F4）：看字選讀音。答對 → 建議「良好」；答錯 → 建議「重來」。
@@ -24,6 +25,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ rate: [rating: Rating, firstTry: boolean] }>()
 
+const { show } = useToast()
 const chosen = ref<string | null>(null)
 const choices = computed(() => {
   const d = pickDistractors(props.item, props.pool, 3, props.attempt)
@@ -36,7 +38,7 @@ const suggested = computed<Rating>(() => (correct.value ? 3 : 1))
 function choose(romaji: string) {
   if (answered.value) return
   chosen.value = romaji
-  void speakJa(props.item.char).catch(() => {})
+  void speakJaOrNotify(props.item.char, show)
 }
 
 watch(() => props.item.id, () => (chosen.value = null))

@@ -12,7 +12,7 @@ import type { CardRecord } from '@/core/srs/types'
 import { useWritingPractice } from '@/core/handwriting/useWritingPractice'
 import type { Difficulty } from '@/core/handwriting/types'
 import { loadSettings, setSetting, settings } from '@/core/settings'
-import { speakJa } from '@/core/tts'
+import { speakJaOrNotify } from '@/core/tts'
 import { useToast } from '@/core/ui/useToast'
 import { errorMessage } from '@/core/util/errors'
 
@@ -65,6 +65,14 @@ async function resetProgress(skill: KanaSkill) {
 }
 
 async function load() {
+  try {
+    await loadInner()
+  } catch (e) {
+    show(errorMessage(e))
+  }
+}
+
+async function loadInner() {
   await loadSettings()
   item.value = (await findKana(char.value)) ?? null
   recentCount.value = await countPractices(cardId.value)
@@ -82,12 +90,8 @@ async function flagWrong() {
   show((await practice.flagLastSampleWrong()) ? '已標記判定有誤' : '還沒有可標記的筆跡')
 }
 
-async function speak() {
-  try {
-    await speakJa(char.value)
-  } catch (e) {
-    show(errorMessage(e))
-  }
+function speak() {
+  void speakJaOrNotify(char.value, show)
 }
 
 watch(practice.finished, (done) => {
@@ -215,7 +219,7 @@ onMounted(load)
   flex: none;
 }
 .hero__big {
-  font-size: 7rem;
+  font-size: var(--fs-kana);
   line-height: 1;
 }
 </style>

@@ -159,7 +159,7 @@ onMounted(load)
         </div>
       </section>
 
-      <div class="row" style="gap: var(--sp-2)">
+      <div class="row" style="gap: var(--sp-2); flex-wrap: wrap">
         <button class="btn btn--secondary btn--sm" type="button" @click="testError">測試錯誤</button>
         <button class="btn btn--secondary btn--sm" type="button" @click="testRejection">測試 Promise</button>
         <button class="btn btn--secondary btn--sm" type="button" @click="testWarn">測試警告</button>

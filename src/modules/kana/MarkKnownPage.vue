@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
@@ -21,6 +21,7 @@ const mode = ref<'suspend' | 'occasional'>('suspend')
 const selected = ref<Set<string>>(new Set())
 const busy = ref(false)
 const { show } = useToast()
+let leaveTimer: ReturnType<typeof setTimeout> | undefined
 
 const SKILL_TEXT: Record<KanaSkill, string> = { read: '讀', write: '寫' }
 
@@ -76,13 +77,14 @@ async function submit() {
     show(`已標記 ${selected.value.size} 個假名的「${SKILL_TEXT[skill.value]}」為已會`)
     selected.value = new Set()
     await load()
-    setTimeout(() => router.push('/'), 800)
+    leaveTimer = setTimeout(() => router.push('/'), 800)
   } finally {
     busy.value = false
   }
 }
 
 onMounted(load)
+onBeforeUnmount(() => clearTimeout(leaveTimer))
 </script>
 
 <template>
@@ -108,7 +110,7 @@ onMounted(load)
       </section>
 
       <section class="stack">
-        <h2 class="section-title">選擇假名<button class="btn btn--ghost btn--sm" type="button" style="min-height: 28px; padding: 0" @click="selectAll">全選未標記</button></h2>
+        <h2 class="section-title">選擇假名<button class="btn btn--ghost btn--sm" type="button" style="padding: 0" @click="selectAll">全選未標記</button></h2>
         <div class="card stack" lang="ja">
           <div v-for="[row, list] in rows" :key="row" class="row-pick">
             <button class="chip" type="button" :aria-pressed="list.every((i) => selected.has(i.char))" @click="toggleRow(list)">{{ row }}</button>
