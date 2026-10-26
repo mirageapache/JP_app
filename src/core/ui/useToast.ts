@@ -1,15 +1,9 @@
-import { ref } from 'vue'
+import { useToastStore } from '@/stores/toast'
 
-/** 簡單的 Toast 狀態；頁面以 `<div v-if="toast" class="toast">{{ toast }}</div>` 顯示 */
-export function useToast(durationMs = 2000) {
-  const toast = ref('')
-  let timer: ReturnType<typeof setTimeout> | undefined
-  function show(message: string) {
-    toast.value = message
-    clearTimeout(timer)
-    timer = setTimeout(() => (toast.value = ''), durationMs)
-  }
-  return { toast, show }
+/** 頁面用：`const { show } = useToast()`；顯示由 App.vue 的 <AppToast> 統一負責 */
+export function useToast() {
+  const store = useToastStore()
+  return { show: store.show }
 }
 
 /** 複製文字到剪貼簿；iOS 需在使用者手勢內呼叫。回傳是否成功 */

@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import JaText from '@/components/JaText.vue'
-import { db } from '@/core/db'
+import { listHandwritingLogs } from '@/core/handwriting/repository'
 import { weaknessScores, type WeakScore } from '@/core/stats/weakness'
 
 /** 弱點專練（規劃書 F8、§6.2）：依 handwritingLogs 的弱點分數排序，不影響 FSRS */
@@ -11,7 +11,7 @@ const scores = ref<WeakScore[]>([])
 const loading = ref(true)
 
 onMounted(async () => {
-  scores.value = weaknessScores(await db.handwritingLogs.toArray()).filter((s) => s.score > 0)
+  scores.value = weaknessScores(await listHandwritingLogs()).filter((s) => s.score > 0)
   loading.value = false
 })
 </script>

@@ -4,10 +4,11 @@ import AppIcon from '@/components/AppIcon.vue'
 import AppTabbar from '@/components/AppTabbar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import { kanaCardId, kanaTable, loadKanaPack, type KanaGroup, type KanaItem, type KanaPack, type KanaScript } from '@/core/content/kana'
-import { db } from '@/core/db'
+import { practiceCountByCard } from '@/core/handwriting/repository'
+import { errorMessage } from '@/core/util/errors'
 
 /**
- * 50 音表（規劃書 F1、§6.4）。P1a：顯示字與羅馬字、練習次數；學習狀態（已熟／弱點）於 P1b 加入 SRS 後顯示。
+ * 50 音表（規劃書 F1、§6.4）：顯示字與羅馬字、練習次數（練過的字外框實線）；弱點與對照另有專頁。
  */
 const pack = ref<KanaPack | null>(null)
 const script = ref<KanaScript>('hiragana')
@@ -39,17 +40,14 @@ const table = computed<(KanaItem | null)[][]>(() => {
   }
   return [list]
 })
-const columns = computed(() => (group.value === 'youon' ? 3 : group.value === 'small' ? 5 : 5))
+const columns = computed(() => (group.value === 'youon' ? 3 : 5))
 
 async function load() {
   try {
     pack.value = await loadKanaPack()
-    const logs = await db.handwritingLogs.toArray()
-    const counts = new Map<string, number>()
-    for (const l of logs) counts.set(l.cardId, (counts.get(l.cardId) ?? 0) + 1)
-    practiced.value = counts
+    practiced.value = await practiceCountByCard()
   } catch (e) {
-    error.value = e instanceof Error ? e.message : String(e)
+    error.value = errorMessage(e)
   }
 }
 

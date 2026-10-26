@@ -1,3 +1,4 @@
+import { isValidCardId } from '@/core/srs/cardId'
 import type { CardEventRecord, ReviewLogRecord } from '@/core/srs/types'
 import type { HandwritingLog } from './index'
 
@@ -15,7 +16,7 @@ export function isReviewLog(x: unknown): x is ReviewLogRecord {
   return (
     isObj(x) &&
     isStr(x.uuid) &&
-    isStr(x.cardId) &&
+    isValidCardId(x.cardId) &&
     (x.rating === 1 || x.rating === 2 || x.rating === 3 || x.rating === 4) &&
     isNum(x.reviewedAt) &&
     isNum(x.durationMs) &&
@@ -32,7 +33,7 @@ export function isCardEvent(x: unknown): x is CardEventRecord {
   return (
     isObj(x) &&
     isStr(x.uuid) &&
-    isStr(x.cardId) &&
+    (x.cardId === '*' || isValidCardId(x.cardId)) &&
     typeof x.type === 'string' &&
     EVENT_TYPES.has(x.type) &&
     (x.payload === undefined || isObj(x.payload)) &&
@@ -46,7 +47,7 @@ export function isHandwritingLog(x: unknown): x is HandwritingLog {
   return (
     isObj(x) &&
     isStr(x.uuid) &&
-    isStr(x.cardId) &&
+    isValidCardId(x.cardId) &&
     isStr(x.variantId) &&
     isNum(x.score) &&
     Array.isArray(x.strokeResults) &&

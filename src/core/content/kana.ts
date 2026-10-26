@@ -1,3 +1,6 @@
+import { makeCardId } from '@/core/srs/cardId'
+import type { Skill } from '@/core/srs/types'
+
 /**
  * 假名內容包（public/content/kana.json，由 tools/kana/build_kana.py 產生）。
  * 內容只讀、隨版本更新；進度以 ID（kana:あ）連結（規劃書 §5.1）。
@@ -5,7 +8,8 @@
 
 export type KanaScript = 'hiragana' | 'katakana'
 export type KanaGroup = 'seion' | 'dakuon' | 'handakuon' | 'youon' | 'small'
-export type KanaSkill = 'read' | 'write'
+/** 假名的技能就是 SRS 的 Skill（讀、寫）；單一型別，避免兩個名字 */
+export type KanaSkill = Skill
 
 export interface StrokeVariant {
   id: string
@@ -53,9 +57,13 @@ export async function findKana(char: string): Promise<KanaItem | undefined> {
   return pack.items.find((i) => i.char === char)
 }
 
+export function kanaItemId(char: string): string {
+  return `kana:${char}`
+}
+
 /** 卡片 ID = 項目 ID + # + 技能（規劃書 §5.1） */
 export function kanaCardId(char: string, skill: KanaSkill): string {
-  return `kana:${char}#${skill}`
+  return makeCardId(kanaItemId(char), skill)
 }
 
 /** 五十音表的格子：依行 × 母音排列，缺的位置為 null */

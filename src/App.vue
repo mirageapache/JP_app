@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppToast from '@/components/AppToast.vue'
 import IconSprite from '@/components/IconSprite.vue'
 import PwaUpdatePrompt from '@/components/PwaUpdatePrompt.vue'
 import { dbStatus } from '@/core/db/status'
@@ -11,6 +12,7 @@ import { dbStatus } from '@/core/db/status'
     <div class="caption faint" style="margin-top: 4px; word-break: break-all">{{ dbStatus.error }}</div>
   </div>
   <RouterView />
+  <AppToast />
   <PwaUpdatePrompt />
 </template>
 

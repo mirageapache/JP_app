@@ -2,11 +2,13 @@
 import { computed, onMounted, ref } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
-import { db, type ErrorLog } from '@/core/db'
+import type { ErrorLog } from '@/core/db'
+import { clearErrorLogs, listErrorLogs } from '@/core/debug/errorLogs'
 import { getDeviceInfo, type DeviceInfo } from '@/core/debug/deviceInfo'
 import { rebuildAllCards } from '@/core/srs/repository'
 import { isTtsSupported, loadJaVoices, speakJa, type JaVoice } from '@/core/tts'
 import { copyText, useToast } from '@/core/ui/useToast'
+import { errorMessage } from '@/core/util/errors'
 
 const version = __APP_VERSION__
 const logs = ref<ErrorLog[]>([])
@@ -16,7 +18,7 @@ const voices = ref<JaVoice[]>([])
 const voiceName = ref('')
 const ttsStatus = ref('')
 const persistResult = ref('')
-const { toast, show: showToast } = useToast()
+const { show: showToast } = useToast()
 
 /** 手寫、備份、同步、朗讀各自依賴的瀏覽器能力 */
 const support = computed(() => ({
@@ -38,7 +40,7 @@ const shown = computed(() =>
 )
 
 async function load() {
-  logs.value = await db.errorLogs.orderBy('at').reverse().limit(300).toArray()
+  logs.value = await listErrorLogs()
   info.value = await getDeviceInfo()
   voices.value = await loadJaVoices()
   if (!voiceName.value && voices.value[0]) voiceName.value = voices.value.find((v) => v.default)?.name ?? voices.value[0].name
@@ -50,7 +52,7 @@ async function speak(text: string) {
     await speakJa(text, { voiceName: voiceName.value || undefined })
     ttsStatus.value = `「${text}」播放完畢`
   } catch (e) {
-    ttsStatus.value = e instanceof Error ? e.message : String(e)
+    ttsStatus.value = errorMessage(e)
   }
 }
 
@@ -65,7 +67,7 @@ async function requestPersist() {
 }
 
 async function clear() {
-  await db.errorLogs.clear()
+  await clearErrorLogs()
   await load()
 }
 
@@ -88,7 +90,7 @@ async function rebuildCards() {
     const n = await rebuildAllCards()
     showToast(`已重建 ${n} 張卡片`)
   } catch (e) {
-    showToast(e instanceof Error ? e.message : String(e))
+    showToast(errorMessage(e))
   }
 }
 
@@ -189,7 +191,6 @@ onMounted(load)
       </ul>
     </main>
 
-    <div v-if="toast" class="toast" role="status">{{ toast }}</div>
   </div>
 </template>
 

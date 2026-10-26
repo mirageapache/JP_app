@@ -9,7 +9,9 @@ import type { CharTemplate, UserStroke, Verdict } from './types'
 
 export const HINT_AFTER = 3
 
-export type Rating = 'again' | 'hard' | 'good' | 'easy'
+/** 手寫結果的評等建議；與 srs 的 Rating（1～4）以 GRADE_TO_RATING 對應 */
+export type HandwritingGrade = 'again' | 'hard' | 'good' | 'easy'
+export const GRADE_TO_RATING = { again: 1, hard: 2, good: 3, easy: 4 } as const satisfies Record<HandwritingGrade, 1 | 2 | 3 | 4>
 
 export interface AttemptRecord {
   strokeIndex: number
@@ -96,7 +98,7 @@ export interface SessionSummary {
   hintsUsed: number
   skipped: boolean
   durationMs: number
-  rating: Rating
+  rating: HandwritingGrade
 }
 
 /**
@@ -107,7 +109,7 @@ export interface SessionSummary {
 export function summarize(s: SessionState, template: CharTemplate, fastMs: number): SessionSummary {
   const misses = s.attempts.filter((a) => a.verdict.kind !== 'pass').length
   const durationMs = s.startedAt !== null && s.finishedAt !== null ? s.finishedAt - s.startedAt : 0
-  let rating: Rating
+  let rating: HandwritingGrade
   if (s.skipped || s.hintsUsed > 0 || misses > 2) rating = 'again'
   else if (misses > 0) rating = 'hard'
   else if (durationMs > 0 && durationMs < fastMs) rating = 'easy'

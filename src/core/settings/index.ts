@@ -28,8 +28,6 @@ export interface SettingsSchema {
   kanaStrokeVariants: Record<string, string>
   /** 手寫調校模式（device） */
   tuningMode: boolean
-  /** 除錯面板（device） */
-  debugPanel: boolean
 }
 
 type Key = keyof SettingsSchema
@@ -45,7 +43,6 @@ export const SETTING_DEFAULTS: SettingsSchema = {
   showFurigana: true,
   kanaStrokeVariants: {},
   tuningMode: false,
-  debugPanel: false,
 }
 
 export const SETTING_SCOPE: Record<Key, Setting['scope']> = {
@@ -59,7 +56,6 @@ export const SETTING_SCOPE: Record<Key, Setting['scope']> = {
   showFurigana: 'account',
   kanaStrokeVariants: 'account',
   tuningMode: 'device',
-  debugPanel: 'device',
 }
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
@@ -78,7 +74,6 @@ const SETTING_VALIDATORS: Record<Key, (v: unknown) => boolean> = {
   showFurigana: isBool,
   kanaStrokeVariants: (v) => isObj(v) && Object.values(v).every((s) => typeof s === 'string'),
   tuningMode: isBool,
-  debugPanel: isBool,
 }
 
 export function isSettingKey(key: string): key is Key {

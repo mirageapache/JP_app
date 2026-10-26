@@ -6,8 +6,8 @@ import WritingBox from '@/components/WritingBox.vue'
 import type { KanaItem } from '@/core/content/kana'
 import { kanaCardId } from '@/core/content/kana'
 import type { Difficulty } from '@/core/handwriting/types'
+import { GRADE_TO_RATING } from '@/core/handwriting/session'
 import { useWritingPractice } from '@/core/handwriting/useWritingPractice'
-import { ratingFromName } from '@/core/srs/fsrs'
 import type { Rating } from '@/core/srs/types'
 import { speakJa } from '@/core/tts'
 
@@ -35,7 +35,7 @@ const difficulty = ref<Difficulty>(pick())
 const box = ref<InstanceType<typeof WritingBox>>()
 const practice = useWritingPractice({ char, cardId, difficulty, mode: 'session' })
 
-const suggested = computed<Rating | null>(() => (practice.summary.value ? ratingFromName(practice.summary.value.rating) : null))
+const suggested = computed<Rating | null>(() => (practice.summary.value ? GRADE_TO_RATING[practice.summary.value.rating] : null))
 
 watch(practice.lastWrongPoints, (pts) => {
   if (pts) box.value?.flashWrong(pts)

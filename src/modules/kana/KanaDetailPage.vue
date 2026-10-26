@@ -6,14 +6,15 @@ import AppTopbar from '@/components/AppTopbar.vue'
 import StrokeOrderAnimation from '@/components/StrokeOrderAnimation.vue'
 import WritingBox from '@/components/WritingBox.vue'
 import { findKana, kanaCardId, type KanaItem, type KanaSkill } from '@/core/content/kana'
-import { db } from '@/core/db'
-import { addCardEvent } from '@/core/srs/repository'
+import { countPractices } from '@/core/handwriting/repository'
+import { addCardEvent, getCard } from '@/core/srs/repository'
 import type { CardRecord } from '@/core/srs/types'
 import { useWritingPractice } from '@/core/handwriting/useWritingPractice'
 import type { Difficulty } from '@/core/handwriting/types'
 import { loadSettings, setSetting, settings } from '@/core/settings'
 import { speakJa } from '@/core/tts'
 import { useToast } from '@/core/ui/useToast'
+import { errorMessage } from '@/core/util/errors'
 
 /** 假名詳細頁（規劃書 F2、F3、§6.4）：筆順動畫、筆畫版本、自由手寫練習（不影響 FSRS） */
 const route = useRoute()
@@ -26,7 +27,7 @@ const cardsBySkill = ref<Partial<Record<KanaSkill, CardRecord>>>({})
 const confirmReset = ref<KanaSkill | null>(null)
 const order = ref<InstanceType<typeof StrokeOrderAnimation>>()
 const box = ref<InstanceType<typeof WritingBox>>()
-const { toast, show } = useToast()
+const { show } = useToast()
 
 const cardId = computed(() => kanaCardId(char.value, 'write'))
 const canWrite = computed(() => item.value?.skills.includes('write') ?? false)
@@ -67,12 +68,9 @@ async function resetProgress(skill: KanaSkill) {
 async function load() {
   await loadSettings()
   item.value = (await findKana(char.value)) ?? null
-  recentCount.value = await db.handwritingLogs.where('cardId').equals(cardId.value).count()
+  recentCount.value = await countPractices(cardId.value)
   const next: Partial<Record<KanaSkill, CardRecord>> = {}
-  for (const skill of item.value?.skills ?? []) {
-    const c = await db.cards.get(kanaCardId(char.value, skill))
-    if (c) next[skill] = c
-  }
+  for (const skill of item.value?.skills ?? []) next[skill] = await getCard(kanaCardId(char.value, skill))
   cardsBySkill.value = next
 }
 
@@ -89,7 +87,7 @@ async function speak() {
   try {
     await speakJa(char.value)
   } catch (e) {
-    show(e instanceof Error ? e.message : String(e))
+    show(errorMessage(e))
   }
 }
 
@@ -222,7 +220,6 @@ onMounted(load)
       </section>
     </main>
 
-    <div v-if="toast" class="toast" role="status">{{ toast }}</div>
   </div>
 </template>
 

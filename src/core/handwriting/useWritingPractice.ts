@@ -4,6 +4,7 @@ import { loadSettings, settings } from '@/core/settings'
 import { HINT_AFTER, applyStroke, createSession, isFinished, skip as skipSession, summarize, type AttemptRecord, type SessionState } from './session'
 import { loadCharTemplate } from './templates'
 import type { CharTemplate, Difficulty, UserStroke, Verdict } from './types'
+import { errorMessage } from '@/core/util/errors'
 
 /** 「簡單」的時間門檻（規劃書 §6.1：低於該字的平均時間）：該字紀錄不足 MIN_LOGS_FOR_AVERAGE 筆前先用這個常數 */
 export const FAST_MS = 4000
@@ -75,7 +76,7 @@ export function useWritingPractice(options: {
       fastMs.value = avg ?? FAST_MS
       reset()
     } catch (e) {
-      if (token === loadToken) loadError.value = e instanceof Error ? e.message : String(e)
+      if (token === loadToken) loadError.value = errorMessage(e)
     }
   }
 

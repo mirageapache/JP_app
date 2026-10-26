@@ -13,6 +13,11 @@ export async function getCard(cardId: string, now = Date.now()): Promise<CardRec
   return (await db.cards.get(cardId)) ?? emptyCardRecord(cardId, now)
 }
 
+/** 所有卡片快取（每日佇列、標記已會頁） */
+export function listCards(): Promise<CardRecord[]> {
+  return db.cards.toArray()
+}
+
 /** 記錄一次評分：寫入 reviewLogs，並以 FSRS 更新該卡 */
 export async function recordReview(
   cardId: string,

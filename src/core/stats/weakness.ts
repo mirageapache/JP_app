@@ -1,4 +1,5 @@
 import type { HandwritingLog } from '@/core/db'
+import { displayKeyOf } from '@/core/srs/cardId'
 
 /**
  * 弱點分數（規劃書 F8、§6.2）：由 handwritingLogs 計算，只用於弱點專練與統計，不影響每日佇列。
@@ -33,7 +34,7 @@ export function weaknessScores(logs: HandwritingLog[], minAttempts = 2): WeakSco
       weightSum += w
     })
     const score = Math.round((100 * weighted) / weightSum)
-    out.push({ cardId, char: cardId.replace(/^kana:/, '').replace(/#.*$/, ''), score, attempts: list.length, lastAt: recent[0]!.at })
+    out.push({ cardId, char: displayKeyOf(cardId), score, attempts: list.length, lastAt: recent[0]!.at })
   }
   return out.sort((a, b) => b.score - a.score || b.lastAt - a.lastAt)
 }

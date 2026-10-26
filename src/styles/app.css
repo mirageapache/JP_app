@@ -18,6 +18,7 @@
   --c-primary-ink: #FFFFFF;
   --c-primary-soft: #E7EDF6;
   --c-shu: #C8432B;
+  --c-on-shu: #FFFFFF;
   --c-shu-soft: #FBE9E4;
   --c-ok: #2E7A53;
   --c-ok-soft: #E4F1E9;
@@ -74,6 +75,7 @@
     --c-primary-ink: #0F1F38;
     --c-primary-soft: #1F2B3E;
     --c-shu: #F08470;
+    --c-on-shu: #2A120D;
     --c-shu-soft: #3B221C;
     --c-ok: #6CC495;
     --c-ok-soft: #1B3127;
@@ -190,6 +192,7 @@ ruby rt { font-size: .5em; color: var(--c-ink-2); font-family: var(--font-ja); }
 .btn--secondary { background: var(--c-surface); border-color: var(--c-line); color: var(--c-ink); }
 .btn--ghost { color: var(--c-primary); }
 .btn--danger { color: var(--c-shu); }
+.btn--danger-fill { background: var(--c-shu); color: var(--c-on-shu); }
 .btn--lg { min-height: 52px; border-radius: var(--r-md); }
 .btn--sm { min-height: 36px; padding: 0 var(--sp-3); font-size: var(--fs-body); border-radius: var(--r-sm); }
 .btn--block { width: 100%; }

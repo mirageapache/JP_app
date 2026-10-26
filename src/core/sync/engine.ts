@@ -5,6 +5,7 @@ import { rebuildCards } from '@/core/srs/repository'
 import type { CardEventRecord, ReviewLogRecord } from '@/core/srs/types'
 import { getDeviceId } from './deviceId'
 import { SCHEMA_VERSION, type ChunkDoc, type ChunkPayload, type RemoteSettings, type SyncTransport } from './transport'
+import { errorMessage } from '@/core/util/errors'
 
 /**
  * 同步引擎（規劃書 §7.5）：
@@ -207,7 +208,7 @@ export function createSyncEngine(transport: SyncTransport) {
       await patchMeta({ lastError: null, lastSyncAt: Date.now() })
       return { pushed, pulled: p.pulled, rebuiltCards: leftover + p.rebuiltCards, settingsPulled: s.pulled, settingsPushed: s.pushed }
     } catch (e) {
-      await patchMeta({ lastError: e instanceof Error ? e.message : String(e) })
+      await patchMeta({ lastError: errorMessage(e) })
       throw e
     }
   }

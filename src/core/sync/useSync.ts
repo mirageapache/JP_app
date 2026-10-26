@@ -1,8 +1,9 @@
-import { computed, reactive, readonly } from 'vue'
+import { reactive, readonly } from 'vue'
 import { onAuthChanged, type AuthUser } from './auth'
 import { countPending, createSyncEngine, getSyncMeta, type SyncResult } from './engine'
 import { isFirebaseConfigured } from './firebaseApp'
 import { firestoreTransport } from './transport'
+import { errorMessage } from '@/core/util/errors'
 
 /**
  * 同步狀態與觸發（規劃書 §7.5）：
@@ -55,12 +56,10 @@ function rememberAuth(signedIn: boolean) {
 }
 let listening = false
 let started = false
-let timer: ReturnType<typeof setInterval> | undefined
 let inFlight: Promise<SyncResult | null> | null = null
 let inFlightUid: string | null = null
 
 export const syncState = readonly(state)
-export const isSignedIn = computed(() => !!state.user)
 
 export async function refreshPending(): Promise<void> {
   state.pending = await countPending()
@@ -87,7 +86,7 @@ export function requestSync(): Promise<SyncResult | null> {
     })
     .catch(async (e) => {
       state.status = 'error'
-      state.lastError = e instanceof Error ? e.message : String(e)
+      state.lastError = errorMessage(e)
       console.error('同步失敗', e) // 進 errorLogs，除錯面板看得到（F16）
       await refreshPending()
       return null
@@ -123,14 +122,9 @@ export function startSync(): void {
     if (document.visibilityState === 'visible') void requestSync()
     else if (state.user && state.pending > 0) void requestSync() // 進入背景時盡力上傳
   })
-  timer = setInterval(() => {
+  setInterval(() => {
     if (document.visibilityState === 'visible') void requestSync()
   }, INTERVAL_MS)
-}
-
-export function stopSync(): void {
-  if (timer) clearInterval(timer)
-  started = false
 }
 
 export async function deleteCloudData(): Promise<number> {

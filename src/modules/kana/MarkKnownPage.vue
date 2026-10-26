@@ -4,8 +4,7 @@ import { useRouter } from 'vue-router'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import { kanaCardId, loadKanaPack, type KanaItem, type KanaScript, type KanaSkill } from '@/core/content/kana'
-import { db } from '@/core/db'
-import { markKnown } from '@/core/srs/repository'
+import { listCards, markKnown } from '@/core/srs/repository'
 import type { CardRecord } from '@/core/srs/types'
 import { useToast } from '@/core/ui/useToast'
 
@@ -21,7 +20,7 @@ const skill = ref<KanaSkill>('read')
 const mode = ref<'suspend' | 'occasional'>('suspend')
 const selected = ref<Set<string>>(new Set())
 const busy = ref(false)
-const { toast, show } = useToast()
+const { show } = useToast()
 
 const SKILL_TEXT: Record<KanaSkill, string> = { read: '讀', write: '寫' }
 
@@ -66,7 +65,7 @@ function selectAll() {
 async function load() {
   const pack = await loadKanaPack()
   items.value = pack.items
-  cards.value = new Map((await db.cards.toArray()).map((c) => [c.id, c]))
+  cards.value = new Map((await listCards()).map((c) => [c.id, c]))
 }
 
 async function submit() {
@@ -161,7 +160,6 @@ onMounted(load)
       </button>
     </div>
 
-    <div v-if="toast" class="toast" role="status">{{ toast }}</div>
   </div>
 </template>
 

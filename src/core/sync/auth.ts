@@ -1,5 +1,6 @@
 import type { User } from 'firebase/auth'
 import { getFirebase } from './firebaseApp'
+import { errorMessage } from '@/core/util/errors'
 
 /**
  * 登入（規劃書 §7.2）：只提供電子郵件 + 密碼。
@@ -32,7 +33,7 @@ export function describeAuthError(e: unknown): string {
     'auth/operation-not-allowed': 'Firebase 尚未啟用這種登入方式',
     'auth/requires-recent-login': '為了安全，請重新輸入密碼後再執行',
   }
-  return map[code] ?? (e instanceof Error ? e.message : String(e))
+  return map[code] ?? (errorMessage(e))
 }
 
 export async function signUpWithEmail(email: string, password: string): Promise<AuthUser> {

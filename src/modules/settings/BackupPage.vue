@@ -12,9 +12,12 @@ import {
   readBackupFile,
   restoreSnapshot,
   type BackupFile,
+  backupStats,
 } from '@/core/backup'
-import { db, type Snapshot } from '@/core/db'
+import type { Snapshot } from '@/core/db'
+import { downloadBlob, shareFile } from '@/core/ui/share'
 import { useToast } from '@/core/ui/useToast'
+import { errorMessage } from '@/core/util/errors'
 
 /** 備份與還原（規劃書 §7.6）：匯出到「檔案」、匯入合併、匯入前快照可回復 */
 const version = __APP_VERSION__
@@ -25,12 +28,12 @@ const applySettings = ref(false)
 const busy = ref(false)
 const result = ref('')
 const fileInput = ref<HTMLInputElement>()
-const { toast, show } = useToast()
+const { show } = useToast()
 
 async function load() {
-  const [r, c, h, s] = await Promise.all([db.reviewLogs.count(), db.cardEvents.count(), db.handwritingLogs.count(), db.snapshots.orderBy('at').reverse().toArray()])
-  counts.value = { reviewLogs: r, cardEvents: c, handwritingLogs: h }
-  snapshots.value = s
+  const s = await backupStats()
+  counts.value = s.counts
+  snapshots.value = s.snapshots
 }
 
 async function exportBackup() {
@@ -42,24 +45,11 @@ async function exportBackup() {
     const blob = gzip ? await gzipText(text) : new Blob([text], { type: 'application/json' })
     const name = backupFileName(gzip)
     const file = new File([blob], name, { type: gzip ? 'application/gzip' : 'application/json' })
-    if (navigator.share && navigator.canShare?.({ files: [file] })) {
-      try {
-        await navigator.share({ files: [file], title: '日語練習帳備份' })
-        show('已開啟分享面板，請選「儲存到檔案」')
-        return
-      } catch (e) {
-        if ((e as { name?: string }).name === 'AbortError') return
-      }
-    }
-    // 桌面瀏覽器：直接下載
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = name
-    a.click()
-    setTimeout(() => URL.revokeObjectURL(url), 1000)
+    const shared = await shareFile(file, '日語練習帳備份')
+    if (shared === 'shared') show('已開啟分享面板，請選「儲存到檔案」')
+    else if (shared === 'unsupported') downloadBlob(blob, name) // 桌面瀏覽器
   } catch (e) {
-    show(e instanceof Error ? e.message : String(e))
+    show(errorMessage(e))
   } finally {
     busy.value = false
   }
@@ -74,7 +64,7 @@ async function onPick(e: Event) {
     pending.value = { file: markRaw(await readBackupFile(f)), name: f.name }
     result.value = ''
   } catch (err) {
-    show(err instanceof Error ? err.message : String(err))
+    show(errorMessage(err))
   }
 }
 
@@ -88,7 +78,7 @@ async function confirmImport() {
     pending.value = null
     await load()
   } catch (e) {
-    show(e instanceof Error ? e.message : String(e))
+    show(errorMessage(e))
   } finally {
     busy.value = false
   }
@@ -101,7 +91,7 @@ async function restore(id: number) {
     show('已回復到匯入前的狀態')
     await load()
   } catch (e) {
-    show(e instanceof Error ? e.message : String(e))
+    show(errorMessage(e))
   } finally {
     busy.value = false
   }
@@ -164,6 +154,5 @@ onMounted(load)
         <p class="small faint">回復會以快照內容取代目前的紀錄與設定。</p>
       </section>
     </main>
-    <div v-if="toast" class="toast" role="status">{{ toast }}</div>
   </div>
 </template>

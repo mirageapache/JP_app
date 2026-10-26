@@ -216,7 +216,6 @@ watch(() => props.template, redraw)
       <g class="accepted-paths">
         <path v-for="i in accepted" :key="'a' + i" :d="template.strokes[i]?.d" />
       </g>
-      <!-- TODO(P1a)：prefers-reduced-motion 時提供暫停（design-system §8） -->
       <g v-if="guide && !hintStroke" class="guide">
         <line :x1="guide.x" :y1="guide.y" :x2="guide.x2" :y2="guide.y2" marker-end="url(#guide-arrow)" />
         <circle :cx="guide.x" :cy="guide.y" r="4" />

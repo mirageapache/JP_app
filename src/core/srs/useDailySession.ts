@@ -1,11 +1,11 @@
 import { computed, ref, shallowRef } from 'vue'
 import { loadKanaPack, type KanaItem } from '@/core/content/kana'
-import { db } from '@/core/db'
 import { loadSettings, setSetting, settings } from '@/core/settings'
 import { dayKey } from './day'
 import { buildDailyQueue, type DailyQueue, type QueueEntry } from './queue'
-import { countNewItemsIntroducedToday, recordReview, todayStats } from './repository'
+import { countNewItemsIntroducedToday, listCards, recordReview, todayStats } from './repository'
 import type { Rating } from './types'
+import { errorMessage } from '@/core/util/errors'
 
 /**
  * 每日學習流程（規劃書 §6.2）：建立今天的佇列、逐張出題、記錄評分與時間。
@@ -54,7 +54,7 @@ export function useDailySession() {
     items.value = new Map(list.map((i) => [i.id, i]))
     const now = Date.now()
     todayKey.value = dayKey(now)
-    const [cards, introduced, stats] = await Promise.all([db.cards.toArray(), countNewItemsIntroducedToday(now), todayStats(now)])
+    const [cards, introduced, stats] = await Promise.all([listCards(), countNewItemsIntroducedToday(now), todayStats(now)])
     today.value = stats
     const q = buildDailyQueue({
       cards,
@@ -78,7 +78,7 @@ export function useDailySession() {
     try {
       await buildQueue()
     } catch (e) {
-      error.value = e instanceof Error ? e.message : String(e)
+      error.value = errorMessage(e)
     } finally {
       loading.value = false
     }
@@ -90,7 +90,7 @@ export function useDailySession() {
     try {
       q = await buildQueue()
     } catch (e) {
-      error.value = e instanceof Error ? e.message : String(e)
+      error.value = errorMessage(e)
       return
     }
     pending.value = [...q.entries]

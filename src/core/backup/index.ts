@@ -1,4 +1,4 @@
-import { db, type HandwritingLog, type Setting } from '@/core/db'
+import { db, type HandwritingLog, type Setting, type Snapshot } from '@/core/db'
 import { filterValid, isCardEvent, isHandwritingLog, isReviewLog } from '@/core/db/validate'
 import { getDeviceId } from '@/core/sync/deviceId'
 import { rebuildAllCards } from '@/core/srs/repository'
@@ -30,6 +30,17 @@ export interface ImportSummary {
   added: { reviewLogs: number; cardEvents: number; handwritingLogs: number }
   settingsApplied: boolean
   rebuiltCards: number
+}
+
+/** 備份頁顯示用：各表筆數與快照列表 */
+export async function backupStats(): Promise<{ counts: { reviewLogs: number; cardEvents: number; handwritingLogs: number }; snapshots: Snapshot[] }> {
+  const [reviewLogs, cardEvents, handwritingLogs, snapshots] = await Promise.all([
+    db.reviewLogs.count(),
+    db.cardEvents.count(),
+    db.handwritingLogs.count(),
+    db.snapshots.orderBy('at').reverse().toArray(),
+  ])
+  return { counts: { reviewLogs, cardEvents, handwritingLogs }, snapshots }
 }
 
 export async function collectBackup(appVersion: string): Promise<BackupFile> {

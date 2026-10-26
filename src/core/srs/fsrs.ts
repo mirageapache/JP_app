@@ -1,6 +1,7 @@
 import { createEmptyCard, fsrs, generatorParameters, State, type Card, type Grade } from 'ts-fsrs'
+import { parseCardId } from './cardId'
 import { addDays } from './day'
-import type { CardEventRecord, CardRecord, CardState, CardType, MarkKnownPayload, Rating, ReviewLogRecord, Skill } from './types'
+import type { CardEventRecord, CardRecord, CardState, MarkKnownPayload, Rating, ReviewLogRecord } from './types'
 
 /**
  * FSRS 封裝（規劃書 §6.2）。
@@ -14,20 +15,12 @@ const PARAMS_BY_VERSION: Record<string, ReturnType<typeof generatorParameters>> 
   [PARAMS_VERSION]: generatorParameters({ enable_fuzz: false, enable_short_term: true }),
 }
 
-/** 「偶爾複習」模式的初始穩定度（天）；規劃書 §6.2，待 P1b 實測調整 */
+/** 「偶爾複習」模式的初始穩定度（天）；規劃書 §6.2，待實測調整 */
 export const OCCASIONAL_STABILITY_DAYS = 90
 
 function schedulerFor(version: string) {
   const params = PARAMS_BY_VERSION[version] ?? PARAMS_BY_VERSION[PARAMS_VERSION]!
   return fsrs(params)
-}
-
-export function parseCardId(cardId: string): { itemId: string; type: CardType; skill: Skill } {
-  const hash = cardId.lastIndexOf('#')
-  const itemId = cardId.slice(0, hash)
-  const skill = cardId.slice(hash + 1) as Skill
-  const type = itemId.split(':')[0] as CardType
-  return { itemId, type, skill }
 }
 
 export function emptyCardRecord(cardId: string, now: number): CardRecord {
@@ -155,9 +148,4 @@ export function rebuildCard(cardId: string, reviews: ReviewLogRecord[], events: 
     }
   }
   return card
-}
-
-/** 手寫結果轉 FSRS 評分（規劃書 §6.1 表）：由 session.summarize 的 rating 字串轉成數字 */
-export function ratingFromName(name: 'again' | 'hard' | 'good' | 'easy'): Rating {
-  return ({ again: 1, hard: 2, good: 3, easy: 4 } as const)[name]
 }

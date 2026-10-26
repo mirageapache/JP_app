@@ -2,8 +2,12 @@
 import { computed, onMounted, ref } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
-import { db, type StrokeSample } from '@/core/db'
+import ConfirmSheet from '@/components/ConfirmSheet.vue'
+import type { StrokeSample } from '@/core/db'
+import { clearSamples, deleteSample, deleteSamplesOf, listSamples } from '@/core/handwriting/repository'
 import { loadSettings, setSetting, settings } from '@/core/settings'
+import { displayKeyOf } from '@/core/srs/cardId'
+import { shareFile } from '@/core/ui/share'
 import { copyText, useToast } from '@/core/ui/useToast'
 
 /**
@@ -17,12 +21,12 @@ const expanded = ref<string | null>(null)
 const switchEl = ref<HTMLInputElement>()
 
 const KIND_TEXT: Record<string, string> = { pass: '通過', position: '位置', direction: '方向', order: '順序', connected: '連筆', shape: '形狀' }
-const { toast, show } = useToast()
+const { show } = useToast()
 
 const groups = computed(() => {
   const map = new Map<string, { cardId: string; char: string; count: number; wrong: number; touch: number; pen: number }>()
   for (const s of samples.value) {
-    const g = map.get(s.cardId) ?? { cardId: s.cardId, char: s.cardId.replace(/^kana:/, '').replace(/#.*$/, ''), count: 0, wrong: 0, touch: 0, pen: 0 }
+    const g = map.get(s.cardId) ?? { cardId: s.cardId, char: displayKeyOf(s.cardId), count: 0, wrong: 0, touch: 0, pen: 0 }
     g.count++
     if (s.judgedCorrect === false) g.wrong++
     if (s.pointerType === 'pen') g.pen++
@@ -36,7 +40,7 @@ const sizeKb = computed(() => Math.round(JSON.stringify(samples.value).length / 
 
 async function load() {
   await loadSettings()
-  samples.value = await db.strokeSamples.orderBy('recordedAt').toArray()
+  samples.value = await listSamples()
 }
 
 async function toggle(on: boolean) {
@@ -51,13 +55,13 @@ async function toggle(on: boolean) {
 
 async function turnOff(deleteSamples: boolean) {
   confirm.value = null
-  if (deleteSamples) await db.strokeSamples.clear()
+  if (deleteSamples) await clearSamples()
   await setSetting('tuningMode', false)
   await load()
 }
 
 async function deleteOne(uuid: string) {
-  await db.strokeSamples.delete(uuid)
+  await deleteSample(uuid)
   await load()
 }
 
@@ -66,14 +70,14 @@ function samplesOf(cardId: string) {
 }
 
 async function deleteCard(cardId: string) {
-  await db.strokeSamples.where('cardId').equals(cardId).delete()
+  await deleteSamplesOf(cardId)
   await load()
   show('已刪除')
 }
 
 async function deleteAll() {
   confirm.value = null
-  await db.strokeSamples.clear()
+  await clearSamples()
   await load()
   show('已刪除全部樣本')
 }
@@ -88,15 +92,8 @@ async function exportSamples() {
   }
   const text = JSON.stringify(payload)
   const file = new File([text], `stroke-samples-${new Date().toISOString().slice(0, 10)}.json`, { type: 'application/json' })
-  if (navigator.share && navigator.canShare?.({ files: [file] })) {
-    try {
-      await navigator.share({ files: [file], title: '筆跡樣本' })
-      return
-    } catch (e) {
-      if ((e as { name?: string }).name === 'AbortError') return // 使用者取消分享，不視為失敗
-      /* 不支援時改用剪貼簿 */
-    }
-  }
+  if ((await shareFile(file, '筆跡樣本')) !== 'unsupported') return
+  // 不支援分享檔案時改用剪貼簿
   show((await copyText(text)) ? `已複製 ${samples.value.length} 筆樣本` : '無法分享或複製')
 }
 
@@ -153,7 +150,7 @@ onMounted(load)
             <ul v-if="expanded === g.cardId" class="sample-list">
               <li v-for="s in samplesOf(g.cardId)" :key="s.uuid" class="row small">
                 <span class="badge" :class="s.verdict.kind === 'pass' ? 'badge--ok' : 'badge--shu'">第 {{ s.strokeIndex + 1 }} 筆 {{ KIND_TEXT[s.verdict.kind] }}</span>
-                <span class="faint num grow">{{ s.pointerType === 'pen' ? '筆' : '手指' }} · {{ s.difficulty === 'trace' ? '描摹' : '空白' }} · {{ new Date(s.recordedAt).toLocaleTimeString('zh-TW', { hour12: false }) }}<template v-if="s.judgedCorrect === false"> · 已標記誤判</template></span>
+                <span class="faint num grow">{{ s.pointerType === 'pen' ? '筆' : '手指' }} · {{ { trace: '描摹', hint: '提示', blank: '空白' }[s.difficulty] }} · {{ new Date(s.recordedAt).toLocaleTimeString('zh-TW', { hour12: false }) }}<template v-if="s.judgedCorrect === false"> · 已標記誤判</template></span>
                 <button class="icon-btn" type="button" style="width: 36px; height: 36px" aria-label="刪除這筆樣本" @click="deleteOne(s.uuid)"><AppIcon name="x" size="sm" /></button>
               </li>
             </ul>
@@ -167,25 +164,18 @@ onMounted(load)
       </div>
     </main>
 
-    <!-- 確認面板 -->
-    <div v-if="confirm" class="sheet-backdrop" @click="confirm = null" />
-    <div v-if="confirm === 'all'" class="sheet" role="dialog" aria-labelledby="sheetTitle">
-      <div class="sheet__handle"></div>
-      <h2 id="sheetTitle" style="font-size: var(--fs-title)">刪除全部 {{ samples.length }} 筆樣本？</h2>
+    <ConfirmSheet :open="confirm === 'all'" :title="`刪除全部 ${samples.length} 筆樣本？`" @close="confirm = null">
       <p class="muted">刪除後無法復原。若之後想用這些樣本做測試，請先匯出。</p>
-      <button class="btn btn--block btn--lg" type="button" style="background: var(--c-shu); color: #fff" @click="deleteAll">刪除全部</button>
+      <button class="btn btn--danger-fill btn--block btn--lg" type="button" @click="deleteAll">刪除全部</button>
       <button class="btn btn--secondary btn--block" type="button" @click="confirm = null">取消</button>
-    </div>
-    <div v-if="confirm === 'off'" class="sheet" role="dialog" aria-labelledby="sheetTitle2">
-      <div class="sheet__handle"></div>
-      <h2 id="sheetTitle2" style="font-size: var(--fs-title)">關閉調校模式</h2>
+    </ConfirmSheet>
+    <ConfirmSheet :open="confirm === 'off'" title="關閉調校模式" @close="confirm = null">
       <p class="muted">要一併刪除已保存的 {{ samples.length }} 筆筆跡嗎？</p>
-      <button class="btn btn--block btn--lg" type="button" style="background: var(--c-shu); color: #fff" @click="turnOff(true)">關閉並刪除筆跡</button>
+      <button class="btn btn--danger-fill btn--block btn--lg" type="button" @click="turnOff(true)">關閉並刪除筆跡</button>
       <button class="btn btn--secondary btn--block" type="button" @click="turnOff(false)">只關閉，保留筆跡</button>
       <button class="btn btn--ghost btn--block" type="button" @click="confirm = null">取消</button>
-    </div>
+    </ConfirmSheet>
 
-    <div v-if="toast" class="toast" role="status">{{ toast }}</div>
   </div>
 </template>
 

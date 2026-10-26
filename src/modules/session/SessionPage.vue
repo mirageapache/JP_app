@@ -4,6 +4,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import JaText from '@/components/JaText.vue'
 import { useDailySession } from '@/core/srs/useDailySession'
 import { getCard } from '@/core/srs/repository'
+import { itemKey } from '@/core/srs/cardId'
 import { previewIntervals } from '@/core/srs/fsrs'
 import { requestSync } from '@/core/sync/useSync'
 import type { Rating } from '@/core/srs/types'
@@ -101,8 +102,8 @@ onMounted(() => session.start())
       <section v-if="session.wrongItems.value.length" class="stack">
         <h2 class="section-title">這次答錯的</h2>
         <div class="chips" style="flex-wrap: wrap">
-          <RouterLink v-for="id in session.wrongItems.value" :key="id" class="chip" :to="`/kana/${encodeURIComponent(id.replace('kana:', ''))}`">
-            <JaText :text="id.replace('kana:', '')" display style="font-size: 1.125rem" />
+          <RouterLink v-for="id in session.wrongItems.value" :key="id" class="chip" :to="`/kana/${encodeURIComponent(itemKey(id))}`">
+            <JaText :text="itemKey(id)" display style="font-size: 1.125rem" />
           </RouterLink>
         </div>
         <p class="small faint">它們會在幾分鐘到一天內再出現一次。</p>

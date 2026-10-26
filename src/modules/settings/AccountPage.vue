@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
+import ConfirmSheet from '@/components/ConfirmSheet.vue'
 import { deleteAccount, describeAuthError, reauthenticate, sendPasswordReset, signInWithEmail, signOut, signUpWithEmail } from '@/core/sync/auth'
 import { deleteCloudData, ensureAuthListener, refreshPending, requestSync, syncState } from '@/core/sync/useSync'
 import { useToast } from '@/core/ui/useToast'
@@ -13,7 +14,7 @@ const busy = ref(false)
 const error = ref('')
 const confirm = ref<'delete' | null>(null)
 const confirmPassword = ref('')
-const { toast, show } = useToast()
+const { show } = useToast()
 
 const lastSyncText = computed(() => (syncState.lastSyncAt ? new Date(syncState.lastSyncAt).toLocaleString('zh-TW', { hour12: false }) : '尚未同步'))
 
@@ -140,15 +141,11 @@ onMounted(refreshPending)
       </template>
     </main>
 
-    <div v-if="confirm" class="sheet-backdrop" @click="confirm = null" />
-    <div v-if="confirm === 'delete'" class="sheet" role="dialog" aria-labelledby="delTitle">
-      <div class="sheet__handle"></div>
-      <h2 id="delTitle" style="font-size: var(--fs-title)">刪除帳號與雲端資料</h2>
+    <ConfirmSheet :open="confirm === 'delete'" title="刪除帳號與雲端資料" @close="confirm = null">
       <p class="muted">雲端上的所有紀錄與設定會被刪除，無法復原；這台裝置上的紀錄會保留。請輸入密碼確認。</p>
-      <div class="input"><AppIcon name="lock" size="sm" /><input v-model="confirmPassword" type="password" autocomplete="current-password" placeholder="密碼" /></div>
-      <button class="btn btn--block btn--lg" type="button" style="background: var(--c-shu); color: #fff" :disabled="confirmPassword.length < 6 || busy" @click="doDelete">確認刪除</button>
+      <div class="input"><AppIcon name="lock" size="sm" /><input v-model="confirmPassword" type="password" autocomplete="current-password" placeholder="密碼" aria-label="密碼" /></div>
+      <button class="btn btn--danger-fill btn--block btn--lg" type="button" :disabled="confirmPassword.length < 6 || busy" @click="doDelete">確認刪除</button>
       <button class="btn btn--secondary btn--block" type="button" @click="confirm = null">取消</button>
-    </div>
-    <div v-if="toast" class="toast" role="status">{{ toast }}</div>
+    </ConfirmSheet>
   </div>
 </template>

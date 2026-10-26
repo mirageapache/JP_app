@@ -1,4 +1,5 @@
 import type { KanaItem } from '@/core/content/kana'
+import { makeCardId } from './cardId'
 import { dayKey, endOfDay } from './day'
 import type { CardRecord, Skill } from './types'
 
@@ -83,14 +84,14 @@ export function buildDailyQueue(input: QueueInput): DailyQueue {
   // 2. 已導入項目解鎖的 write 卡（不佔新項目額度）
   for (const item of input.items) {
     if (!item.skills.includes('write') || input.commuteMode) continue
-    const read = byId.get(`${item.id}#${UNLOCK_AFTER}`)
-    const write = byId.get(`${item.id}#write`)
+    const read = byId.get(makeCardId(item.id, UNLOCK_AFTER))
+    const write = byId.get(makeCardId(item.id, 'write'))
     const writeStarted = write ? write.reps > 0 || write.suspended : false
     const readKnown = read?.suspended === true // 標記已會（讀）後，寫仍要練
     // 首次複習通過：read 卡已練過，且最後一次不是今天（兩種技能不同天第一次出現）
     const readPassed = !!read && read.reps > 0 && !read.suspended && read.lastReview !== null && dayKey(read.lastReview) !== dayKey(input.now)
     if (read && (readKnown || readPassed) && !writeStarted && !newPaused) {
-      entries.push({ cardId: `${item.id}#write`, itemId: item.id, skill: 'write', kind: 'new' })
+      entries.push({ cardId: makeCardId(item.id, 'write'), itemId: item.id, skill: 'write', kind: 'new' })
     }
   }
 
@@ -100,9 +101,9 @@ export function buildDailyQueue(input: QueueInput): DailyQueue {
   for (const item of input.items) {
     if (introduced >= budget) break
     if (!item.skills.includes(INTRO_SKILL)) continue
-    const read = byId.get(`${item.id}#${INTRO_SKILL}`)
+    const read = byId.get(makeCardId(item.id, INTRO_SKILL))
     if (read && (read.reps > 0 || read.suspended)) continue
-    entries.push({ cardId: `${item.id}#${INTRO_SKILL}`, itemId: item.id, skill: INTRO_SKILL, kind: 'new' })
+    entries.push({ cardId: makeCardId(item.id, INTRO_SKILL), itemId: item.id, skill: INTRO_SKILL, kind: 'new' })
     introduced++
   }
 
