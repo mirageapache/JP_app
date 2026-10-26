@@ -13,7 +13,7 @@ const router = useRouter()
 /** 連點版本號 5 次開啟除錯面板（規劃書 F16） */
 const { tap } = useTapToReveal(5, () => router.push('/settings/debug'))
 
-function step(key: 'dailyNewKana' | 'dailyGoalMinutes' | 'newPauseThreshold', delta: number, min: number, max: number) {
+function step(key: 'dailyNewKana' | 'dailyGoalMinutes' | 'newPauseThreshold' | 'dailyMaxCards', delta: number, min: number, max: number) {
   const next = Math.min(max, Math.max(min, settings[key] + delta))
   if (next !== settings[key]) void setSetting(key, next)
 }
@@ -73,20 +73,22 @@ onMounted(() => {
               <button type="button" aria-label="增加" @click="step('newPauseThreshold', 10, 20, 500)">＋</button>
             </div>
           </li>
+          <li class="list-row">
+            <div class="list-row__main"><div class="list-row__title">每日題數上限</div><div class="list-row__sub">超過的留到明天</div></div>
+            <div class="stepper">
+              <button type="button" aria-label="減少" @click="step('dailyMaxCards', -10, 0, 300)">−</button>
+              <span class="num">{{ settings.dailyMaxCards || '不限' }}</span>
+              <button type="button" aria-label="增加" @click="step('dailyMaxCards', 10, 0, 300)">＋</button>
+            </div>
+          </li>
         </ul>
-        <p class="list-note">新卡以「項目」計算，一個假名的「讀」先出現，熟了之後才加入「寫」。</p>
+        <p class="list-note">新卡以「項目」計算，一個假名的「讀」先出現，練過一次之後（隔天起）才加入「寫」。</p>
       </section>
 
       <!-- 顯示 -->
       <section class="stack" style="gap: var(--sp-2)">
         <h2 class="section-title">顯示</h2>
         <ul class="list">
-          <li>
-            <label class="list-row">
-              <div class="list-row__main"><div class="list-row__title">顯示讀音標注</div><div class="list-row__sub" lang="ja"><ruby>食<rt>た</rt></ruby>べる</div></div>
-              <span class="switch"><input type="checkbox" :checked="settings.showFurigana" aria-label="顯示讀音標注" @change="setSetting('showFurigana', ($event.target as HTMLInputElement).checked)" /><span></span></span>
-            </label>
-          </li>
           <li>
             <RouterLink class="list-row" to="/kana/mark-known">
               <div class="list-row__main"><div class="list-row__title">標記已會的假名</div><div class="list-row__sub">跳過已經熟悉的字</div></div>
@@ -108,6 +110,7 @@ onMounted(() => {
             </RouterLink>
           </li>
         </ul>
+        <p class="list-note">學習紀錄存在這台裝置上；<strong>從主畫面刪除 App 圖示會一併刪除紀錄</strong>。建議登入同步或定期匯出備份。</p>
       </section>
 
       <!-- 進階 -->

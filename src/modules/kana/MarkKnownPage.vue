@@ -28,7 +28,7 @@ const SKILL_TEXT: Record<KanaSkill, string> = { read: '讀', write: '寫' }
 const rows = computed(() => {
   const map = new Map<string, KanaItem[]>()
   for (const i of items.value) {
-    if (i.script !== script.value || i.group === 'youon' || i.group === 'small') continue
+    if (i.script !== script.value) continue
     if (!i.skills.includes(skill.value)) continue
     map.set(i.row, [...(map.get(i.row) ?? []), i])
   }

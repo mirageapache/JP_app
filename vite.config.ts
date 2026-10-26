@@ -29,13 +29,14 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // App Shell 預快取；內容包（/content/）改用執行期快取，避免每次內容更新都重新下載全部
-        globPatterns: ['**/*.{js,css,html,woff2,svg,png,webmanifest}'],
-        globIgnores: ['**/content/**'],
+        // App Shell 與 kana.json 預快取（離線第一次開啟就能學習）；筆畫檔 179 份改用執行期快取，
+        // StaleWhileRevalidate：先用快取、背景更新，內容修正才到得了裝置（CacheFirst 一年等於永不更新）
+        globPatterns: ['**/*.{js,css,html,woff2,svg,png,webmanifest,json}'],
+        globIgnores: ['**/content/strokes/**'],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith('/content/'),
-            handler: 'CacheFirst',
+            urlPattern: ({ url }) => url.pathname.startsWith('/content/strokes/'),
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'content',
               expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 365 },

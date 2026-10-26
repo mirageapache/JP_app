@@ -7,7 +7,7 @@ import { firestoreTransport } from './transport'
 /**
  * 同步狀態與觸發（規劃書 §7.5）：
  * 開啟 App、完成一輪練習、網路恢復、App 進入背景（盡力而為）、開啟期間每 5 分鐘。
- * Firebase 只在已設定且使用者登入時才載入。
+ * Firebase SDK（約 280 KB）只在「這台裝置曾登入過」或使用者按下登入時才載入（規劃書 §7.2）。
  */
 
 const INTERVAL_MS = 5 * 60 * 1000
@@ -36,6 +36,24 @@ const state = reactive<SyncState>({
 })
 
 const engine = createSyncEngine(firestoreTransport)
+/** 這台裝置曾登入過：下次啟動才需要載入 Firebase 還原登入狀態 */
+const SEEN_KEY = 'jp-app.auth.seen'
+function authSeen(): boolean {
+  try {
+    return localStorage.getItem(SEEN_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+function rememberAuth(signedIn: boolean) {
+  try {
+    if (signedIn) localStorage.setItem(SEEN_KEY, '1')
+    else localStorage.removeItem(SEEN_KEY)
+  } catch {
+    /* 存不了就每次啟動都載入 */
+  }
+}
+let listening = false
 let started = false
 let timer: ReturnType<typeof setInterval> | undefined
 let inFlight: Promise<SyncResult | null> | null = null
@@ -78,19 +96,28 @@ export function requestSync(): Promise<SyncResult | null> {
   return inFlight
 }
 
+/** 載入 Firebase 並開始監聽登入狀態；登入前（AccountPage）與曾登入過的裝置啟動時呼叫 */
+export async function ensureAuthListener(): Promise<void> {
+  if (listening || !state.configured) return
+  listening = true
+  await onAuthChanged((u) => {
+    state.user = u
+    rememberAuth(!!u)
+    if (u) void requestSync()
+  })
+}
+
 /** 在 App 啟動時呼叫一次：監聽登入狀態並掛上觸發時機 */
 export function startSync(): void {
   if (started) return
   started = true
   void refreshPending().catch((e) => console.error('讀取同步狀態失敗', e))
-  if (!state.configured) {
+  if (!state.configured || !authSeen()) {
     state.user = null
-    return
+    if (!state.configured) return
+  } else {
+    void ensureAuthListener().catch((e) => console.error('載入 Firebase 失敗', e))
   }
-  void onAuthChanged((u) => {
-    state.user = u
-    if (u) void requestSync()
-  })
   window.addEventListener('online', () => void requestSync())
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') void requestSync()

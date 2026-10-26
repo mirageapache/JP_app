@@ -6,9 +6,10 @@ import type { CardRecord, Skill } from './types'
  * 每日佇列（規劃書 §6.2「每日佇列」）：純函式，輸入卡片與內容，輸出今天要出的卡片。
  * - 到期複習卡（越久沒複習的越先）→ 新卡（依學習順序）
  * - 新卡上限以「項目」計：一個項目的第一張卡（辨識類）出現才算一個新項目
- * - 技能錯開：產出類（write）在同項目的辨識卡（read）畢業（Review 狀態且不是今天畢業）或被標記已會後才加入，
- *   不佔新項目額度；同一項目的兩種技能不會同一天第一次出現
+ * - 技能錯開（規劃書 §6.2「首次複習通過後才加入產出類」）：write 在同項目的 read 卡已在前一天（或更早）練過、
+ *   或被標記已會後才加入，不佔新項目額度；同一項目的兩種技能不會同一天第一次出現
  * - 到期複習超過 newPauseThreshold 時暫停新卡
+ * - 每日總量上限 maxCards（F5；0 = 不限）：超過的留到明天，到期卡不會因此消失
  * - 通勤模式：排除 write 卡（延後到當天稍晚，不算逾期）
  */
 
@@ -23,6 +24,8 @@ export interface QueueInput {
   /** 「今天想多學一點」追加的項目數 */
   extraNewItems: number
   newPauseThreshold: number
+  /** 一天最多出幾張（含複習與新卡）；0 = 不限 */
+  maxCards: number
   commuteMode: boolean
 }
 
@@ -42,6 +45,8 @@ export interface DailyQueue {
   newPaused: boolean
   /** 通勤模式下延後的手寫卡數 */
   deferredWrite: number
+  /** 因每日總量上限而留到明天的卡數 */
+  capped: number
 }
 
 const INTRO_SKILL: Skill = 'read'
@@ -55,6 +60,7 @@ export function buildDailyQueue(input: QueueInput): DailyQueue {
   const extraNewItems = num(input.extraNewItems, 0)
   const introducedToday = num(input.newItemsIntroducedToday, 0)
   const pauseThreshold = num(input.newPauseThreshold, Infinity)
+  const maxCards = num(input.maxCards, 0)
   const byId = new Map(input.cards.map((c) => [c.id, c]))
   const cutoff = endOfDay(input.now)
   const entries: QueueEntry[] = []
@@ -71,10 +77,8 @@ export function buildDailyQueue(input: QueueInput): DailyQueue {
     }
     entries.push({ cardId: c.id, itemId: c.itemId, skill: c.skill, kind: 'review' })
   }
-  const dueCount = entries.length
 
   const newPaused = due.length > pauseThreshold
-  let newCount = 0
 
   // 2. 已導入項目解鎖的 write 卡（不佔新項目額度）
   for (const item of input.items) {
@@ -83,10 +87,10 @@ export function buildDailyQueue(input: QueueInput): DailyQueue {
     const write = byId.get(`${item.id}#write`)
     const writeStarted = write ? write.reps > 0 || write.suspended : false
     const readKnown = read?.suspended === true // 標記已會（讀）後，寫仍要練
-    const readGraduated = !!read && read.state === 2 && !read.suspended && read.lastReview !== null && dayKey(read.lastReview) !== dayKey(input.now)
-    if (read && (readKnown || readGraduated) && !writeStarted && !newPaused) {
+    // 首次複習通過：read 卡已練過，且最後一次不是今天（兩種技能不同天第一次出現）
+    const readPassed = !!read && read.reps > 0 && !read.suspended && read.lastReview !== null && dayKey(read.lastReview) !== dayKey(input.now)
+    if (read && (readKnown || readPassed) && !writeStarted && !newPaused) {
       entries.push({ cardId: `${item.id}#write`, itemId: item.id, skill: 'write', kind: 'new' })
-      newCount++
     }
   }
 
@@ -100,8 +104,15 @@ export function buildDailyQueue(input: QueueInput): DailyQueue {
     if (read && (read.reps > 0 || read.suspended)) continue
     entries.push({ cardId: `${item.id}#${INTRO_SKILL}`, itemId: item.id, skill: INTRO_SKILL, kind: 'new' })
     introduced++
-    newCount++
   }
 
-  return { entries, dueCount, newCount, newPaused, deferredWrite }
+  // 每日總量上限：複習在前、新卡在後，超過的留到明天
+  let capped = 0
+  let finalEntries = entries
+  if (maxCards > 0 && entries.length > maxCards) {
+    capped = entries.length - maxCards
+    finalEntries = entries.slice(0, maxCards)
+  }
+  const finalDue = finalEntries.filter((e) => e.kind === 'review').length
+  return { entries: finalEntries, dueCount: finalDue, newCount: finalEntries.length - finalDue, newPaused, deferredWrite, capped }
 }

@@ -5,8 +5,9 @@ import { HINT_AFTER, applyStroke, createSession, isFinished, skip as skipSession
 import { loadCharTemplate } from './templates'
 import type { CharTemplate, Difficulty, UserStroke, Verdict } from './types'
 
-/** 「簡單」的時間門檻；規劃書寫「低於該字的平均時間」，尚無統計前先用常數（P1b 以紀錄計算） */
+/** 「簡單」的時間門檻（規劃書 §6.1：低於該字的平均時間）：該字紀錄不足 MIN_LOGS_FOR_AVERAGE 筆前先用這個常數 */
 export const FAST_MS = 4000
+export const MIN_LOGS_FOR_AVERAGE = 3
 
 export const VERDICT_TEXT: Record<Verdict['kind'], string> = {
   pass: '通過',
@@ -48,9 +49,10 @@ export function useWritingPractice(options: {
   const lastVerdict = shallowRef<Verdict | null>(null)
   const lastWrongPoints = shallowRef<UserStroke['points'] | null>(null)
   const saved = ref(false)
+  const fastMs = ref(FAST_MS)
 
   const finished = computed(() => template.value !== null && isFinished(session.value, template.value))
-  const summary = computed(() => (finished.value && template.value ? summarize(session.value, template.value, FAST_MS) : null))
+  const summary = computed(() => (finished.value && template.value ? summarize(session.value, template.value, fastMs.value) : null))
   const hintIndex = computed(() => (session.value.hintShown && !finished.value ? session.value.expectedIndex : null))
   /** 提示模式：永遠顯示下一筆的起點與方向 */
   const guideIndex = computed(() => (options.difficulty.value === 'hint' && !finished.value ? session.value.expectedIndex : null))
@@ -67,13 +69,22 @@ export function useWritingPractice(options: {
     if (options.enabled && !options.enabled.value) return
     try {
       await loadSettings()
-      const t = await loadCharTemplate(options.char.value)
+      const [t, avg] = await Promise.all([loadCharTemplate(options.char.value), averageDuration(options.cardId.value)])
       if (token !== loadToken) return // 字已切換，丟棄較慢的舊回應
       template.value = t
+      fastMs.value = avg ?? FAST_MS
       reset()
     } catch (e) {
       if (token === loadToken) loadError.value = e instanceof Error ? e.message : String(e)
     }
+  }
+
+  /** 這個字過去完整寫完（未跳過）的平均時間；紀錄太少回傳 null */
+  async function averageDuration(cardId: string): Promise<number | null> {
+    const logs = await db.handwritingLogs.where('cardId').equals(cardId).toArray()
+    const durations = logs.filter((l) => !l.skipped && l.durationMs > 0).map((l) => l.durationMs)
+    if (durations.length < MIN_LOGS_FOR_AVERAGE) return null
+    return durations.reduce((a, b) => a + b, 0) / durations.length
   }
 
   function reset() {

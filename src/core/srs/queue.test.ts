@@ -18,6 +18,7 @@ function base(overrides: Partial<QueueInput> = {}): QueueInput {
     dailyNewItems: 5,
     extraNewItems: 0,
     newPauseThreshold: 100,
+    maxCards: 0,
     commuteMode: false,
     ...overrides,
   }
@@ -72,6 +73,26 @@ describe('每日佇列', () => {
     expect(news).toContain('kana:あ#write')
     expect(news).toContain('kana:い#read') // 額度 1 仍給了下一個新項目
     expect(news).toHaveLength(2)
+  })
+
+  it('read 卡昨天練過一次（尚未畢業）就解鎖 write（規劃書：首次複習通過）', () => {
+    const yesterday = T0 - 86400000
+    const read = { ...applyRating(emptyCardRecord('kana:あ#read', yesterday), 3, yesterday), due: addDays(T0, 10) }
+    expect(read.state).not.toBe(2)
+    expect(buildDailyQueue(base({ cards: [read] })).entries.map((e) => e.cardId)).toContain('kana:あ#write')
+  })
+
+  it('每日總量上限：複習優先，超過的留到明天', () => {
+    const many: CardRecord[] = Array.from({ length: 8 }, (_, i) => ({
+      ...applyRating(emptyCardRecord(`kana:x${i}#read`, T0 - 1e6), 3, T0 - 1e6),
+      due: T0 - 1,
+    }))
+    const q = buildDailyQueue(base({ cards: many, maxCards: 10 }))
+    expect(q.entries).toHaveLength(10)
+    expect(q.dueCount).toBe(8)
+    expect(q.newCount).toBe(2)
+    expect(q.capped).toBe(3) // 8 複習 + 5 新卡 = 13，留 3 張
+    expect(buildDailyQueue(base({ cards: many, maxCards: 0 })).capped).toBe(0)
   })
 
   it('read 今天才畢業不解鎖 write（技能不同天出現）；read 標記已會則解鎖 write', () => {

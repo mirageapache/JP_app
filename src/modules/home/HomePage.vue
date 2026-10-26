@@ -65,7 +65,8 @@ onMounted(() => session.refresh())
             <div class="row row--between"><span class="muted">預估時間</span><strong class="num">約 {{ estimateMin }} 分</strong></div>
           </div>
         </div>
-        <p v-if="queue?.newPaused" class="small muted"><AppIcon name="info" size="sm" /> 到期複習較多，今天先暫停新卡。</p>
+        <p v-if="queue?.newPaused" class="small muted"><AppIcon name="info" size="sm" /> 到期複習較多，今天先暫停新卡（含「多學一點」）。</p>
+        <p v-if="queue?.capped" class="small muted">已達每日題數上限，{{ queue.capped }} 張留到明天。</p>
         <p v-if="queue?.deferredWrite" class="small muted">通勤模式：{{ queue.deferredWrite }} 張手寫卡延後到今天稍晚。</p>
         <RouterLink class="btn btn--primary btn--lg btn--block" :class="{ 'btn--secondary': queue && queue.entries.length === 0 }" to="/session">
           {{ goalReached ? '繼續學習' : queue && queue.entries.length === 0 ? '今天沒有待學的卡片' : '開始學習' }}
@@ -92,7 +93,7 @@ onMounted(() => session.refresh())
         </div>
       </section>
 
-      <button class="btn btn--secondary btn--block" type="button" @click="session.addExtraNew(settings.dailyNewKana).then(() => session.refresh())">
+      <button class="btn btn--secondary btn--block" type="button" :disabled="queue?.newPaused" @click="session.addExtraNew(settings.dailyNewKana).then(() => session.refresh())">
         <AppIcon name="plus" size="sm" />今天想多學一點（+{{ settings.dailyNewKana }}）
       </button>
     </main>

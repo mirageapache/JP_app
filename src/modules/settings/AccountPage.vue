@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import { deleteAccount, describeAuthError, reauthenticate, sendPasswordReset, signInWithEmail, signOut, signUpWithEmail } from '@/core/sync/auth'
-import { deleteCloudData, refreshPending, requestSync, syncState } from '@/core/sync/useSync'
+import { deleteCloudData, ensureAuthListener, refreshPending, requestSync, syncState } from '@/core/sync/useSync'
 import { useToast } from '@/core/ui/useToast'
 
 /** 帳號與同步（規劃書 §7.2、§7.5）：電子郵件登入、同步狀態、登出、刪除帳號與雲端資料 */
@@ -32,6 +32,7 @@ async function run(fn: () => Promise<unknown>, successMsg?: string) {
 
 const doSignIn = () =>
   run(async () => {
+    await ensureAuthListener() // 先掛監聽，登入成功的狀態才會被接住並觸發同步
     await signInWithEmail(email.value.trim(), password.value)
     password.value = ''
     const r = await requestSync()
@@ -41,11 +42,16 @@ const doSignIn = () =>
   })
 const doSignUp = () =>
   run(async () => {
+    await ensureAuthListener()
     await signUpWithEmail(email.value.trim(), password.value)
     password.value = ''
     await requestSync()
   }, '帳號已建立，紀錄會自動同步')
-const doReset = () => run(() => sendPasswordReset(email.value.trim()), '已寄出重設密碼的信')
+const doReset = () =>
+  run(async () => {
+    await ensureAuthListener()
+    await sendPasswordReset(email.value.trim())
+  }, '已寄出重設密碼的信')
 const doSignOut = () => run(() => signOut(), '已登出，本機紀錄保留')
 const doSync = () =>
   run(async () => {

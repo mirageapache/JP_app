@@ -5,8 +5,10 @@ import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import StrokeOrderAnimation from '@/components/StrokeOrderAnimation.vue'
 import WritingBox from '@/components/WritingBox.vue'
-import { findKana, kanaCardId, type KanaItem } from '@/core/content/kana'
+import { findKana, kanaCardId, type KanaItem, type KanaSkill } from '@/core/content/kana'
 import { db } from '@/core/db'
+import { addCardEvent } from '@/core/srs/repository'
+import type { CardRecord } from '@/core/srs/types'
 import { useWritingPractice } from '@/core/handwriting/useWritingPractice'
 import type { Difficulty } from '@/core/handwriting/types'
 import { loadSettings, setSetting, settings } from '@/core/settings'
@@ -19,6 +21,9 @@ const char = computed(() => decodeURIComponent(String(route.params.char ?? '')))
 const item = ref<KanaItem | null>(null)
 const difficulty = ref<Difficulty>('trace')
 const recentCount = ref(0)
+/** 讀／寫兩張卡的排程狀態（規劃書 F6：標記已會後可在這裡恢復；§7.5 reset 事件的入口） */
+const cardsBySkill = ref<Partial<Record<KanaSkill, CardRecord>>>({})
+const confirmReset = ref<KanaSkill | null>(null)
 const order = ref<InstanceType<typeof StrokeOrderAnimation>>()
 const box = ref<InstanceType<typeof WritingBox>>()
 const { toast, show } = useToast()
@@ -31,11 +36,44 @@ const variantId = computed(() => settings.kanaStrokeVariants[char.value] ?? vari
 const practice = useWritingPractice({ char, cardId, difficulty, variantId, mode: 'free', enabled: canWrite })
 
 const RATING_TEXT = { again: '重來', hard: '困難', good: '良好', easy: '簡單' } as const
+const SKILL_TEXT: Record<KanaSkill, string> = { read: '讀', write: '寫' }
+
+function describeCard(c: CardRecord | undefined): string {
+  if (!c || (c.reps === 0 && !c.suspended)) return '尚未開始'
+  if (c.suspended) return '已標記已會（不排程）'
+  const due = new Date(c.due)
+  const dueText = c.due <= Date.now() ? '今天到期' : `${due.getMonth() + 1}/${due.getDate()} 到期`
+  return `已練 ${c.reps} 次 · ${dueText}`
+}
+
+async function unsuspend(skill: KanaSkill) {
+  await addCardEvent(kanaCardId(char.value, skill), 'unsuspend')
+  show(`「${SKILL_TEXT[skill]}」已恢復排程`)
+  await load()
+}
+
+async function resetProgress(skill: KanaSkill) {
+  if (confirmReset.value !== skill) {
+    confirmReset.value = skill
+    setTimeout(() => (confirmReset.value = confirmReset.value === skill ? null : confirmReset.value), 4000)
+    return
+  }
+  confirmReset.value = null
+  await addCardEvent(kanaCardId(char.value, skill), 'reset')
+  show(`「${SKILL_TEXT[skill]}」的進度已重設`)
+  await load()
+}
 
 async function load() {
   await loadSettings()
   item.value = (await findKana(char.value)) ?? null
   recentCount.value = await db.handwritingLogs.where('cardId').equals(cardId.value).count()
+  const next: Partial<Record<KanaSkill, CardRecord>> = {}
+  for (const skill of item.value?.skills ?? []) {
+    const c = await db.cards.get(kanaCardId(char.value, skill))
+    if (c) next[skill] = c
+  }
+  cardsBySkill.value = next
 }
 
 async function chooseVariant(id: string) {
@@ -89,6 +127,29 @@ onMounted(load)
       </section>
 
       <p v-if="practice.loadError.value" class="banner banner--shu"><AppIcon name="alert" size="sm" />{{ practice.loadError.value }}</p>
+
+      <!-- 學習狀態 -->
+      <section v-if="item" class="stack">
+        <h2 class="section-title">每日學習狀態</h2>
+        <ul class="list">
+          <li v-for="skill in item.skills" :key="skill" class="list-row">
+            <div class="list-row__main">
+              <div class="list-row__title">{{ SKILL_TEXT[skill] }}</div>
+              <div class="list-row__sub">{{ describeCard(cardsBySkill[skill]) }}</div>
+            </div>
+            <button v-if="cardsBySkill[skill]?.suspended" class="btn btn--secondary btn--sm" type="button" @click="unsuspend(skill)">恢復排程</button>
+            <button
+              v-else-if="cardsBySkill[skill] && cardsBySkill[skill]!.reps > 0"
+              class="btn btn--sm"
+              :class="confirmReset === skill ? 'btn--danger' : 'btn--ghost'"
+              type="button"
+              @click="resetProgress(skill)"
+            >
+              {{ confirmReset === skill ? '確定重設？' : '重設進度' }}
+            </button>
+          </li>
+        </ul>
+      </section>
 
       <!-- 筆畫版本 -->
       <section v-if="variants.length > 1" class="stack">

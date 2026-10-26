@@ -14,6 +14,8 @@ export interface SettingsSchema {
   dailyGoalMinutes: number
   /** 到期複習超過此數時暫停新卡 */
   newPauseThreshold: number
+  /** 每日總量上限（含複習與新卡）；0 = 不限 */
+  dailyMaxCards: number
   /** 通勤模式「今天先不手寫」：記錄開啟的台灣日期，隔天自動失效（device） */
   commuteDate: string | null
   /** 「今天想多學一點」：日期與追加的項目數（device） */
@@ -36,6 +38,7 @@ export const SETTING_DEFAULTS: SettingsSchema = {
   dailyNewKana: 5,
   dailyGoalMinutes: 20,
   newPauseThreshold: 100,
+  dailyMaxCards: 0,
   commuteDate: null,
   extraNew: null,
   onboardingDone: false,
@@ -49,6 +52,7 @@ export const SETTING_SCOPE: Record<Key, Setting['scope']> = {
   dailyNewKana: 'account',
   dailyGoalMinutes: 'account',
   newPauseThreshold: 'account',
+  dailyMaxCards: 'account',
   commuteDate: 'device',
   extraNew: 'device',
   onboardingDone: 'device',
@@ -67,6 +71,7 @@ const SETTING_VALIDATORS: Record<Key, (v: unknown) => boolean> = {
   dailyNewKana: isCount,
   dailyGoalMinutes: isCount,
   newPauseThreshold: isCount,
+  dailyMaxCards: isCount,
   commuteDate: (v) => v === null || typeof v === 'string',
   extraNew: (v) => v === null || (isObj(v) && typeof v.date === 'string' && isCount(v.count)),
   onboardingDone: isBool,

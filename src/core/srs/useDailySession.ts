@@ -64,6 +64,7 @@ export function useDailySession() {
       dailyNewItems: settings.dailyNewKana,
       extraNewItems: extraNew.value,
       newPauseThreshold: settings.newPauseThreshold,
+      maxCards: settings.dailyMaxCards,
       commuteMode: commuteMode.value,
     })
     queue.value = q
