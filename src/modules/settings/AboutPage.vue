@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppTopbar from '@/components/AppTopbar.vue'
 
-/** 關於與資料來源（規劃書 §8 授權、Q15）：第一版就標示來源 */
+/** 關於與資料來源（規劃書 §8 授權、Q15）：只列目前實際使用的來源；單字階段加入 JMdict、JmdictFurigana、Tatoeba、Tanos */
 const version = __APP_VERSION__
 const sources = [
   {
@@ -19,22 +19,6 @@ const sources = [
     license: 'SIL Open Font License 1.1',
     url: 'https://fonts.google.com/specimen/Klee+One',
     licenseUrl: 'https://openfontlicense.org/',
-  },
-  {
-    name: 'JMdict',
-    by: '© Electronic Dictionary Research and Development Group',
-    use: '單字資料（P2 起使用）',
-    license: 'CC BY-SA 4.0',
-    url: 'https://www.edrdg.org/jmdict/j_jmdict.html',
-    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
-  },
-  {
-    name: 'Tatoeba',
-    by: 'Tatoeba 社群',
-    use: '例句（P2 起使用）',
-    license: 'CC BY 2.0 FR',
-    url: 'https://tatoeba.org/',
-    licenseUrl: 'https://creativecommons.org/licenses/by/2.0/fr/',
   },
 ]
 </script>
@@ -59,7 +43,7 @@ const sources = [
             </div>
           </li>
         </ul>
-        <p class="small faint" style="padding: 0 var(--sp-1)">以上資料皆經過篩選與格式轉換；由其轉出的內容包依相同授權釋出。</p>
+        <p class="small faint" style="padding: 0 var(--sp-1)">以上資料皆經過篩選與格式轉換；由其轉出的內容包依相同授權釋出。單字與例句（JMdict、JmdictFurigana、Tatoeba、Tanos JLPT 清單）將於單字階段加入並在此標示。</p>
       </section>
 
       <section class="stack">

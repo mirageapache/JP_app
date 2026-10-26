@@ -1,7 +1,7 @@
 # 日語學習 PWA 專案規劃書
 
-> 版本：v0.4.1（v0.2 依審查問題清單 `plan-review-questions.md` 修訂；v0.3 改用 Firebase 同步；v0.4 第二輪審查修訂）
-> 更新日期：2026-10-24
+> 版本：v0.4.2（v0.2 依審查問題清單 `plan-review-questions.md` 修訂；v0.3 改用 Firebase 同步；v0.4 第二輪審查修訂；v0.4.2 依 P1.5 完成時的完整 code review 對齊實作，見 `code-review-2026-10-26.md` 與附錄 D）
+> 更新日期：2026-10-26
 > 性質：個人自用，不商業化
 > 介面語言：繁體中文
 
@@ -88,8 +88,8 @@
 | 層級 | 選擇 | 理由 |
 |---|---|---|
 | 框架 | Vue 3 + TypeScript + Vite | 最熟悉的技術 |
-| PWA | `vite-plugin-pwa`（Workbox），`registerType: 'prompt'` | 離線快取、Service Worker、Manifest；有新版本時提示使用者更新。App Shell 預快取；內容包改用執行期快取（CacheFirst），避免每次內容更新都重新下載全部 |
-| 狀態 | Pinia | 只作為設定與畫面狀態的讀取快取，資料以 Dexie 為準 |
+| PWA | `vite-plugin-pwa`（Workbox），`registerType: 'prompt'` | 離線快取、Service Worker、Manifest；有新版本時提示使用者更新。App Shell 與 `kana.json` 預快取（離線第一次開啟就能學習）；筆畫檔等大量內容檔用執行期快取（StaleWhileRevalidate：先用快取、背景更新，內容修正才到得了裝置），並在啟動後背景預抓一次（每個 App 版本一次） |
+| 狀態 | Pinia | 全站畫面狀態（toast 等）；設定以 Dexie 為準，`core/settings` 另有 reactive 讀取快取 |
 | UI | 自訂元件（`src/styles/app.css` + `src/components/`） | P0 試用 Vant 4 與 Konsta UI 手感差不多，皆不採用；日後改導入專案擁有者自行開發的個人 UI 元件庫 |
 | 本機資料庫 | IndexedDB + Dexie | PWA 內建，API 友善；App 的主要資料庫 |
 | 雲端同步 | Firebase Auth + Cloud Firestore（`firebase/firestore/lite`） | 登入狀態由 SDK 自動維護；免費方案足夠個人使用；不需自行架設後端。同步模組以動態 `import()` 延遲載入 |
@@ -205,8 +205,8 @@ public/content/
   "order": 15,
   "romaji": "so",
   "strokeVariants": [
-    { "id": "1", "label": "一筆寫法", "default": true },
-    { "id": "2", "label": "兩筆寫法" }
+    { "id": "kanjivg", "label": "一筆寫法（KanjiVG）", "default": true },
+    { "id": "two", "label": "兩筆寫法", "strokes": null }
   ]
 }
 ```
@@ -276,7 +276,7 @@ public/content/
 | `strokeSamples` | `uuid`、`cardId`、`variantId`、難度、`pointerType`、筆跡座標、判定結果、人工標記、`recordedAt` | **僅調校模式**時寫入 | 否（另行匯出） |
 | `settings` | `key`、`value`、`scope`（account / device）、`updatedAt` | 設定的唯一來源（Pinia 僅快取）；`updatedAt` 只在使用者實際修改時更新，初始化預設值不算 | 僅 `scope = account` |
 | `errorLogs` | `id`、`level`、`message`、`stack`、`at` | 除錯面板用，保留最近 N 筆 | 否 |
-| `syncMeta` | `uid`、`deviceId`、`lastPulledAt`、`lastPushedAt`、`lastError` | 本機同步狀態 | 否 |
+| `syncMeta` | `uid`、`lastPulledAt`、`lastPushedAt`、`lastSettingsPushAt`、`lastSyncAt`、`dirtyCardIds`、`lastError` | 本機同步狀態；`dirtyCardIds` 是已合併進本機但尚未重建的卡片（下載中斷的保險）。`deviceId` 存在 localStorage，IndexedDB 被清時仍在 | 否 |
 
 **Schema 遷移**
 - Dexie 每次 schema 變更都升版本號並撰寫遷移函式
@@ -289,8 +289,10 @@ public/content/
 
 | `scope` | 項目 | 同步 |
 |---|---|---|
-| `account` | 每日新卡數、每日目標、讀音顯示、筆畫版本選擇、`listen` 技能開關、通勤模式預設值 | 是，以 `updatedAt` 較新者為準 |
-| `device` | 調校模式開關、除錯面板開關、`deviceId`、上次同步狀態 | 否 |
+| `account` | 每日新卡數、每日目標、新卡暫停門檻、每日題數上限、讀音顯示、筆畫版本選擇、`listen` 技能開關 | 是，以 `updatedAt` 較新者為準；每個 key 整個覆寫（巢狀值不深合併） |
+| `device` | 調校模式開關、通勤模式（當日）、多學一點（當日）、引導完成 | 否 |
+
+所有外部來源的設定值（雲端、備份檔）都要通過每個 key 的型別驗證才接受，否則略過。
 
 ---
 
@@ -330,16 +332,16 @@ public/content/
 
 | 結果 | 建議評分 |
 |---|---|
-| 全部筆畫一次通過，且總時間低於該字的平均時間 | 簡單 |
+| 全部筆畫一次通過，且總時間低於該字的平均時間（該字完整寫完的紀錄不足 3 筆時以 4 秒代替） | 簡單 |
 | 全部筆畫一次通過 | 良好 |
 | 有重寫，但總重寫次數 ≤ 2 | 困難 |
 | 重寫次數 > 2、有筆畫看過提示，或放棄 | 重來 |
 
 **筆畫版本**
 - 有多種寫法的字，練習畫面提示「此字有其他常見寫法」
-- 使用者可在該字的練習畫面或設定頁選擇習慣的版本，之後以該版本判定
+- 使用者可在該字的練習畫面選擇習慣的版本，之後以該版本判定（目前替代寫法尚無筆畫資料，選擇會保存並同步，但判定一律用 KanjiVG 版本；設定頁的集中選擇待替代資料補齊後再做）
 
-**難度設定**：門檻值可依難度調整（描摹寬鬆、空白嚴格）；依 `pointerType` 區分手指與 Apple Pencil，手指的門檻乘上放寬係數；門檻依 P0 實測筆跡校準（`tests/fixtures/strokes/`），之後以調校模式收集的樣本持續調整。
+**難度設定**：門檻值可依難度調整（描摹寬鬆、空白嚴格）；依 `pointerType` 區分手指與 Apple Pencil，手指的門檻乘上放寬係數（1.3；滑鼠 1.15）；門檻依 P0 實測筆跡校準（`tests/fixtures/strokes/`），之後以調校模式收集的樣本持續調整。
 
 **調校模式**
 - 設定頁中的開關，預設關閉
@@ -373,11 +375,13 @@ public/content/
 | 項目 | 規則 |
 |---|---|
 | 新卡上限 | 各類型分開計，以**學習項目**計數；預設假名 5、單字 3、文法 1，可在設定調整（假名學完後可考慮將單字調高） |
-| 技能錯開 | 同一項目的技能卡不同天出現：先出辨識類（`read`、`recognize`、`understand`），該卡首次複習通過後，才加入產出類（`write`、`produce`、`apply`）與 `listen` |
+| 技能錯開 | 同一項目的技能卡不同天出現：先出辨識類（`read`、`recognize`、`understand`），該卡首次複習通過（已練過、且最後一次不是今天）或被標記已會後，才加入產出類（`write`、`produce`、`apply`）與 `listen`。各內容類型以「技能階梯」（導入技能、解鎖前置、通勤延後）設定，排程器本身不認識內容型別 |
 | 每日目標 | 預設 20 分鐘；達成時提示「今天的目標完成了」，可繼續練習（軟性上限） |
 | 新卡自動暫停 | 到期的複習卡超過 100 張時，當天暫停出新卡，先消化複習 |
-| 出題順序 | 到期複習卡（越久沒複習的越先）→ 新假名 → 新單字 → 新文法 |
-| 多學一點 | 提供「今天想多學一點」按鈕，再加入一批新卡 |
+| 出題順序 | 到期複習卡（到期越早越先）→ 新假名 → 新單字 → 新文法 |
+| 每日題數上限 | 設定「每日題數上限」（預設不限）：複習優先，超過的留到明天，到期卡不會因此消失 |
+| 辨識題干擾選項 | 同行／同母音的假名優先，選項順序以固定 seed 洗牌（重出時換順序） |
+| 多學一點 | 提供「今天想多學一點」按鈕，再加入一批新卡；新卡因複習過多暫停時此按鈕也停用 |
 | 通勤模式 | 「今天先不手寫」開關：到期的 `write` 卡延後到當天稍晚，不算逾期、不影響評分；只出點選式的卡 |
 | 日界線 | 固定以台灣時間（UTC+8，`Asia/Taipei`）每日 0 點為界，不隨裝置時區變動 |
 
@@ -460,7 +464,7 @@ public/content/
 | 本機資料庫 | Dexie 仍為主要資料庫；學習時只讀寫 Dexie，同步在背景進行 |
 | 後端 | 不自行架設伺服器、不使用 BFF 或 Cloud Functions |
 | 託管 | 前端維持 Cloudflare Pages；需將正式網域加入 Firebase Auth 的授權網域；預覽部署的子網域是否需逐一加入，P0 確認 |
-| 載入 | Firebase 相關模組以動態 `import()` 延遲載入，只在登入或同步時才下載，不影響首頁載入時間 |
+| 載入 | Firebase 相關模組以動態 `import()` 延遲載入：只在「這台裝置曾登入過」（還原登入狀態）或使用者按下登入時才下載，不影響首頁載入時間 |
 
 > **不採用 BFF 的理由**：Firebase 的設計就是讓前端直接存取，登入狀態由 SDK 自動維護，權限由安全規則控管。加上 BFF 不會解決任何現有問題，反而增加伺服器、費用（Cloud Functions 需升級為付費方案）與維運負擔。日後若需要在 App 內呼叫需要保密金鑰的服務（例如 AI API），再評估加入。
 
@@ -504,13 +508,16 @@ match /users/{uid}/settings/{doc} {
 
 **上傳（本機 → 雲端）**
 - 各紀錄表加入 `syncedAt` 欄位，`null` 代表尚未上傳
-- 觸發時機：開啟 App、完成一輪練習、網路恢復（`online` 事件）、App 進入背景（`visibilitychange`，盡力而為）、App 開啟期間每 5 分鐘
+- 觸發時機：開啟 App、回到前景、完成一輪練習、網路恢復（`online` 事件）、App 進入背景（`visibilitychange`，盡力而為）、App 開啟期間每 5 分鐘
+- chunk 同時受筆數（400）與位元組（約 700 KB）上限，手寫紀錄多時不會超過 Firestore 的 1 MiB 文件上限
 - 上傳成功後才標記 `syncedAt`；若上傳成功但標記失敗而重傳，產生的重複紀錄會在合併時依 `uuid` 去除，不影響正確性
 
 **下載（雲端 → 本機）**
 - 本機記錄 `lastPulledAt` = **上次下載到的 chunk 中最大的 `createdAt`**（伺服器時間），不使用本機時鐘，避免時鐘誤差造成漏抓
-- 每次同步時下載 `createdAt >= lastPulledAt` 的 chunk（刻意重疊，重複紀錄以 `uuid` 去除）；自己裝置上傳的 chunk 下載後直接忽略
-- 本機沒有 `lastPulledAt`（新裝置、資料被清除）時，下載全部 chunk
+- 每次同步時下載 `createdAt >= lastPulledAt` 的 chunk（刻意重疊，重複紀錄以 `uuid` 去除；每頁 200 份分頁續抓）；非首次下載時忽略自己裝置的 chunk
+- 本機沒有 `lastPulledAt`（新裝置、資料被清除）時，下載全部 chunk，**包含自己裝置的**——IndexedDB 被清但 localStorage 的 `deviceId` 還在時才還原得回來
+- 下載的每一列都通過型別驗證才寫入；`schemaVersion` 比本機新的 chunk 整份略過，等 App 更新後重新下載
+- 合併時把受影響的 `cardId` 記進 `syncMeta.dirtyCardIds`（與合併同一交易），再重建；若中途被系統終止，下一輪同步開頭先補做，不會留下與紀錄不一致的 `cards`。除錯面板另有「重建所有卡片」
 - 下載後以 `uuid` 與本機紀錄取聯集，再重建 `cards`：
   - 一般同步：只重建**被新紀錄影響到的卡片**（新 chunk 中出現的 `cardId`），對這些卡片重放完整歷史
   - 新裝置還原、資料修復：全量重建
@@ -551,9 +558,13 @@ match /users/{uid}/settings/{doc} {
   "handwritingLogs": [],
   "quizLogs": [],
   "contentReports": [],
-  "settings": {}
+  "settings": [{ "key": "dailyNewKana", "value": 5, "scope": "account", "updatedAt": 1730000000000 }]
 }
 ```
+
+- 匯出時各紀錄的 `syncedAt` 一律為 `null`（同步狀態與裝置、帳號相關，不隨備份帶走）
+- 匯入前的快照只保留最近 3 份；桌面瀏覽器不支援分享檔案時直接下載
+- 匯入時逐列驗證，格式不對的紀錄略過；設定只接受認得的 key 與正確型別，`scope` 以 App 定義為準、缺 `updatedAt` 時補當下時間
 
 ### 7.7 已知風險與 P0 驗證
 
@@ -788,3 +799,25 @@ JP_app/
 | 拼字題改為顯示鍵盤安裝說明 | 網頁無法偵測已安裝的鍵盤 |
 | Firebase 模組延遲載入；預覽子網域授權列入 P0 | — |
 | P1 拆成 P1a（自由練習）與 P1b（每日使用）；新增 P0 驗證清單 | — |
+
+---
+
+## 附錄 D：v0.4.2 主要變更（P1.5 完成時的完整 code review）
+
+審查報告：`code-review-2026-10-26.md`。以下是規劃書因此對齊實作或決策的地方：
+
+| 變更 | 說明 |
+|---|---|
+| 首次全量下載不略過自己裝置的 chunk | IndexedDB 被清但 `deviceId` 仍在時才還原得回來 |
+| `syncMeta.dirtyCardIds`、chunk 位元組上限、下載分頁、外部資料逐列驗證 | 同步中斷與壞資料的自我修復 |
+| 每日題數上限（F5）實作為設定「每日題數上限」 | 複習優先，超過的留到明天 |
+| write 卡解鎖條件明確為「前置卡已練過且最後一次不是今天」 | 原文「首次複習通過」的具體定義 |
+| 排程器以技能階梯（SkillLadder）設定，不認識內容型別 | P2 單字三技能只需新增一組階梯 |
+| 「簡單」門檻以該字平均時間計算（不足 3 筆用 4 秒） | — |
+| 內容快取：`kana.json` 預快取、筆畫檔 StaleWhileRevalidate 並背景預抓 | 原 CacheFirst 一年等於永不更新 |
+| Firebase 只在曾登入過的裝置啟動時載入 | 未登入者不下載 SDK |
+| 設定 scope 清單更新；每個 key 整個覆寫 | 移除「通勤模式預設值」「除錯面板開關」，新增每日題數上限 |
+| 筆畫版本：保存並同步，但判定一律 KanjiVG，設定頁選擇延後 | 替代寫法尚無筆畫資料 |
+| 讀音顯示開關先從設定頁移除 | P2 單字才有讀音標注內容 |
+| P0 原型頁移除；裝置能力與語音測試併入除錯面板 | 原型頁可寫入真實帳號 |
+| 標記已會：含拗音與小寫；假名詳細頁可「恢復排程」「重設進度」 | `unsuspend`／`reset` 事件有 UI 入口 |

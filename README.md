@@ -2,7 +2,7 @@
 
 以 iPhone 為主要使用裝置的日語學習 PWA，核心特色是**螢幕手寫練習**，並逐步擴充為涵蓋 N5～N1 的學習工具。個人自用，不商業化。
 
-> **目前狀態**：P1a～P1.5 程式完成（假名 50 音表與手寫練習、每日學習 SRS、標記已會、JSON 備份、Firebase 同步），等待 iPhone 實測與手寫門檻調校。測試項目見 [docs/p1-verification.md](docs/p1-verification.md)。部署於 https://jp-app-ebf.pages.dev/ 。
+> **目前狀態**：P1a～P1.5 程式完成（假名 50 音表與手寫練習、每日學習 SRS、標記已會、JSON 備份、Firebase 同步），並於 2026-10-26 完成整個專案的完整 code review 與修正（[docs/code-review-2026-10-26.md](docs/code-review-2026-10-26.md)）。等待 iPhone 實測與手寫門檻調校，測試項目見 [docs/p1-verification.md](docs/p1-verification.md)。部署於 https://jp-app-ebf.pages.dev/ 。
 
 ## 文件
 
@@ -13,6 +13,7 @@
 | [development-phases.md](docs/development-phases.md) | 各開發階段的工作項目清單（P0～P5） |
 | [p0-verification.md](docs/p0-verification.md) | P0 iPhone 實機驗證結果與手寫判定分析 |
 | [p1-verification.md](docs/p1-verification.md) | P1a～P1.5 的 iPhone 測試指南與結果表 |
+| [code-review-2026-10-26.md](docs/code-review-2026-10-26.md) | P1.5 完成時的完整 code review 報告與處理結果 |
 | [design-system.md](docs/design-system.md) | 設計系統：色彩、字體、元件、手寫練習的視覺規範 |
 | [ui-mockups/index.html](docs/ui-mockups/index.html) | 所有頁面的 UI 範例（用瀏覽器開啟） |
 
@@ -30,13 +31,13 @@
 |---|---|
 | 前端 | Vue 3 + TypeScript + Vite |
 | PWA | `vite-plugin-pwa` |
-| 狀態 | Pinia |
+| 狀態 | Pinia（全站畫面狀態，如 toast）；設定以 Dexie 為準 |
 | 本機資料庫 | IndexedDB + Dexie（主要資料庫） |
 | 雲端同步 | Firebase Auth + Cloud Firestore |
 | SRS | `ts-fsrs` |
 | 手寫 | Canvas + Pointer Events，自寫比對引擎 |
 | 發音 | Web Speech API |
-| 測試 | Vitest、Firebase Emulator（安全規則） |
+| 測試 | Vitest；Firebase Emulator（安全規則，需 Java，不在 `npm test` 內） |
 | 託管 | Cloudflare Pages |
 | 內容建置 | Python（`tools/`） |
 
@@ -47,22 +48,33 @@
 ```
 ├─ docs/                # 規劃書、設計系統、UI 範例、開發階段清單
 ├─ public/
-│  ├─ content/strokes/  # KanjiVG 轉出的假名筆畫資料（CC BY-SA 3.0）
+│  ├─ content/          # kana.json（假名內容包）、strokes/（KanjiVG 轉出的筆畫資料，CC BY-SA 3.0）
+│  ├─ fonts/            # Klee One 假名子集（自帶離線）
 │  ├─ icons/            # PWA 圖示
 │  └─ _redirects, _headers  # Cloudflare Pages：SPA 回退與快取標頭
 ├─ src/
 │  ├─ app/              # 路由
-│  ├─ components/       # AppTopbar、AppTabbar、AppIcon、WritingBox…
+│  ├─ components/       # AppTopbar、AppTabbar、AppIcon、WritingBox、HandwritingPractice、ConfirmSheet、AppToast…
 │  ├─ core/
-│  │  ├─ handwriting/   # 筆畫幾何、逐筆比對、書寫流程、筆畫資料載入
-│  │  ├─ sync/          # Firebase 登入、chunk 上傳／下載
-│  │  ├─ db/            # Dexie schema
+│  │  ├─ content/       # 假名內容載入、技能階梯、干擾選項、易混淆組
+│  │  ├─ handwriting/   # 筆畫幾何、逐筆比對、書寫流程、筆畫資料載入、紀錄存取
+│  │  ├─ srs/           # FSRS 封裝、卡片 ID、每日佇列、紀錄重放、每日學習流程
+│  │  ├─ sync/          # Firebase 登入、chunk 上傳／下載、同步狀態
+│  │  ├─ backup/        # JSON 匯出／匯入、快照
+│  │  ├─ settings/      # 設定（Dexie 為準、驗證、scope）
+│  │  ├─ stats/         # 弱點分數
+│  │  ├─ db/            # Dexie schema、外部資料驗證、資料庫狀態
 │  │  ├─ debug/         # 錯誤收集、裝置資訊
 │  │  ├─ tts/           # 語音合成
-│  │  └─ ui/            # useToast 等共用 composable
-│  ├─ modules/          # home、settings、p0（驗證頁）；kana、vocab… 於後續階段加入
+│  │  ├─ ui/            # toast、分享或下載
+│  │  └─ util/          # 小工具（errorMessage）
+│  ├─ stores/           # Pinia（toast）
+│  ├─ modules/          # home、session、kana、settings
 │  └─ styles/app.css    # 設計 token 與共用樣式
-├─ tools/kanjivg/       # KanjiVG → 筆畫 JSON 建置腳本（Python）
+├─ tools/
+│  ├─ kanjivg/          # KanjiVG → 筆畫 JSON（Python）
+│  ├─ kana/             # kana.json 建置
+│  └─ fonts/            # Klee One 子集化
 ├─ firebase/            # Firestore 安全規則、規則測試、部署說明
 ├─ scripts/             # 開發用工具（iPhone 尺寸截圖）
 └─ tests/
@@ -117,7 +129,7 @@ Firestore 安全規則的部署與測試見 [firebase/README.md](firebase/README
 
 ### iPhone 實機測試
 
-PWA 的 Service Worker 需要 HTTPS，請用 Cloudflare Pages 的網址測試：Safari 開啟 → 分享 → 加入主畫面 → 從主畫面開啟。P0 的驗證項目都在 App 內「設定 → P0 驗證清單」；在「裝置能力與驗證清單」頁勾選結果後按「複製驗證結果」回報。
+PWA 的 Service Worker 需要 HTTPS，請用 Cloudflare Pages 的網址測試：Safari 開啟 → 分享 → 加入主畫面 → 從主畫面開啟。測試項目依 [docs/p1-verification.md](docs/p1-verification.md)；裝置資訊、API 支援、語音測試與錯誤紀錄在「設定 → 連點版本號 5 次 → 除錯面板」，可一鍵複製回報。
 
 ## 資料來源與授權
 
@@ -126,9 +138,10 @@ PWA 的 Service Worker 需要 HTTPS，請用 Cloudflare Pages 的網址測試：
 | 資料 | 用途 | 授權 |
 |---|---|---|
 | [KanjiVG](https://kanjivg.tagaini.net/)（© Ulrich Apel） | 假名與漢字筆畫 | CC BY-SA 3.0 |
-| [JMdict](https://www.edrdg.org/jmdict/j_jmdict.html)（© Electronic Dictionary Research and Development Group） | 單字資料 | CC BY-SA 4.0 |
-| [Tatoeba](https://tatoeba.org/) | 例句 | CC BY 2.0 FR |
-| Tanos JLPT 清單（Jonathan Waller） | 單字等級 | 待確認 |
+| [JMdict](https://www.edrdg.org/jmdict/j_jmdict.html)（© Electronic Dictionary Research and Development Group） | 單字資料（P2 起） | CC BY-SA 4.0 |
+| [JmdictFurigana](https://github.com/Doublevil/JmdictFurigana) | 讀音分段（P2 起） | CC BY-SA 4.0 |
+| [Tatoeba](https://tatoeba.org/) | 例句（P2 起） | CC BY 2.0 FR |
+| Tanos JLPT 清單（Jonathan Waller） | 單字等級（P2 起） | 待確認 |
 | [Klee One](https://fonts.google.com/specimen/Klee+One)（© Fontworks Inc.） | 教科書體字型（假名子集，自帶離線） | SIL Open Font License 1.1 |
 
-App 內「關於」頁面會標示上述來源。
+App 內「關於」頁面標示目前實際使用的來源；單字階段加入其餘來源。
