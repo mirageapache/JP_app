@@ -78,7 +78,7 @@ export function requestSync(): Promise<SyncResult | null> {
 export function startSync(): void {
   if (started) return
   started = true
-  void refreshPending()
+  void refreshPending().catch((e) => console.error('讀取同步狀態失敗', e))
   if (!state.configured) {
     state.user = null
     return

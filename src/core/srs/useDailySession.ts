@@ -40,8 +40,10 @@ export function useDailySession() {
   const answering = ref(false)
   let cardShownAt = 0
 
-  const commuteMode = computed(() => settings.commuteDate === dayKey(Date.now()))
-  const extraNew = computed(() => (settings.extraNew?.date === dayKey(Date.now()) ? settings.extraNew.count : 0))
+  /** 最近一次建立佇列時的日期鍵。computed 不會因時間流逝重算，所以每次 buildQueue 都更新它，跨午夜後停在首頁再開始也不會沿用昨天的通勤模式與加碼 */
+  const todayKey = ref(dayKey(Date.now()))
+  const commuteMode = computed(() => settings.commuteDate === todayKey.value)
+  const extraNew = computed(() => (settings.extraNew?.date === todayKey.value ? settings.extraNew.count : 0))
   const finished = computed(() => current.value === null && pending.value.length === 0 && retry.value.length === 0 && queue.value !== null)
   const progress = computed(() => (counters.value.total ? counters.value.done / counters.value.total : 0))
 
@@ -51,6 +53,7 @@ export function useDailySession() {
     const list = schedulableItems(pack.items)
     items.value = new Map(list.map((i) => [i.id, i]))
     const now = Date.now()
+    todayKey.value = dayKey(now)
     const [cards, introduced, stats] = await Promise.all([db.cards.toArray(), countNewItemsIntroducedToday(now), todayStats(now)])
     today.value = stats
     const q = buildDailyQueue({

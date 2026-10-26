@@ -129,13 +129,6 @@ onMounted(() => {
               <AppIcon name="chev-r" size="sm" class="chev" />
             </RouterLink>
           </li>
-          <li>
-            <RouterLink class="list-row" to="/p0">
-              <AppIcon name="check" />
-              <div class="list-row__main">P0 驗證清單</div>
-              <AppIcon name="chev-r" size="sm" class="chev" />
-            </RouterLink>
-          </li>
         </ul>
       </section>
 

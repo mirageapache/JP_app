@@ -145,17 +145,6 @@ onMounted(load)
                     <span class="badge" :class="g.wrong ? 'badge--shu' : 'badge--ok'">{{ g.wrong }} 誤判</span>
                     手指 {{ g.touch }}<template v-if="g.pen"> · 筆 {{ g.pen }}</template>
 
-<style scoped>
-.sample-list {
-  list-style: none;
-  margin: 0;
-  padding: 0 var(--sp-4) var(--sp-2) var(--sp-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-1);
-  border-top: 1px dashed var(--c-line);
-}
-</style>
                   </div>
                 </div>
               </button>

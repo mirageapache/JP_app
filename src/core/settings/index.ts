@@ -64,7 +64,13 @@ let loaded: Promise<void> | undefined
 /** 從 Dexie 載入一次；之後讀取 `settings` 即可 */
 export function loadSettings(): Promise<void> {
   loaded ??= (async () => {
-    const rows = await db.settings.toArray()
+    let rows: Setting[] = []
+    try {
+      rows = await db.settings.toArray()
+    } catch (e) {
+      // 資料庫開不起來（隱私模式、儲存被清）：用預設值繼續，讓 App 至少能顯示訊息
+      console.error('無法讀取設定，改用預設值', e)
+    }
     for (const row of rows) {
       if (row.key in SETTING_DEFAULTS) (state as Record<string, unknown>)[row.key] = row.value
     }

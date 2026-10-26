@@ -53,6 +53,8 @@ const guide = computed(() => {
 })
 
 interface LiveStroke {
+  /** 只接受同一個指標的後續事件：手掌、第二根手指的 pointerup 不會結束 Pencil 的筆畫 */
+  pointerId: number
   points: Point[]
   pointerType: UserStroke['pointerType']
   startedAt: number
@@ -114,14 +116,18 @@ function pointerType(e: PointerEvent): UserStroke['pointerType'] {
 }
 
 function onDown(e: PointerEvent) {
-  if (props.disabled || current) return
-  canvas.value?.setPointerCapture(e.pointerId)
-  current = { points: [toViewBox(e)], pointerType: pointerType(e), startedAt: performance.now(), lastEventTime: e.timeStamp }
+  if (props.disabled || current || !e.isPrimary) return
+  try {
+    canvas.value?.setPointerCapture(e.pointerId)
+  } catch {
+    /* 指標已離開時 Safari 會擲錯；沒有 capture 仍可書寫 */
+  }
+  current = { pointerId: e.pointerId, points: [toViewBox(e)], pointerType: pointerType(e), startedAt: performance.now(), lastEventTime: e.timeStamp }
   redraw()
 }
 
 function onMove(e: PointerEvent) {
-  if (!current) return
+  if (!current || e.pointerId !== current.pointerId) return
   // 支援時取得完整軌跡（Apple Pencil 240Hz），不支援時退回單一事件
   const events = typeof e.getCoalescedEvents === 'function' ? e.getCoalescedEvents() : [e]
   for (const ev of events.length ? events : [e]) {
@@ -137,7 +143,7 @@ function onMove(e: PointerEvent) {
 }
 
 function onUp(e: PointerEvent) {
-  if (!current) return
+  if (!current || e.pointerId !== current.pointerId) return
   const stroke: UserStroke = {
     points: current.points,
     pointerType: current.pointerType,
@@ -149,8 +155,12 @@ function onUp(e: PointerEvent) {
   emit('stroke', stroke)
 }
 
-/** iOS 接管手勢（捲動、邊緣返回）時會送 pointercancel：丟棄半截筆畫，不送判定 */
-function onCancel() {
+/**
+ * iOS 接管手勢（捲動、邊緣返回）時會送 pointercancel：丟棄半截筆畫，不送判定。
+ * lostpointercapture 也走這裡：否則 current 永遠不會歸零，畫布從此不收筆。
+ */
+function onCancel(e: PointerEvent) {
+  if (!current || e.pointerId !== current.pointerId) return
   current = null
   redraw()
 }
@@ -229,6 +239,7 @@ watch(() => props.template, redraw)
       @pointermove="onMove"
       @pointerup="onUp"
       @pointercancel="onCancel"
+      @lostpointercapture="onCancel"
     />
   </div>
 </template>

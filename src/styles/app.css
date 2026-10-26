@@ -482,8 +482,9 @@ button.list-row { width: 100%; border: 0; background: none; text-align: left; }
   font-size: var(--fs-small); font-weight: 700;
 }
 
+/* 減少動態：動畫瞬間完成而不是移除，forwards 的結束狀態（提示筆畫、淡入）才會保留；筆順動畫是內容，用 rAF 不受影響 */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: 0ms !important; animation: none !important; }
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
 
 /* ---------- 字型：Klee One（教科書體）假名子集，離線可用；見 tools/fonts/README.md ---------- */

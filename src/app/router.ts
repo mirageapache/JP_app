@@ -18,20 +18,21 @@ export const router = createRouter({
     { path: '/settings/backup', name: 'backup', component: () => import('@/modules/settings/BackupPage.vue') },
     { path: '/settings/about', name: 'about', component: () => import('@/modules/settings/AboutPage.vue') },
     { path: '/settings/debug', name: 'debug', component: () => import('@/modules/settings/DebugPage.vue') },
-    { path: '/p0', name: 'p0', component: () => import('@/modules/p0/P0IndexPage.vue') },
-    { path: '/p0/handwriting', name: 'p0-handwriting', component: () => import('@/modules/p0/P0HandwritingPage.vue') },
-    { path: '/p0/firebase', name: 'p0-firebase', component: () => import('@/modules/p0/P0FirebasePage.vue') },
-    { path: '/p0/device', name: 'p0-device', component: () => import('@/modules/p0/P0DevicePage.vue') },
-    { path: '/p0/tts-auto', name: 'p0-tts-auto', component: () => import('@/modules/p0/P0TtsAutoPage.vue') },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/modules/home/NotFoundPage.vue') },
   ],
-  scrollBehavior: () => ({ top: 0 }),
+  // 返回時回到原本的捲動位置（50 音表下半部進詳細頁再返回不會跳回頂端）
+  scrollBehavior: (_to, _from, saved) => saved ?? { top: 0 },
 })
 
-/** 首次開啟先到引導頁（規劃書 Q23）；P0 驗證頁不受影響 */
+/** 首次開啟先到引導頁（規劃書 Q23） */
 router.beforeEach(async (to) => {
-  if (to.name === 'onboarding' || String(to.path).startsWith('/p0')) return true
+  if (to.name === 'onboarding') return true
   await loadSettings()
   if (!settings.onboardingDone) return { name: 'onboarding' }
   return true
+})
+
+/** 路由載入失敗（例如離線且 chunk 未快取）只記錄，不讓畫面停在空白 */
+router.onError((e) => {
+  console.error('路由錯誤', e)
 })

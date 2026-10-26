@@ -4,13 +4,31 @@ import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import { db, type ErrorLog } from '@/core/db'
 import { getDeviceInfo, type DeviceInfo } from '@/core/debug/deviceInfo'
+import { isTtsSupported, loadJaVoices, speakJa, type JaVoice } from '@/core/tts'
 import { copyText, useToast } from '@/core/ui/useToast'
 
 const version = __APP_VERSION__
 const logs = ref<ErrorLog[]>([])
 const filter = ref<'all' | 'error' | 'warn'>('all')
 const info = ref<DeviceInfo | null>(null)
+const voices = ref<JaVoice[]>([])
+const voiceName = ref('')
+const ttsStatus = ref('')
+const persistResult = ref('')
 const { toast, show: showToast } = useToast()
+
+/** 手寫、備份、同步、朗讀各自依賴的瀏覽器能力 */
+const support = computed(() => ({
+  'Pointer Events': typeof PointerEvent !== 'undefined',
+  'getCoalescedEvents（完整筆跡）': typeof PointerEvent !== 'undefined' && 'getCoalescedEvents' in PointerEvent.prototype,
+  'CompressionStream（備份 gzip）': typeof CompressionStream !== 'undefined',
+  IndexedDB: typeof indexedDB !== 'undefined',
+  'Service Worker': 'serviceWorker' in navigator,
+  'storage.persist': !!navigator.storage?.persist,
+  'Web Share（匯出到檔案）': typeof navigator.share === 'function',
+  語音合成: isTtsSupported(),
+  Clipboard: !!navigator.clipboard?.writeText,
+}))
 
 const shown = computed(() =>
   logs.value.filter((l) =>
@@ -20,6 +38,28 @@ const shown = computed(() =>
 
 async function load() {
   logs.value = await db.errorLogs.orderBy('at').reverse().limit(300).toArray()
+  info.value = await getDeviceInfo()
+  voices.value = await loadJaVoices()
+  if (!voiceName.value && voices.value[0]) voiceName.value = voices.value.find((v) => v.default)?.name ?? voices.value[0].name
+}
+
+async function speak(text: string) {
+  ttsStatus.value = `播放「${text}」…`
+  try {
+    await speakJa(text, { voiceName: voiceName.value || undefined })
+    ttsStatus.value = `「${text}」播放完畢`
+  } catch (e) {
+    ttsStatus.value = e instanceof Error ? e.message : String(e)
+  }
+}
+
+async function requestPersist() {
+  if (!navigator.storage?.persist) {
+    persistResult.value = '此環境不支援'
+    return
+  }
+  const ok = await navigator.storage.persist()
+  persistResult.value = ok ? '已允許持久儲存' : '未允許（iOS 可能需要加入主畫面）'
   info.value = await getDeviceInfo()
 }
 
@@ -35,7 +75,7 @@ function fmtTime(t: number) {
 async function copyAll() {
   const text = [
     `日語練習帳 ${version}`,
-    JSON.stringify(info.value, null, 2),
+    JSON.stringify({ ...info.value, support: support.value, voices: voices.value }, null, 2),
     ...shown.value.map((l) => `[${fmtTime(l.at)}] ${l.level}: ${l.message}${l.stack ? '\n' + l.stack : ''}`),
   ].join('\n')
   showToast((await copyText(text)) ? '已複製' : '無法存取剪貼簿')
@@ -74,6 +114,36 @@ onMounted(load)
         <div class="row row--between small"><span class="muted">儲存用量</span><span class="num">{{ info.storageUsage ?? '—' }}</span></div>
         <div class="row row--between small"><span class="muted">畫面</span><span class="num">{{ info.viewport }} @{{ info.devicePixelRatio }}x</span></div>
         <p class="caption faint" style="word-break: break-all">{{ info.userAgent }}</p>
+        <button class="btn btn--secondary btn--sm" type="button" style="align-self: flex-start" @click="requestPersist">要求持久儲存</button>
+        <p v-if="persistResult" class="small muted">{{ persistResult }}</p>
+      </section>
+
+      <!-- API 支援 -->
+      <section class="stack" style="gap: var(--sp-2)">
+        <h2 class="section-title">API 支援</h2>
+        <ul class="list">
+          <li v-for="(ok, name) in support" :key="name" class="list-row" style="min-height: 40px">
+            <div class="list-row__main small">{{ name }}</div>
+            <span class="badge" :class="ok ? 'badge--ok' : 'badge--shu'">{{ ok ? '支援' : '不支援' }}</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 語音 -->
+      <section class="stack" style="gap: var(--sp-2)">
+        <h2 class="section-title">語音（ja-JP）<span class="caption faint">{{ voices.length }} 個語音</span></h2>
+        <div class="card stack" style="gap: var(--sp-3)">
+          <select v-model="voiceName" class="input" style="padding: 0 var(--sp-3)" aria-label="選擇語音">
+            <option v-if="voices.length === 0" value="">（沒有日文語音）</option>
+            <option v-for="v in voices" :key="v.name" :value="v.name">{{ v.name }}{{ v.localService ? '' : '（需網路）' }}</option>
+          </select>
+          <div class="row" style="gap: var(--sp-2); flex-wrap: wrap">
+            <button class="btn btn--secondary btn--sm" type="button" lang="ja" @click="speak('あ')">あ</button>
+            <button class="btn btn--secondary btn--sm" type="button" lang="ja" @click="speak('たべる')">たべる</button>
+            <button class="btn btn--secondary btn--sm" type="button" lang="ja" @click="speak('ここに名前を書いてください。')">例句</button>
+          </div>
+          <p class="small muted" aria-live="polite">{{ ttsStatus || '點按鈕播放；靜音開關撥下時 iOS 不會出聲。' }}</p>
+        </div>
       </section>
 
       <div class="row" style="gap: var(--sp-2)">

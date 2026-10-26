@@ -34,10 +34,6 @@ export interface SyncTransport {
   deleteAll(uid: string): Promise<number>
 }
 
-export function recordCount(c: ChunkPayload): number {
-  return c.reviewLogs.length + c.cardEvents.length + c.handwritingLogs.length
-}
-
 export function settingToRemote(s: Setting): { value: unknown; updatedAt: number } | null {
   return s.updatedAt === null ? null : { value: s.value, updatedAt: s.updatedAt }
 }
