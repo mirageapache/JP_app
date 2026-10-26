@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import pack from '../../../public/content/kana.json'
-import type { KanaPack } from '@/core/content/kana'
+import { KANA_LADDER, toSchedulable, type KanaPack } from '@/core/content/kana'
 import { addDays } from './day'
 import { applyRating, emptyCardRecord } from './fsrs'
 import { buildDailyQueue, type QueueInput } from './queue'
@@ -12,7 +12,8 @@ const T0 = Date.UTC(2026, 9, 25, 2, 0, 0)
 function base(overrides: Partial<QueueInput> = {}): QueueInput {
   return {
     cards: [],
-    items,
+    items: items.map(toSchedulable),
+    ladders: { kana: KANA_LADDER },
     now: T0,
     newItemsIntroducedToday: 0,
     dailyNewItems: 5,
@@ -105,7 +106,7 @@ describe('每日佇列', () => {
   it('通勤模式延後 write 卡；到期過多時暫停新卡', () => {
     const write = { ...applyRating(emptyCardRecord('kana:あ#write', T0 - 1e6), 3, T0 - 1e6), due: T0 - 1 }
     const q = buildDailyQueue(base({ cards: [write], commuteMode: true }))
-    expect(q.deferredWrite).toBe(1)
+    expect(q.deferred).toBe(1)
     expect(q.entries.find((e) => e.skill === 'write')).toBeUndefined()
 
     const many: CardRecord[] = Array.from({ length: 101 }, (_, i) => ({

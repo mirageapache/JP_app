@@ -1,5 +1,5 @@
 import { makeCardId } from '@/core/srs/cardId'
-import type { Skill } from '@/core/srs/types'
+import type { SchedulableItem, Skill, SkillLadder } from '@/core/srs/types'
 
 /**
  * 假名內容包（public/content/kana.json，由 tools/kana/build_kana.py 產生）。
@@ -55,6 +55,13 @@ export function loadKanaPack(): Promise<KanaPack> {
 export async function findKana(char: string): Promise<KanaItem | undefined> {
   const pack = await loadKanaPack()
   return pack.items.find((i) => i.char === char)
+}
+
+/** 假名的技能階梯（規劃書 §6.2）：先讀後寫，寫在讀首次複習通過後解鎖；通勤模式延後寫 */
+export const KANA_LADDER: SkillLadder = { intro: 'read', unlockAfter: { write: 'read' }, deferInCommute: ['write'] }
+
+export function toSchedulable(item: KanaItem): SchedulableItem {
+  return { id: item.id, type: 'kana', skills: item.skills }
 }
 
 export function kanaItemId(char: string): string {

@@ -12,9 +12,11 @@ import { speakJa } from '@/core/tts'
  * 辨識題（規劃書 F4）：看字選讀音。答對 → 建議「良好」；答錯 → 建議「重來」。
  * 使用者可改評分後再繼續（design-system：評分列附建議）。
  */
+/** 統一的題型 props（見 cardRenderers.ts）；isNew 在辨識題用不到 */
 const props = defineProps<{
   item: KanaItem
   pool: KanaItem[]
+  isNew?: boolean
   intervals: Record<Rating, string>
   /** 本輪第幾次出現，用來變換選項順序 */
   attempt: number

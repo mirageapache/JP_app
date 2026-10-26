@@ -1,5 +1,5 @@
 import { computed, ref, shallowRef } from 'vue'
-import { loadKanaPack, type KanaItem } from '@/core/content/kana'
+import { KANA_LADDER, loadKanaPack, toSchedulable, type KanaItem } from '@/core/content/kana'
 import { loadSettings, setSetting, settings } from '@/core/settings'
 import { dayKey } from './day'
 import { buildDailyQueue, type DailyQueue, type QueueEntry } from './queue'
@@ -58,7 +58,8 @@ export function useDailySession() {
     today.value = stats
     const q = buildDailyQueue({
       cards,
-      items: list,
+      items: list.map(toSchedulable),
+      ladders: { kana: KANA_LADDER },
       now,
       newItemsIntroducedToday: introduced,
       dailyNewItems: settings.dailyNewKana,

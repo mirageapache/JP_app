@@ -28,6 +28,8 @@ export interface PracticeFeedback {
  * 一個字的手寫練習流程（給假名詳細頁與每日佇列共用）：
  * 載入筆畫資料 → 逐筆判定 → 完成後寫入 handwritingLogs；調校模式開啟時另存筆跡到 strokeSamples。
  */
+export type WritingPractice = ReturnType<typeof useWritingPractice>
+
 export function useWritingPractice(options: {
   char: Ref<string>
   cardId: Ref<string>

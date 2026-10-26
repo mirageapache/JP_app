@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
+import HandwritingPractice from '@/components/HandwritingPractice.vue'
 import RatingBar from '@/components/RatingBar.vue'
-import WritingBox from '@/components/WritingBox.vue'
 import type { KanaItem } from '@/core/content/kana'
 import { kanaCardId } from '@/core/content/kana'
 import type { Difficulty } from '@/core/handwriting/types'
@@ -15,8 +15,10 @@ import { speakJa } from '@/core/tts'
  * 手寫題（規劃書 F3、§6.1）：看音寫字。新卡用描摹、複習用空白；
  * 完成後由手寫結果建議評分，使用者可調整。
  */
+/** 統一的題型 props（見 cardRenderers.ts）；pool 在手寫題用不到 */
 const props = defineProps<{
   item: KanaItem
+  pool?: KanaItem[]
   isNew: boolean
   intervals: Record<Rating, string>
   /** 本輪第幾次出現；答錯重出時改用提示模式 */
@@ -32,14 +34,10 @@ function pick(): Difficulty {
   return (props.attempt ?? 1) > 1 ? 'hint' : 'blank'
 }
 const difficulty = ref<Difficulty>(pick())
-const box = ref<InstanceType<typeof WritingBox>>()
 const practice = useWritingPractice({ char, cardId, difficulty, mode: 'session' })
 
 const suggested = computed<Rating | null>(() => (practice.summary.value ? GRADE_TO_RATING[practice.summary.value.rating] : null))
 
-watch(practice.lastWrongPoints, (pts) => {
-  if (pts) box.value?.flashWrong(pts)
-})
 watch(
   () => props.item.id,
   () => {
@@ -63,22 +61,7 @@ function speak() {
       <button class="icon-btn icon-btn--filled" type="button" aria-label="播放讀音" @click="speak"><AppIcon name="volume" /></button>
     </div>
 
-    <WritingBox
-      ref="box"
-      :template="practice.template.value"
-      :show-ghost="difficulty === 'trace'"
-      :accepted="practice.session.value.accepted"
-      :hint-index="practice.hintIndex.value"
-      :guide-index="practice.guideIndex.value"
-      :disabled="practice.finished.value"
-      @stroke="practice.onStroke"
-    />
-
-    <div class="feedback" :class="`feedback--${practice.feedback.value.kind}`" aria-live="polite">
-      <AppIcon v-if="practice.feedback.value.kind === 'ok'" name="check" size="sm" />
-      <AppIcon v-else-if="practice.feedback.value.kind === 'shu'" name="x" size="sm" />
-      {{ practice.feedback.value.text }}
-    </div>
+    <HandwritingPractice :practice="practice" :difficulty="difficulty" />
   </div>
 
   <footer class="session-foot">

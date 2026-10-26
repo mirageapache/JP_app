@@ -7,9 +7,9 @@ import { getCard } from '@/core/srs/repository'
 import { itemKey } from '@/core/srs/cardId'
 import { previewIntervals } from '@/core/srs/fsrs'
 import { requestSync } from '@/core/sync/useSync'
+import { parseCardId } from '@/core/srs/cardId'
 import type { Rating } from '@/core/srs/types'
-import RecognizeCard from './RecognizeCard.vue'
-import WriteCard from './WriteCard.vue'
+import { CARD_RENDERERS, rendererKey, type CardProps } from './cardRenderers'
 
 /** 每日學習（規劃書 §6.2、design-system §5.3）：全螢幕，頂部關閉與進度，底部作答／評分 */
 const session = useDailySession()
@@ -19,6 +19,23 @@ const attempts = ref<Map<string, number>>(new Map())
 const currentItem = computed(() => (session.current.value ? session.itemOf(session.current.value) : undefined))
 const pool = computed(() => [...session.items.value.values()])
 const attempt = computed(() => attempts.value.get(session.current.value?.cardId ?? '') ?? 0)
+/** 依「類型:技能」挑題型元件；沒登記的組合顯示錯誤而不是空白 */
+const renderer = computed(() => {
+  const entry = session.current.value
+  return entry ? CARD_RENDERERS[rendererKey(parseCardId(entry.cardId).type, entry.skill)] : undefined
+})
+const cardProps = computed<CardProps | null>(() =>
+  session.current.value && currentItem.value
+    ? {
+        item: currentItem.value,
+        pool: pool.value,
+        isNew: session.current.value.kind === 'new',
+        intervals: intervals.value,
+        attempt: attempt.value,
+        disabled: session.answering.value,
+      }
+    : null,
+)
 const total = computed(() => session.counters.value.total)
 const done = computed(() => session.counters.value.done)
 
@@ -56,27 +73,11 @@ onMounted(() => session.start())
     </header>
 
     <!-- 進行中 -->
-    <template v-if="session.current.value && currentItem">
-      <RecognizeCard
-        v-if="session.current.value.skill === 'read'"
-        :key="session.current.value.cardId + attempt"
-        :item="currentItem"
-        :pool="pool"
-        :intervals="intervals"
-        :attempt="attempt"
-        :disabled="session.answering.value"
-        @rate="rate"
-      />
-      <WriteCard
-        v-else
-        :key="session.current.value.cardId + attempt"
-        :item="currentItem"
-        :is-new="session.current.value.kind === 'new'"
-        :intervals="intervals"
-        :attempt="attempt"
-        :disabled="session.answering.value"
-        @rate="rate"
-      />
+    <template v-if="session.current.value && cardProps">
+      <component :is="renderer" v-if="renderer" :key="session.current.value.cardId + attempt" v-bind="cardProps" @rate="rate" />
+      <main v-else class="page" style="justify-content: center; text-align: center">
+        <p class="banner banner--shu">這種題型（{{ session.current.value.cardId }}）還沒有對應的畫面</p>
+      </main>
     </template>
 
     <!-- 沒有題目 -->

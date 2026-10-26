@@ -7,6 +7,23 @@ export type Rating = 1 | 2 | 3 | 4
 /** FSRS 狀態：0 New、1 Learning、2 Review、3 Relearning */
 export type CardState = 0 | 1 | 2 | 3
 
+/** 排程器需要知道的項目資訊；各內容型別（KanaItem、之後的 VocabItem）各自轉成這個形狀，依學習順序排列 */
+export interface SchedulableItem {
+  id: string
+  type: CardType
+  skills: Skill[]
+}
+
+/** 一種內容類型的技能階梯（規劃書 §6.2「技能錯開」） */
+export interface SkillLadder {
+  /** 導入技能：項目第一張出現的卡，佔新項目額度 */
+  intro: Skill
+  /** 其他技能在哪個技能「首次複習通過」或被標記已會後解鎖 */
+  unlockAfter: Partial<Record<Skill, Skill>>
+  /** 通勤模式下延後的技能 */
+  deferInCommute: Skill[]
+}
+
 /** `cards` 表：由紀錄重建的快取（不同步） */
 export interface CardRecord {
   /** 卡片 ID = 項目 ID + # + 技能，例如 kana:あ#write */

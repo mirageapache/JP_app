@@ -3,8 +3,8 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
+import HandwritingPractice from '@/components/HandwritingPractice.vue'
 import StrokeOrderAnimation from '@/components/StrokeOrderAnimation.vue'
-import WritingBox from '@/components/WritingBox.vue'
 import { findKana, kanaCardId, type KanaItem, type KanaSkill } from '@/core/content/kana'
 import { countPractices } from '@/core/handwriting/repository'
 import { addCardEvent, getCard } from '@/core/srs/repository'
@@ -26,7 +26,6 @@ const recentCount = ref(0)
 const cardsBySkill = ref<Partial<Record<KanaSkill, CardRecord>>>({})
 const confirmReset = ref<KanaSkill | null>(null)
 const order = ref<InstanceType<typeof StrokeOrderAnimation>>()
-const box = ref<InstanceType<typeof WritingBox>>()
 const { show } = useToast()
 
 const cardId = computed(() => kanaCardId(char.value, 'write'))
@@ -91,9 +90,6 @@ async function speak() {
   }
 }
 
-watch(practice.lastWrongPoints, (pts) => {
-  if (pts) box.value?.flashWrong(pts)
-})
 watch(practice.finished, (done) => {
   if (done) void load()
 })
@@ -176,22 +172,7 @@ onMounted(load)
           </div>
         </div>
 
-        <WritingBox
-          ref="box"
-          :template="practice.template.value"
-          :show-ghost="difficulty === 'trace'"
-          :accepted="practice.session.value.accepted"
-          :hint-index="practice.hintIndex.value"
-          :guide-index="practice.guideIndex.value"
-          :disabled="practice.finished.value"
-          @stroke="practice.onStroke"
-        />
-
-        <div class="feedback" :class="`feedback--${practice.feedback.value.kind}`" aria-live="polite">
-          <AppIcon v-if="practice.feedback.value.kind === 'ok'" name="check" size="sm" />
-          <AppIcon v-else-if="practice.feedback.value.kind === 'shu'" name="x" size="sm" />
-          {{ practice.feedback.value.text }}
-        </div>
+        <HandwritingPractice :practice="practice" :difficulty="difficulty" />
 
         <div v-if="practice.summary.value" class="card stack" style="gap: var(--sp-2)">
           <div class="row row--between">
