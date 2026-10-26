@@ -4,6 +4,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import { db, type ErrorLog } from '@/core/db'
 import { getDeviceInfo, type DeviceInfo } from '@/core/debug/deviceInfo'
+import { rebuildAllCards } from '@/core/srs/repository'
 import { isTtsSupported, loadJaVoices, speakJa, type JaVoice } from '@/core/tts'
 import { copyText, useToast } from '@/core/ui/useToast'
 
@@ -81,6 +82,16 @@ async function copyAll() {
   showToast((await copyText(text)) ? '已複製' : '無法存取剪貼簿')
 }
 
+/** 資料修復：由紀錄重建 cards 快取（同步或匯入中斷後卡片狀態不對時用） */
+async function rebuildCards() {
+  try {
+    const n = await rebuildAllCards()
+    showToast(`已重建 ${n} 張卡片`)
+  } catch (e) {
+    showToast(e instanceof Error ? e.message : String(e))
+  }
+}
+
 function testError() {
   throw new Error('測試用錯誤（可忽略）')
 }
@@ -150,6 +161,7 @@ onMounted(load)
         <button class="btn btn--secondary btn--sm" type="button" @click="testError">測試錯誤</button>
         <button class="btn btn--secondary btn--sm" type="button" @click="testRejection">測試 Promise</button>
         <button class="btn btn--secondary btn--sm" type="button" @click="testWarn">測試警告</button>
+        <button class="btn btn--secondary btn--sm" type="button" @click="rebuildCards">重建所有卡片</button>
       </div>
 
       <div class="row row--between">

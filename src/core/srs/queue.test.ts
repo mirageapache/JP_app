@@ -31,6 +31,12 @@ function graduated(cardId: string, start: number): CardRecord {
 }
 
 describe('每日佇列', () => {
+  it('設定值是 NaN 時不會把全部假名排成新卡', () => {
+    const q = buildDailyQueue(base({ dailyNewItems: NaN, extraNewItems: NaN, newPauseThreshold: NaN }))
+    expect(q.newCount).toBe(0)
+    expect(q.newPaused).toBe(false)
+  })
+
   it('沒有任何卡時，依學習順序給出 N 個新項目的 read 卡', () => {
     const q = buildDailyQueue(base())
     expect(q.newCount).toBe(5)

@@ -96,13 +96,16 @@ export async function rebuildCards(cardIds: Iterable<string>, now = Date.now()):
 
 /** 全量重建（新裝置還原、資料修復） */
 export async function rebuildAllCards(now = Date.now()): Promise<number> {
-  const [reviewIds, eventIds] = await Promise.all([
-    db.reviewLogs.orderBy('cardId').uniqueKeys(),
-    db.cardEvents.orderBy('cardId').uniqueKeys(),
-  ])
-  const ids = new Set<string>([...(reviewIds as string[]), ...(eventIds as string[])])
-  await db.cards.clear()
-  return rebuildCards(ids, now)
+  // clear 與重建放同一交易：中途失敗時不會留下一個空的 cards 表（所有卡被當成新卡）
+  return db.transaction('rw', db.cardEvents, db.reviewLogs, db.cards, async () => {
+    const [reviewIds, eventIds] = await Promise.all([
+      db.reviewLogs.orderBy('cardId').uniqueKeys(),
+      db.cardEvents.orderBy('cardId').uniqueKeys(),
+    ])
+    const ids = new Set<string>([...(reviewIds as string[]), ...(eventIds as string[])])
+    await db.cards.clear()
+    return rebuildCards(ids, now)
+  })
 }
 
 /** 今天（台灣日）導入的新項目數：今天第一次評分的 read 卡 */

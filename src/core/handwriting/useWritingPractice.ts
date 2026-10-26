@@ -150,6 +150,9 @@ export function useWritingPractice(options: {
     await db.handwritingLogs.add(log)
   }
 
+  /** 最後一筆存進去的樣本；where('cardId').last() 的順序是 uuid 不是時間，同字多樣本會標到錯的 */
+  let lastSampleUuid: string | null = null
+
   async function saveSample(stroke: UserStroke, strokeIndex: number, verdict: Verdict) {
     const sample: StrokeSample = {
       uuid: crypto.randomUUID(),
@@ -165,14 +168,14 @@ export function useWritingPractice(options: {
       recordedAt: Date.now(),
     }
     await db.strokeSamples.add(sample)
+    lastSampleUuid = sample.uuid
   }
 
   /** 調校模式：標記最後一筆的判定有誤；回傳是否有樣本可標記 */
   async function flagLastSampleWrong(): Promise<boolean> {
-    const target = await db.strokeSamples.where('cardId').equals(options.cardId.value).last()
-    if (!target) return false
-    await db.strokeSamples.update(target.uuid, { judgedCorrect: false })
-    return true
+    if (!lastSampleUuid) return false
+    const n = await db.strokeSamples.update(lastSampleUuid, { judgedCorrect: false })
+    return n > 0
   }
 
   watch([options.char, () => options.enabled?.value ?? true], load, { immediate: true })

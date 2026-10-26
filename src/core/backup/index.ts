@@ -1,8 +1,9 @@
 import { db, type HandwritingLog, type Setting } from '@/core/db'
+import { filterValid, isCardEvent, isHandwritingLog, isReviewLog } from '@/core/db/validate'
 import { getDeviceId } from '@/core/sync/deviceId'
 import { rebuildAllCards } from '@/core/srs/repository'
 import type { CardEventRecord, ReviewLogRecord } from '@/core/srs/types'
-import { reloadSettings } from '@/core/settings'
+import { isValidSetting, reloadSettings, SETTING_SCOPE } from '@/core/settings'
 
 /**
  * JSON 匯出／匯入（規劃書 §7.6）：不依賴雲端的備份。
@@ -80,20 +81,35 @@ export async function readBackupFile(file: Blob): Promise<BackupFile> {
   return migrateBackup(parsed)
 }
 
-/** 舊版備份檔遷移（規劃書 §5.3「Schema 遷移」）；目前只有 v1 */
-export function migrateBackup(data: Partial<BackupFile>): BackupFile {
+/**
+ * 舊版備份檔遷移（規劃書 §5.3「Schema 遷移」）；目前只有 v1。
+ * 同時逐列驗證：格式不對的紀錄略過（計入 skipped），設定只留認得的 key 與正確型別，scope 以 App 定義為準。
+ */
+export function migrateBackup(data: Partial<BackupFile>): BackupFile & { skipped: number } {
   if (typeof data !== 'object' || data === null || !Array.isArray(data.reviewLogs)) throw new Error('不是有效的備份檔')
   const version = data.schemaVersion ?? 1
   if (version > BACKUP_SCHEMA_VERSION) throw new Error(`備份檔版本（${version}）比 App 新，請先更新 App`)
+  const reviews = filterValid(data.reviewLogs, isReviewLog)
+  const events = filterValid(data.cardEvents ?? [], isCardEvent)
+  const hand = filterValid(data.handwritingLogs ?? [], isHandwritingLog)
+  const settings: Setting[] = []
+  for (const s of Array.isArray(data.settings) ? (data.settings as unknown[]) : []) {
+    if (typeof s !== 'object' || s === null) continue
+    const { key, value, updatedAt } = s as Partial<Setting>
+    if (typeof key !== 'string' || !isValidSetting(key, value)) continue
+    // 缺 updatedAt 的設定若直接進雲端，Firestore 會拒絕 undefined 欄位，之後每輪同步都失敗
+    settings.push({ key, value, scope: SETTING_SCOPE[key], updatedAt: typeof updatedAt === 'number' && Number.isFinite(updatedAt) ? updatedAt : Date.now() })
+  }
   return {
     schemaVersion: BACKUP_SCHEMA_VERSION,
-    appVersion: data.appVersion ?? 'unknown',
-    exportedAt: data.exportedAt ?? '',
-    deviceId: data.deviceId ?? 'unknown',
-    reviewLogs: data.reviewLogs,
-    cardEvents: data.cardEvents ?? [],
-    handwritingLogs: data.handwritingLogs ?? [],
-    settings: data.settings ?? [],
+    appVersion: typeof data.appVersion === 'string' ? data.appVersion : 'unknown',
+    exportedAt: typeof data.exportedAt === 'string' ? data.exportedAt : '',
+    deviceId: typeof data.deviceId === 'string' ? data.deviceId : 'unknown',
+    reviewLogs: reviews.rows,
+    cardEvents: events.rows,
+    handwritingLogs: hand.rows,
+    settings,
+    skipped: reviews.skipped + events.skipped + hand.skipped,
   }
 }
 
@@ -110,8 +126,9 @@ export async function createSnapshot(appVersion: string): Promise<number> {
  * 合併匯入：各紀錄表以 uuid 取聯集；設定依選項決定是否以備份檔為準；最後全量重建 cards。
  */
 export async function importBackup(input: BackupFile, options: { applySettings: boolean }): Promise<ImportSummary> {
-  // 呼叫端可能傳入 Vue reactive Proxy，IndexedDB 無法 structured clone；先轉成純物件
-  const data = JSON.parse(JSON.stringify(input)) as BackupFile
+  // 呼叫端可能傳入 Vue reactive Proxy，IndexedDB 無法 structured clone；先轉成純物件。
+  // 再過一次 migrateBackup：呼叫端若自行組出 BackupFile（例如測試），也保證進 Dexie 的都是驗過的列
+  const data = migrateBackup(JSON.parse(JSON.stringify(input)) as Partial<BackupFile>)
   const added = { reviewLogs: 0, cardEvents: 0, handwritingLogs: 0 }
   await db.transaction('rw', [db.reviewLogs, db.cardEvents, db.handwritingLogs, db.settings], async () => {
     added.reviewLogs = await addMissing<ReviewLogRecord>(db.reviewLogs, data.reviewLogs)

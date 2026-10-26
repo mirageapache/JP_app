@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { db } from '@/core/db'
 import { resetSettingsCache, setSetting } from '@/core/settings'
 import { recordReview } from '@/core/srs/repository'
-import { CHUNK_MAX_RECORDS, countPending, createSyncEngine, getSyncMeta, PULL_PAGE } from './engine'
+import { CHUNK_MAX_BYTES, CHUNK_MAX_RECORDS, countPending, createSyncEngine, getSyncMeta, PULL_PAGE } from './engine'
 import type { ChunkDoc, ChunkPayload, RemoteSettings, SyncTransport } from './transport'
 import { getDeviceId } from './deviceId'
 
@@ -149,6 +149,75 @@ describe('同步引擎', () => {
     const engine = createSyncEngine(cloud.transport)
     const r = await engine.sync('u1')
     expect(r.pulled).toBe(PULL_PAGE + 3)
+  })
+
+  it('手寫紀錄大時依位元組切 chunk，每份都在上限內', async () => {
+    const cloud = fakeCloud()
+    const engine = createSyncEngine(cloud.transport)
+    // 每筆約 3 KB：300 筆 ≈ 1 MB，只以筆數（400）切會超過 Firestore 的 1 MiB
+    const rows = Array.from({ length: 300 }, (_, i) => ({
+      uuid: `h${i}`, cardId: 'kana:あ#write', variantId: 'kanjivg', difficulty: 'blank' as const, pointerType: 'touch' as const, score: 50,
+      strokeResults: Array.from({ length: 60 }, (_, k) => ({ strokeIndex: k % 3, kind: 'shape' as const, difficulty: 'blank' as const })),
+      misses: 30, hintsUsed: 1, skipped: false, durationMs: 60000, mode: 'free' as const, at: T0 + i, syncedAt: null,
+    }))
+    await db.handwritingLogs.bulkAdd(rows)
+    expect(await engine.push('u1')).toBe(300)
+    expect(cloud.chunks.length).toBeGreaterThan(1)
+    for (const c of cloud.chunks) expect(new TextEncoder().encode(JSON.stringify(c)).length).toBeLessThanOrEqual(CHUNK_MAX_BYTES + 200)
+  })
+
+  it('下載後重建中斷（dirtyCardIds 殘留）會在下一輪補做', async () => {
+    const cloud = fakeCloud()
+    const engine = createSyncEngine(cloud.transport)
+    // 模擬：紀錄已合併進本機、dirty 已記下，但 rebuild 沒跑完就被殺
+    await db.reviewLogs.add({ uuid: 'x1', cardId: 'kana:い#read', rating: 3, reviewedAt: T0, durationMs: 1, mode: 'session', paramsVersion: 'fsrs-default-v1', deviceId: 'other', syncedAt: 1 })
+    await db.syncMeta.put({ key: 'main', uid: 'u1', lastPulledAt: 5000, lastPushedAt: null, lastSettingsPushAt: null, lastSyncAt: null, dirtyCardIds: ['kana:い#read'], lastError: null })
+    expect(await db.cards.get('kana:い#read')).toBeUndefined()
+    const r = await engine.sync('u1')
+    expect(r.rebuiltCards).toBe(1)
+    expect((await db.cards.get('kana:い#read'))?.reps).toBe(1)
+    expect((await getSyncMeta()).dirtyCardIds).toEqual([])
+  })
+
+  it('chunk 內格式不對的列與較新 schema 的 chunk 會略過，不寫進本機', async () => {
+    const cloud = fakeCloud()
+    const engine = createSyncEngine(cloud.transport)
+    await cloud.transport.uploadChunk('u1', {
+      deviceId: 'other', schemaVersion: 1,
+      reviewLogs: [
+        { uuid: 'ok1', cardId: 'kana:あ#read', rating: 3, reviewedAt: T0, durationMs: 1, mode: 'session', paramsVersion: 'fsrs-default-v1', deviceId: 'other', syncedAt: null },
+        { uuid: 'bad1', cardId: 'kana:あ#read', rating: 9, reviewedAt: T0, durationMs: 1, mode: 'session', paramsVersion: 'fsrs-default-v1', deviceId: 'other', syncedAt: null } as never,
+        { uuid: 'bad2', cardId: 'kana:あ#read', rating: 3, reviewedAt: 'yesterday', durationMs: 1, mode: 'session', paramsVersion: 'fsrs-default-v1', deviceId: 'other', syncedAt: null } as never,
+      ],
+      cardEvents: [{ uuid: 'bad3', cardId: 'kana:う#read', type: 'explode', at: T0, deviceId: 'other', syncedAt: null } as never],
+      handwritingLogs: [],
+    })
+    await cloud.transport.uploadChunk('u1', {
+      deviceId: 'other', schemaVersion: 99,
+      reviewLogs: [{ uuid: 'future', cardId: 'kana:え#read', rating: 3, reviewedAt: T0, durationMs: 1, mode: 'session', paramsVersion: 'fsrs-default-v1', deviceId: 'other', syncedAt: null }],
+      cardEvents: [], handwritingLogs: [],
+    })
+    const r = await engine.sync('u1')
+    expect(r.pulled).toBe(1)
+    expect(await db.reviewLogs.count()).toBe(1)
+    expect(await db.cardEvents.count()).toBe(0)
+    expect((await db.cards.get('kana:あ#read'))?.reps).toBe(1)
+  })
+
+  it('雲端設定型別不對或缺 updatedAt 時略過，不套用也不炸', async () => {
+    const cloud = fakeCloud()
+    await cloud.transport.setSettings('u1', {
+      dailyNewKana: { value: '5', updatedAt: 500 },
+      dailyGoalMinutes: { value: 30 } as never,
+      notAKey: { value: 1, updatedAt: 500 },
+      newPauseThreshold: { value: 50, updatedAt: 500 },
+    })
+    const engine = createSyncEngine(cloud.transport)
+    const r = await engine.sync('u1')
+    expect(r.settingsPulled).toBe(1)
+    expect(await db.settings.get('dailyNewKana')).toBeUndefined()
+    expect(await db.settings.get('dailyGoalMinutes')).toBeUndefined()
+    expect((await db.settings.get('newPauseThreshold'))?.value).toBe(50)
   })
 
   it('換帳號會重設下載基準並把紀錄標回未上傳；刪除雲端後本機紀錄回到未同步', async () => {

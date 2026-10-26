@@ -39,6 +39,7 @@ const engine = createSyncEngine(firestoreTransport)
 let started = false
 let timer: ReturnType<typeof setInterval> | undefined
 let inFlight: Promise<SyncResult | null> | null = null
+let inFlightUid: string | null = null
 
 export const syncState = readonly(state)
 export const isSignedIn = computed(() => !!state.user)
@@ -53,8 +54,10 @@ export async function refreshPending(): Promise<void> {
 /** 執行一輪同步（同時只會有一個在跑）；未登入時什麼都不做 */
 export function requestSync(): Promise<SyncResult | null> {
   if (!state.configured || !state.user) return Promise.resolve(null)
-  if (inFlight) return inFlight
   const uid = state.user.uid
+  // 同帳號：共用進行中的那一輪；剛換了帳號：等舊帳號那輪結束再為新帳號跑一輪
+  if (inFlight) return inFlightUid === uid ? inFlight : inFlight.then(() => requestSync())
+  inFlightUid = uid
   state.status = 'syncing'
   inFlight = engine
     .sync(uid)
@@ -67,6 +70,7 @@ export function requestSync(): Promise<SyncResult | null> {
     .catch(async (e) => {
       state.status = 'error'
       state.lastError = e instanceof Error ? e.message : String(e)
+      console.error('同步失敗', e) // 進 errorLogs，除錯面板看得到（F16）
       await refreshPending()
       return null
     })
@@ -104,6 +108,8 @@ export function stopSync(): void {
 
 export async function deleteCloudData(): Promise<number> {
   if (!state.user) throw new Error('尚未登入')
+  // 等進行中的同步結束，否則它的 push 會在刪除後把資料再傳上去
+  if (inFlight) await inFlight.catch(() => null)
   const n = await engine.deleteCloud(state.user.uid)
   await refreshPending()
   return n

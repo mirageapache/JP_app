@@ -33,6 +33,30 @@ describe('備份與還原', () => {
     expect(() => migrateBackup({ schemaVersion: 99, reviewLogs: [] })).toThrow(/比 App 新/)
   })
 
+  it('migrateBackup 會略過格式不對的紀錄、丟掉不認識或型別不對的設定、補上 updatedAt 與正確 scope', () => {
+    const b = migrateBackup({
+      schemaVersion: 1,
+      reviewLogs: [
+        { uuid: 'ok', cardId: 'kana:あ#read', rating: 3, reviewedAt: 1, durationMs: 1, mode: 'session', paramsVersion: 'v', deviceId: 'd', syncedAt: null },
+        { uuid: 'bad', cardId: 'kana:あ#read', rating: 3, reviewedAt: NaN, durationMs: 1, mode: 'session', paramsVersion: 'v', deviceId: 'd', syncedAt: null },
+        'garbage' as never,
+      ],
+      settings: [
+        { key: 'dailyNewKana', value: 9, scope: 'device', updatedAt: undefined as never },
+        { key: 'dailyGoalMinutes', value: '20', scope: 'account', updatedAt: 1 },
+        { key: 'somethingElse', value: 1, scope: 'account', updatedAt: 1 },
+        { key: 'tuningMode', value: true, scope: 'account', updatedAt: 1 },
+      ],
+    })
+    expect(b.reviewLogs.map((r) => r.uuid)).toEqual(['ok'])
+    expect(b.skipped).toBe(2)
+    expect(b.settings.map((s) => s.key).sort()).toEqual(['dailyNewKana', 'tuningMode'])
+    const daily = b.settings.find((s) => s.key === 'dailyNewKana')!
+    expect(daily.scope).toBe('account')
+    expect(daily.updatedAt).toBeTypeOf('number')
+    expect(b.settings.find((s) => s.key === 'tuningMode')!.scope).toBe('device')
+  })
+
   it('匯入以 uuid 取聯集，不重複、不覆蓋，並重建 cards', async () => {
     const { log } = await recordReview('kana:あ#read', 3, 1000, T0)
     const foreign = { ...log, uuid: 'other-device-1', cardId: 'kana:い#read', reviewedAt: T0 + 1000 }

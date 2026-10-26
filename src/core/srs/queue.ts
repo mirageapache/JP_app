@@ -47,7 +47,14 @@ export interface DailyQueue {
 const INTRO_SKILL: Skill = 'read'
 const UNLOCK_AFTER: Skill = 'read'
 
+const num = (v: number, fallback: number) => (Number.isFinite(v) ? v : fallback)
+
 export function buildDailyQueue(input: QueueInput): DailyQueue {
+  // 設定值可能來自壞掉的備份或雲端；NaN 會讓「introduced >= budget」永遠 false 而把全部假名排成新卡
+  const dailyNewItems = num(input.dailyNewItems, 0)
+  const extraNewItems = num(input.extraNewItems, 0)
+  const introducedToday = num(input.newItemsIntroducedToday, 0)
+  const pauseThreshold = num(input.newPauseThreshold, Infinity)
   const byId = new Map(input.cards.map((c) => [c.id, c]))
   const cutoff = endOfDay(input.now)
   const entries: QueueEntry[] = []
@@ -66,7 +73,7 @@ export function buildDailyQueue(input: QueueInput): DailyQueue {
   }
   const dueCount = entries.length
 
-  const newPaused = due.length > input.newPauseThreshold
+  const newPaused = due.length > pauseThreshold
   let newCount = 0
 
   // 2. 已導入項目解鎖的 write 卡（不佔新項目額度）
@@ -84,7 +91,7 @@ export function buildDailyQueue(input: QueueInput): DailyQueue {
   }
 
   // 3. 新項目：read 卡尚未開始的項目，依學習順序，受每日上限限制
-  const budget = newPaused ? 0 : Math.max(0, input.dailyNewItems + input.extraNewItems - input.newItemsIntroducedToday)
+  const budget = newPaused ? 0 : Math.max(0, dailyNewItems + extraNewItems - introducedToday)
   let introduced = 0
   for (const item of input.items) {
     if (introduced >= budget) break

@@ -58,6 +58,33 @@ export const SETTING_SCOPE: Record<Key, Setting['scope']> = {
   debugPanel: 'device',
 }
 
+const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
+const isBool = (v: unknown) => typeof v === 'boolean'
+const isCount = (v: unknown) => typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= 10000
+
+/** 每個 key 接受的值；雲端或備份檔來的值不合格就略過，否則佇列會算出 NaN、同步會被 Firestore 拒絕 */
+const SETTING_VALIDATORS: Record<Key, (v: unknown) => boolean> = {
+  dailyNewKana: isCount,
+  dailyGoalMinutes: isCount,
+  newPauseThreshold: isCount,
+  commuteDate: (v) => v === null || typeof v === 'string',
+  extraNew: (v) => v === null || (isObj(v) && typeof v.date === 'string' && isCount(v.count)),
+  onboardingDone: isBool,
+  showFurigana: isBool,
+  kanaStrokeVariants: (v) => isObj(v) && Object.values(v).every((s) => typeof s === 'string'),
+  tuningMode: isBool,
+  debugPanel: isBool,
+}
+
+export function isSettingKey(key: string): key is Key {
+  return Object.hasOwn(SETTING_DEFAULTS, key)
+}
+
+/** key 存在且值的型別正確 */
+export function isValidSetting(key: string, value: unknown): key is Key {
+  return isSettingKey(key) && SETTING_VALIDATORS[key](value)
+}
+
 const state = reactive<SettingsSchema>({ ...SETTING_DEFAULTS })
 let loaded: Promise<void> | undefined
 
@@ -72,7 +99,7 @@ export function loadSettings(): Promise<void> {
       console.error('無法讀取設定，改用預設值', e)
     }
     for (const row of rows) {
-      if (row.key in SETTING_DEFAULTS) (state as Record<string, unknown>)[row.key] = row.value
+      if (isValidSetting(row.key, row.value)) (state as Record<string, unknown>)[row.key] = row.value
     }
   })()
   return loaded
@@ -90,7 +117,7 @@ export async function reloadSettings(): Promise<void> {
   const rows = await db.settings.toArray()
   const next: Record<string, unknown> = { ...SETTING_DEFAULTS }
   for (const row of rows) {
-    if (row.key in SETTING_DEFAULTS) next[row.key] = row.value
+    if (isValidSetting(row.key, row.value)) next[row.key] = row.value
   }
   Object.assign(state, next)
   loaded = Promise.resolve()

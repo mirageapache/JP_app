@@ -1,4 +1,4 @@
-import type { HandwritingLog, Setting } from '@/core/db'
+import type { HandwritingLog } from '@/core/db'
 import type { CardEventRecord, ReviewLogRecord } from '@/core/srs/types'
 import { getFirebase } from './firebaseApp'
 
@@ -32,10 +32,6 @@ export interface SyncTransport {
   getSettings(uid: string): Promise<RemoteSettings>
   setSettings(uid: string, patch: RemoteSettings): Promise<void>
   deleteAll(uid: string): Promise<number>
-}
-
-export function settingToRemote(s: Setting): { value: unknown; updatedAt: number } | null {
-  return s.updatedAt === null ? null : { value: s.value, updatedAt: s.updatedAt }
 }
 
 /** Firestore（lite）實作 */
@@ -72,7 +68,8 @@ export const firestoreTransport: SyncTransport = {
     if (Object.keys(patch).length === 0) return
     const { db } = await getFirebase()
     const { doc, setDoc } = await import('firebase/firestore/lite')
-    await setDoc(doc(db, 'users', uid, 'settings', 'main'), patch, { merge: true })
+    // mergeFields：每個 key 整個覆寫。merge: true 會把巢狀 map（kanaStrokeVariants）深合併，兩台裝置會各自看到不同的聯集
+    await setDoc(doc(db, 'users', uid, 'settings', 'main'), patch, { mergeFields: Object.keys(patch) })
   },
 
   async deleteAll(uid) {
